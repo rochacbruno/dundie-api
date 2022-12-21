@@ -1,0 +1,12 @@
+fastapi                    # Web Framework
+uvicorn                    # ASGI Server
+sqlmodel                   # Database ORM
+typer                      # CLI Framework
+dynaconf                   # Config Management
+jinja2                     # Templating
+python-jose[cryptography]  # Encrypt
+passlib[bcrypt]            # Hashing
+python-multipart           # Form processing
+psycopg2-binary            # Database Driver
+alembic                    # Database Migrations
+rich                       # Terminal formatting

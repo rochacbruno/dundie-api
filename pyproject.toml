@@ -1,0 +1,98 @@
+[project]
+name = "dundie"
+description = "Rewards API for Dunder Mifflin"
+authors = [
+    {name = 'Bruno Rocha', email = 'rochacbruno@gmail.com'},
+]
+requires-python = ">=3.8"
+license = {text = "MIT"}
+dynamic = ["version", "readme", "dependencies"]
+
+[project.urls]
+Homepage = 'https://github.com/rochacbruno/dundie-api'
+Source = 'https://github.com/rochacbruno/dundie-api'
+
+[project.optional-dependencies]
+dev = [
+	"pytest",
+	"ipdb",
+	"ipython",
+	"pip-tools",
+	"pyright",
+	"flake8",
+	"black",
+	"isort",
+]
+
+[project.scripts]
+dundie = "dundie.cli:main"
+
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["dundie"]
+
+[tool.setuptools_scm]
+write_to = "dundie/VERSION.txt"
+
+[tool.setuptools.dynamic]
+readme = {file = ["docs/README.md"]}
+dependencies = {file = "requirements.txt"}
+
+[tool.pytest.ini_options]
+testpaths = 'tests'
+xfail_strict = true
+filterwarnings = [
+    'error',
+    'ignore:path is deprecated.*:DeprecationWarning:',
+]
+
+[tool.coverage.run]
+source = ['dundie']
+branch = true
+context = '${CONTEXT}'
+
+[tool.coverage.report]
+precision = 2
+exclude_lines = [
+    'pragma: no cover',
+    'raise NotImplementedError',
+    'if TYPE_CHECKING:',
+    '@overload',
+]
+
+[tool.black]
+color = true
+line-length = 100
+target-version = ['py310']
+skip-string-normalization = true
+
+[tool.isort]
+line_length = 100
+known_first_party = 'dundie'
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+combine_as_imports = true
+
+
+[tool.mypy]
+# temporarily ignore some files
+# exclude = 'foo/(zaz|bar)\.py'
+python_version = '3.10'
+show_error_codes = true
+follow_imports = 'silent'
+strict_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = true
+check_untyped_defs = true
+no_implicit_reexport = true
+warn_unused_configs = true
+disallow_subclassing_any = true
+disallow_incomplete_defs = true
+disallow_untyped_decorators = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true

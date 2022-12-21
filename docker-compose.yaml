@@ -1,0 +1,31 @@
+
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8000:8000"
+    environment:
+      DUNDIE_DB__uri: "postgresql://postgres:postgres@db:5432/${DUNDIE_DB:-dundie}"
+      DUNDIE_DB__connect_args: "{}"
+    volumes:
+      - .:/home/app/api
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+  db:
+    build: postgres
+    image: dundie_postgres-13-alpine-multi-user
+    volumes:
+      - $HOME/.postgres/dundie_db/data/postgresql:/var/lib/postgresql/data
+    ports:
+      # ATENÇÃO: Mude para 5432: se precisar acessar via host
+      - "5435:5432"
+    environment:
+      - POSTGRES_DBS=dundie, dundie_test
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
