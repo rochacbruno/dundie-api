@@ -1479,9 +1479,8 @@ async def get_current_super_user(
 SuperUser = Depends(get_current_super_user)
 ```
 
-Agora vamos usar essa dependencia para garantir o super usuário em nossa rota
-**EDITE** `dundie/routes/user.py`
-
+Agora vamos usar essa dependencia para garantir o super usuário em nossa rota 
+**EDITE** `dundie/routes/user.py`  
 
 No topo próximo a linha 9
 
@@ -1525,7 +1524,260 @@ curl -X 'POST' \
 ```
 
 
+## Tratando erros 
+
+Agora vamos tentar duplicar a criação de um usuário fazendo novamente a mesma chamada POST e a mensagem que receberemos é:
+
+```http
+HTTP/1.1 500 Internal Server Error
+
+Internal Server Error
+```
+
+A mensagem de erro não ajuda muito a sabermos o que ocorreu de fato e portanto podemos curtomizar este comportamento.
+
+Quando temos este caso expecifico o código de erro correto é o `409 Conflict` que innforma que o estado interno está em conflito com o estado que está sendo enviado no request.
+
+Para customizar este comportamento podemos editar o arquivo `routes/user.py`
+
+```python
+# No topo
+from sqlalchemy.exc import IntegrityError
+
+# Na função `create_user`
+async def create_user(.......):
+    ...
+    try:
+        session.commit()
+    except IntegrityError:
+        raise HTTPException(status_code=409, detail="User already exists")
+```
+
+A exception `IntegrityError` será levantada para qualquer problemas encontrado no banco de dados portanto não é ainda a melhor opção, precisamos ser mais especificos para ajudar quem está usando a API, portanto vamos fazer as seguintes modificações:
+
+1. Continuar tratando a IntegrityError porém com o código 500 e mensagem de erro genérica.
+2. Adicionar um guard para garantir que o usuário não existe.
+
+
+```python
+@router.post("/", response_model=UserResponse, status_code=201, dependencies=[SuperUser])
+async def create_user(*, session: Session = ActiveSession, user: UserRequest):
+    """Creates new user"""
+    if session.exec(select(User).where(User.username == user.username)).first():
+        raise HTTPException(status_code=409, detail="Username already taken")
+
+    db_user = User.from_orm(user)  # transform UserRequest in User
+    session.add(db_user)
+    try:
+        session.commit()
+    except IntegrityError:
+        raise HTTPException(status_code=500, detail="Database IntegrityError")
+
+    session.refresh(db_user)
+    return db_user
+```
+
+E agora sim teremos o retorno esperado 
+
+```http
+HTTP/1.1 409 Conflict
+```
+
+E no caso de um outro erro de integridade ai invés de mostrar apenas o erro 500 gnérico informamos especificamente que se trata de um problema no banco de dados, porém sem expor o erro diretamente.
+
+> **NOTA** Uma boa prática seria colocar um logger ou um analisador de exceptions como o NewRElic.
+
+
+<!-- TODO:  
+
+0. Permitir que o usuário edite o perfil
+1. Permitir que o usuário altere a senha
+2. Permitir que o manager altere a senha
+3. Permitir que o usuário peça um email
+    de alteração de senha
+
+-->
+
+
+## Update profile 
+
+Agora vamos adicionar uma rota para que o usuário possa alterar o próprio perfil.
+
+O usuário será capaz de mudar apenas os campos `bio` e `avatar`  
+bio será um texto e avatar a URL de uma imagem.
+
+Vamos começar criando o serializer que irá receber essas informações:
+
+**EDITE** `models/user.py`
+
+```python
+class UserProfilePatchRequest(BaseModel):
+    avatar: Optional[str] = None
+    bio: Optional[str] = None
+```
+
+E agora adicionamos a URL em `routes/user.py`
+
+```python
+
+@router.patch("/{username}/", response_model=UserResponse)
+async def update_user(
+    *,
+    session: Session = ActiveSession,
+    patch_data: UserProfilePatchRequest,
+    current_user: User = AuthenticatedUser,
+    username: str
+):
+    user = session.exec(select(User).where(User.username == username)).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    if user.id != current_user.id and not current_user.superuser:
+        raise HTTPException(status_code=403, detail="You can only update your own profile")
+
+    # Update
+    user.avatar = patch_data.avatar
+    user.bio = patch_data.bio
+
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
+```
+
+```bash
+curl -X 'PATCH' \
+ -H 'Authorization: Bearer ...' \
+ -H 'Content-Type: application/json' 
+ --data-raw '{"avatar": "https://test.com/MichaelScott.png", "bio": "I am the boss"}' \
+ -k 'http://localhost:8000/user/michael-scott/'
+```
+
+
+## Update de senha
+
+O endpoint de alteração de senha precisa ficar separado do perfil
+pois este endpoint precisa de alguns detalhes extras:
+
+01. O usuário precisa preencher a senha e a confirmação 
+00. A mudança pode ser feita pelo próprio usuário, pelo superuser ou através de um token requisitado por email (esqueci a senha)
+
+Começamos adicionando o serializer para receber o request da alteração do password.
+
+**EDITE** `models/user.py`
+```python
+
+from fastapi import HTTPException, status
+from dundie.security import get_password_hash
+
+...
+
+
+class UserPasswordPatchRequest(BaseModel):
+    password: str
+    password_confirm: str
+
+    @root_validator(pre=True)
+    def check_passwords_match(cls, values):
+        """Checks if passwords match"""
+        if values.get("password") != values.get("password_confirm"):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Passwords do not match"
+            )
+        return values
+
+    @property
+    def hashed_password(self) -> str:
+        """Returns hashed password"""
+        return get_password_hash(self.password)
+```
+
+Para editar o password do usuário teremos as seguintes condições 
+
+```python
+current_user == user
+# OR
+current_user.supersuser is True
+# OR
+Query.token.is_valid
+```
+
+Vamos implementar a lógica acima como uma dependencia do FastAPI
+
+**EDITE** `dundie/auth.py` e no final:
+```python
+async def get_user_if_change_password_is_allowed(
+    *,
+    request: Request,
+    pwd_reset_token: Optional[str] = None,  # from path?pwd_reset_token=xxxx
+    username: str,  # from /path/{username}
+) -> User:
+    """Returns User if one of the conditions is met.
+    1. There is a pwd_reset_token passed as query parameter and it is valid OR
+    2. authenticated_user is supersuser OR
+    3. authenticated_user is User
+    """
+    target_user = get_user(username)  # The user we want to change the password
+    if not target_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    try:
+        valid_pwd_reset_token = get_current_user(token=pwd_reset_token or "") == target_user
+    except HTTPException:
+        valid_pwd_reset_token = False
+
+    try:
+        authenticated_user = get_current_user(token="", request=request)
+    except HTTPException:
+        authenticated_user = None
+
+    if any(
+        [
+            valid_pwd_reset_token,
+            authenticated_user and authenticated_user.superuser,
+            authenticated_user and authenticated_user.id == target_user.id,
+        ]
+    ):
+        return target_user
+
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="You are not allowed to change this user's password",
+    )
+
+
+CanChangeUserPassword = Depends(get_user_if_change_password_is_allowed)
+```
+
+Agora temos `CanChangeUserPassword` como dependencia para usar em uma rota do FastAPI
+isso vai garantir que a URL só será executada se todas as condições da dependencia foram
+resolvidas.
+
+E agora em `routes/user.py` vamos criar uma rota com o método `POST`
+
+> **NOTA** o ideal para seguir a semantica REST seria criar este método como **PATCH** porém formulários HTML permitem apenas GET e POST e para facilitar o trabalho do front-end vamos usar POST.
+
+```python
+@router.post("/{username}/password/", response_model=UserResponse)
+async def change_password(
+    *,
+    session: Session = ActiveSession,
+    patch_data: UserPasswordPatchRequest,
+    user: User = CanChangeUserPassword
+):
+    user.password = patch_data.hashed_password  # pyright: ignore
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
+```
+
 ---
+
+
+
+
+
 
 > TODO: Daqui para baixo tudo muda
 

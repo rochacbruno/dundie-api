@@ -1,4 +1,3 @@
-
 #!/usr/bin/bash
 
 # Start environment with docker-compose

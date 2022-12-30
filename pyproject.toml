@@ -77,7 +77,6 @@ include_trailing_comma = true
 force_grid_wrap = 0
 combine_as_imports = true
 
-
 [tool.mypy]
 # temporarily ignore some files
 # exclude = 'foo/(zaz|bar)\.py'
