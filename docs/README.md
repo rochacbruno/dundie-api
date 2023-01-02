@@ -165,15 +165,19 @@ Esta é estrutura deste repositório, os arquivos com `*` são os que você vai 
 │   ├── __init__.py
 │   ├── security.py*             # Password Hashing
 │   ├── VERSION.txt              # SCM versioning
-│   ├── models             
+│   ├── models
 │   │   ├── __init__.py*
-│   │   ├── transaction.py*      # Models for transaction  
+│   │   ├── transaction.py*      # Models for transaction
 │   │   └── user.py*             # Models for User
-│   └── routes
-│       ├── auth.py*             # Token and Auth URLs 
+│   ├── routes
+│   │    ├── auth.py*             # Token and Auth URLs
+│   │    ├── __init__.py*
+│   │    ├── transaction.py*      # Transaction URLs 
+│   │    └── user.py*             # User URLs 
+│   └── tasks
 │       ├── __init__.py*
-│       ├── transaction.py*      # Transaction URLs 
-│       └── user.py*             # User URLs 
+│       ├── transaction.py*      # Transaction Taks 
+│       └── user.py*             # User Tasks 
 ├── postgres
 │   ├── create-databases.sh      # DB startup 
 │   └── Dockerfile               # DB image 
@@ -1772,12 +1776,263 @@ async def change_password(
     return user
 ```
 
+## Esqueci a senha
+
+O próximo passo para completar a gestão de usuários é criarmos uma URL onde o usuário irá informar o seu `email` e o sistema vai verificar se existe um usuário com este e-mail cadastrado e então enviar um e-mail com o token para permitir a alteração de senha.
+
+Nós já temos uma função que é capaz de gerar um token em `dundie/auth.py` chamada `create_access_token`
+
+E vamos usar esta função para gerar o token de alteração de senha.
+
+O fluxo será o seguinte:
+
+01. Usuário requisita um token de senha em 
+
+```http
+POST /user/pwd_reset_token/
+
+{
+  "email": "michael-scott@dm.com"
+}
+```
+```
+Response: 200 Ok
+"Email will be sent if user is registered"
+```
+
+02. A view responsável por `/user/pwd_reset_token`
+vai fazer o seguinte:
+
+- Produzir uma background task `try_to_send_pwd_reset_email(email)`.
+
+03. A função `try_to_send_pwd_reset_email` será uma task iniciada em background e irá fazer o seguinte:
+
+1. Procurar o usuário pelo e-mail
+2. Criar um token com expiração curta (Settings)
+3. Renderizar um template com o link para redefinir senha (Settings)
+4. Enviar o e-mail
+
+## Background tasks
+
+O FastAPI já tem suporte a background tasks, assim que o usuário requisita o link para resetar o password, ao invés dele ficar esperando a resposta, nós criamos uma background task que vai executar asincronamente na mesma thread porém liberando a resposta do request.
+
+> **NOTA** para processamento mais intensivo será recomendado utilizar um serviço dedicado a task queue o Celery ou o RQ, para tarefas simples como envio de email podemos fazer com asyncio.
+
+Vamos começar criando uma função que irá receber alguns parametros e enviar um e-mail.
+
+**EDITE** `dundie/tasks/user.py`
+
+```python
+import smtplib
+from datetime import timedelta
+from time import sleep
+
+from sqlmodel import Session, select
+
+from dundie.auth import create_access_token
+from dundie.config import settings
+from dundie.db import engine
+from dundie.models.user import User
+
+
+def send_email(email: str, message: str):
+    if settings.email.debug_mode is True:  # pyright: ignore
+        _send_email_debug(email, message)
+    else:
+        _send_email_smtp(email, message)
+
+
+def _send_email_debug(email: str, message: str):
+    """Mock email sending by printing to a file"""
+    with open("email.log", "a") as f:
+        sleep(3)  # pretend it takes 3 seconds
+        f.write(f"--- START EMAIL {email} ---\n" f"{message}\n" "--- END OF EMAIL ---\n")
+
+
+def _send_email_smtp(email: str, message: str):
+    """Connect to SMTP server and send email"""
+    with smtplib.SMTP_SSL(
+        settings.email.smtp_server, settings.email.smtp_port  # pyright: ignore  # pyright: ignore
+    ) as server:
+        server.login(settings.email.smtp_user, settings.email.smtp_password)  # pyright: ignore
+        server.sendmail(
+            settings.email.smtp_sender,  # pyright: ignore
+            email,
+            message.encode("utf8"),
+        )
+
+
+MESSAGE = """\
+From: Dundie <{sender}>
+To: {to}
+Subject: Password reset for Dundie
+
+Please use the following link to reset your password:
+{url}?pwd_reset_token={pwd_reset_token}
+
+This link will expire in {expire} minutes.
+"""
+# TODO: The message can be moved to an external template
+
+
+def try_to_send_pwd_reset_email(email):
+    """Given an email address sends email if user is found"""
+    with Session(engine) as session:
+        user = session.exec(select(User).where(User.email == email)).first()
+        if not user:
+            return
+
+        sender = settings.email.smtp_sender  # pyright: ignore
+        url = settings.security.PWD_RESET_URL  # pyright: ignore
+        expire = settings.security.RESET_TOKEN_EXPIRE_MINUTES  # pyright: ignore
+
+        pwd_reset_token = create_access_token(
+            data={"sub": user.username},
+            expires_delta=timedelta(minutes=expire),  # pyright: ignore
+            scope="pwd_reset",
+        )
+
+        send_email(
+            email=user.email,
+            message=MESSAGE.format(
+                sender=sender,
+                to=user.email,
+                url=url,
+                pwd_reset_token=pwd_reset_token,
+                expire=expire,
+            ),
+        )
+
+```
+
+O próximo passo é editar o arquivo `dundie/default.toml` e adicionar os settings necessários para o serviço de emails.
+
+```toml
+[default.security]
+...
+RESET_TOKEN_EXPIRE_MINUTES = 10
+PWD_RESET_URL = "https://dm.com/reset_password"
+
+[default.email]
+debug_mode = true
+smtp_sender = "no-reply@dm.com"
+smtp_server = "localhost"
+smtp_port = 1025
+smtp_user = "<replace in .secrets.toml>"
+smtp_password = "<replace in .secrets.toml>"
+```
+
+Agora podemos abrir um terminal e testar essas funções
+
+```bash
+❯ docker-compose exec api dundie shell
+Auto imports: ['settings', 'engine', 'select', 'session', 'User']
+
+In [1]: from dundie.tasks.user import try_to_send_pwd_reset_email
+
+In [2]: try_to_send_pwd_reset_email("mscott@dm.com")
+
+In [3]: open("email.log").readlines()
+Out[3]: 
+['--- START EMAIL mscott@dm.com ---\n',
+ 'From: Dundie <no-reply@dm.com>\n',
+ 'To: mscott@dm.com\n',
+ 'Subject: Password reset for Dundie\n',
+ '\n',
+ 'Please use the following link to reset your password:\n',
+ 'https://dm.com/reset_password?pwd_reset_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtaWNoYWVsLXNjb3R0IiwiZXhwIjoxNjcyNjc3OTk1LCJzY29wZSI6InB3ZF9yZXNldCJ9.nAZNxHYniofTSCzBh38gPi5Qd0FoKONw1Ge6Yp40l5s\n',
+ '\n',
+ 'This link will expire in 10 minutes.\n',
+ '\n',
+ '--- END OF EMAIL ---\n']
+```
+
+Cada e-mail enviado será adicionado ao arquivo email.log enquanto `settings.email.debug_mode` estiver ativado, futuramente podemos colocar os dados de um servidor smtp de verdade.
+
+Agora a parte principal é criar uma rota que permitirá ao iusuário solicitar o token de alteração de senha e disparar a task em background para o envio do e-mail.
+
+**EDITE** `dundie/routes/user.py` e no final vamos adicionar.
+
+
+```python
+from dundie.tasks.user import try_to_send_pwd_reset_email
+
+
+@router.post("/pwd_reset_token/")
+async def send_password_reset_token(*, email: str = Body(embed=True)):
+    try_to_send_pwd_reset_email(email)
+    return {
+        "message": "If we found a user with that email, we sent a password reset token to it."
+    }
+```
+
+Testando:
+
+```bash
+curl -X 'POST' -H 'Content-Type: application/json' \
+--data-raw '{"email": "mscott@dm.com"}' -k \
+'http://localhost:8000/user/pwd_reset_token/'
+```
+
+```http
+POST http://localhost:8000/user/pwd_reset_token/
+#+END
+HTTP/1.1 200 OK
+date: Mon, 02 Jan 2023 16:42:56 GMT
+server: uvicorn
+content-length: 87
+content-type: application/json
+
+#+RESPONSE
+{
+  "message": "If we found a user with that email, we sent a password reset token to it."
+}
+#+END
+```
+
+> **NOTA** por questões de privacidade nós não podemos confirmar se a operação deu certo.
+
+
+**Mas e as background tasks???**
+
+Ao chamar a URL `/user/pwd_reset_token/` a resposta demorou 3 segundos pois estamos bloqueando o request até o e-mail ser enviado, o ideal é que isso seja feito em background, vamos transformar a chamada de `try_to_send_pwd_reset_email` em uma task.
+
+
+**EDITE** `dundie/routes/user.py`
+
+```python
+from fastpi import BackgroundTasks
+...
+
+
+@router.post("/pwd_reset_token/")
+async def send_password_reset_token(
+    *,
+    email: str = Body(embed=True),
+    background_tasks: BackgroundTasks,
+):
+    background_tasks.add_task(try_to_send_pwd_reset_email, email=email)
+    return {
+        "message": "If we found a user with that email, we sent a password reset token to it."
+    }
+```
+
+Assim terminamos a API de gestão de usuários e Auth por enquanto
+
+![](images/user_final.png)
+
+Com estas rotas agora já podemos ter um front-end integrado para a gestão de usuários, mas o nosso próximo passo é cuidar da API de transações.
+
+
+## API de Transações
+
+Vamos começar pelos models em `dundie/models/transaction.py`
+
+
+
+
+
 ---
-
-
-
-
-
 
 > TODO: Daqui para baixo tudo muda
 
