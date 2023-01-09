@@ -1,4 +1,4 @@
-# Projeto Dundie APi 
+# Projeto Dundie API 
 
 Treinamento Python Web API na https://LINUXtips.io
 
@@ -2026,8 +2026,298 @@ Com estas rotas agora já podemos ter um front-end integrado para a gestão de u
 
 ## API de Transações
 
-Vamos começar pelos models em `dundie/models/transaction.py`
+A modelagem dos dados é a seguinte
 
+![database](images/database.png)
+
+https://dbdesigner.page.link/GqDU95ApwZs7a9RH9
+
+Portanto criaremos os models para `Transaction` e `Balance`
+
+**EDITE** `dundie/models/transaction.py`
+
+```python
+from datetime import datetime
+from typing import TYPE_CHECKING, Optional
+
+from sqlmodel import Field, Relationship, SQLModel
+
+if TYPE_CHECKING:
+    from dundie.models.user import User
+
+
+class Transaction(SQLModel, table=True):
+    """Represents the Transaction Model"""
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: int = Field(foreign_key="user.id", nullable=False)
+    from_id: int = Field(foreign_key="user.id", nullable=False)
+    value: int = Field(nullable=False)
+    date: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+
+    # Populates a `.incomes` on `User`
+    user: Optional["User"] = Relationship(
+        back_populates="incomes",
+        sa_relationship_kwargs={"primaryjoin": 'Transaction.user_id == User.id'},
+    )
+    # Populates a `.expenses` on `User`
+    from_user: Optional["User"] = Relationship(
+        back_populates="expenses",
+        sa_relationship_kwargs={"primaryjoin": 'Transaction.from_id == User.id'},
+    )
+
+
+class Balance(SQLModel, table=True):
+    """Store the balance of a user account"""
+
+    user_id: int = Field(
+        foreign_key="user.id",
+        nullable=False,
+        primary_key=True,
+        unique=True,
+    )
+    value: int = Field(nullable=False)
+    updated_at: datetime = Field(
+        default_factory=datetime.utcnow,
+        nullable=False,
+        sa_column_kwargs={"onupdate": datetime.utcnow}
+    )
+
+    # Populates a `._balance` on `User`
+    user: Optional["User"] = Relationship(back_populates="_balance")
+```
+
+E as respectivas mudanças ao `dundie/models/user.py`
+
+```python
+from typing import TYPE_CHECKING, Optional
+
+
+class User(...):
+    ...
+
+    # Populates a `.user` on `Transaction`
+    incomes: Optional[list["Transaction"]] = Relationship(
+        back_populates="user",
+        sa_relationship_kwargs={"primaryjoin": 'User.id == Transaction.user_id'},
+    )
+    # Populates a `.from_user` on `Transaction`
+    expenses: Optional[list["Transaction"]] = Relationship(
+        back_populates="from_user",
+        sa_relationship_kwargs={"primaryjoin": 'User.id == Transaction.from_id'},
+    )
+    # Populates a `.user` on `Balance`
+    _balance: Optional["Balance"] = Relationship(
+        back_populates="user",
+        sa_relationship_kwargs={"lazy": "dynamic"}
+    )
+
+    @property
+    def balance(self) -> int:
+        """Returns the current balance of the user"""
+        if (user_balance := self._balance.first()) is not None:  # pyright: ignore
+            return user_balance.value
+        return 0
+```
+
+E por fim adicionamos o novo model ao contexto do `dundie/models/__init__.py`
+
+```python
+from sqlmodel import SQLModel
+from .user import User
+from .transaction import Transaction, Balance
+
+__all__ = ["User", "SQLModel", "Transaction", "Balance"]
+```
+
+Com os models criados pediamos ao **alembic** para criar o arquivo de migration
+
+```console
+$ docker-compose exec api alembic revision --autogenerate -m "transaction"
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+
+INFO  [alembic.autogenerate.compare] Detected added table 'balance'
+INFO  [alembic.autogenerate.compare] Detected added table 'transaction'
+
+INFO  [alembic.ddl.postgresql] Detected sequence named 'user_id_seq' as owned by integer column 'user(id)', assuming SERIAL and omitting
+  Generating /home/app/api/migrations/versions/8af1cd3be673_transaction.py ...  done
+```
+
+E em sequencia aplicamos para criar as tabelas no banco de dados:
+
+```console
+❯ docker-compose exec api alembic upgrade head
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade f39cbdb1efa7 -> b0abf3428204, transaction
+```
+
+Neste momento nossas tabelas `transaction` e `balance` já devem estar criadas.
+
+**Antares SQL**
+![](images/antares_transaction.png)
+
+
+## Adicionando transactions
+
+A operação de adicionar uma transação será feita com uma requisiçãp `POST` ao endpoint `/transaction/`
+e o corpo da transaction será:
+
+```json
+{
+  "user_id": "integer",
+  "value": "integer",
+}
+```
+
+O usuário autenticado através de token será usado para popular o campo `from_id` e o campo `date` será
+preenchido automaticamente.
+
+> **NOTE** Via `CLI` também será possivel adicionar transaction, e neste caso o `from_id` será o user `admin` (que precisamos garantir a criação via migrations)
+
+### Checagens
+
+- A operação de transaction deve:  
+    01. Obter os usuários 
+    00. Iniciar uma database-transaction
+    00. Procedimento permitido? 
+        01. from_id.saldo >= value OR from_id.uperuser
+            01. Criar `Transaction`
+            00. Atualizar os saldos de `user_id` e `from_id`
+            00. Dar commit na session
+        00. saldo < value 
+            01. Retornar com erro
+
+
+### Atualizando Saldo
+
+Vamos criar uma função com a lógica necessária para adicionar transaction e atualizar
+o saldo baseando-se nas regras anteriores.
+
+**EDITE** `dundie/tasks/transaction.py`
+
+```python
+from typing import Optional
+from sqlmodel import Session
+from dundie.db import engine
+from dundie.models import User, Transaction, Balance
+
+
+class TransactionError(Exception):
+    """Can't add transaction"""
+
+
+def add_transaction(
+    *,
+    user: User,
+    from_user: User,
+    value: int,
+    session: Optional[Session] = None
+):
+    """Adds a new transaction to the specified user.
+
+    params:
+        user: The user to add transaction to.
+        from_user: The user where amount is coming from or superuser
+        value: The value being added
+    """
+    if not from_user.superuser and from_user.balance < value:
+        raise TransactionError("Insufficient balance")
+
+    session = session or Session(engine)
+
+    transaction = Transaction(user=user, from_user=from_user, value=value)  # pyright: ignore
+    session.add(transaction)
+    session.commit()
+    session.refresh(user)
+    session.refresh(from_user)
+
+    for holder in (user, from_user):
+        total_income = sum([t.value for t in holder.incomes])  # pyright: ignore
+        total_expense = sum([t.value for t in holder.expenses])  # pyright: ignore
+        balance = session.get(
+            Balance, holder.id
+        ) or Balance(user=holder, value=0)  # pyright: ignore
+        balance.value = total_income - total_expense
+        session.add(balance)
+
+    session.commit()
+```
+
+### Garantindo a existencia do usuário `admin` via data-migration.
+
+Começamos criando uma `migration` vazia para efetuarmos a operação
+de adição do usuário.
+
+```console
+$ docker-compose exec api alembic revision -m "ensure_admin_user"
+  Generating /home/app/api/migrations/versions/9aa820fb7f01_ensure_admin_user.py ...  done
+```
+
+Repare que dessa vez não usamos `--autogenerate` pois essa migration estará vazia, e neste
+caso vamos manualmente escrever o código que desejamos que seja executado.
+
+**Edite** o arquivo criado em `migrations/versions/9aa820fb7f01_ensure_admin_user.py`
+ 
+```python
+"""ensure_admin_user
+
+Revision ID: 9aa820fb7f01
+Revises: 6f4df3b5e155
+Create Date: 2023-01-06 13:13:37.907183
+
+"""
+from alembic import op
+import sqlalchemy as sa
+import sqlmodel
+from dundie.db import engine
+from dundie.models.user import User
+from sqlmodel import Session
+
+# revision identifiers, used by Alembic.
+revision = '9aa820fb7f01'
+down_revision = '6f4df3b5e155'
+branch_labels = None
+depends_on = None
+
+
+def upgrade() -> None:
+    with Session(engine) as session:
+        # if admin user already exists it will raise IntegityError
+        admin = User(
+            name="Admin",
+            username="admin",
+            email="admin@dm.com",
+            dept="management",
+            currency="USD",
+            password="admin",  # pyright: ignore
+        )
+        try:
+            session.add(admin)
+            session.commit()
+        except sa.exc.IntegityError:
+            session.rollback()
+
+
+def downgrade() -> None:
+    pass
+```
+
+
+Salve o arquivo e aplique a migration.
+
+```console
+$ docker-compose exec api alembic upgrade head                   
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade 6f4df3b5e155 -> 9aa820fb7f01, ensure_admin_user 
+``` 
+
+### Atualizando o saldo via CLI 
+
+Agora vamos criar um comando para adicionar saldo via CLI, sempre que feito via CLI 
+o usuário será o `admin`
 
 
 
