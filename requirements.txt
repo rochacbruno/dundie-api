@@ -25,6 +25,10 @@ dynaconf==3.1.11
 ecdsa==0.18.0
     # via python-jose
 fastapi==0.88.0
+    # via
+    #   -r requirements.in
+    #   fastapi-pagination
+fastapi-pagination==0.11.2
     # via -r requirements.in
 greenlet==2.0.1
     # via sqlalchemy
@@ -53,6 +57,7 @@ pycparser==2.21
 pydantic==1.10.2
     # via
     #   fastapi
+    #   fastapi-pagination
     #   sqlmodel
 pygments==2.13.0
     # via rich

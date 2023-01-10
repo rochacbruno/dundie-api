@@ -2304,6 +2304,8 @@ def downgrade() -> None:
     pass
 ```
 
+> **IMPORTANTE** a migration acima irá setar o password como `admin` e é muito importante que você defina um password mais complexo ou que faça a alteração corretamente em ambientes de produção.
+
 
 Salve o arquivo e aplique a migration.
 
@@ -2320,6 +2322,152 @@ Agora vamos criar um comando para adicionar saldo via CLI, sempre que feito via 
 o usuário será o `admin`
 
 
+**edite** `dundie/cli.py` e adicione um novo comando no final do arquivo.
+
+
+```python
+# Imports
+
+from dundie.tasks.transaction import add_transaction
+
+# Comando
+
+@main.command()
+def transaction(
+    username: str,
+    value: int,
+):
+    """Adds specified value to the user"""
+
+    table = Table(title="Transaction")
+    fields = ["user", "before", "after"]
+    for header in fields:
+        table.add_column(header, style="magenta")
+
+    with Session(engine) as session:
+        from_user = session.exec(select(User).where(User.username == "admin")).first()
+        if not from_user:
+            typer.echo("admin user not found")
+            exit(1)
+        user = session.exec(select(User).where(User.username == username)).first()
+        if not user:
+            typer.echo(f"user {username} not found")
+            exit(1)
+
+        from_user_before = from_user.balance
+        user_before = user.balance
+        add_transaction(user=user, from_user=from_user, session=session, value=value)
+        table.add_row(from_user.username, str(from_user_before), str(from_user.balance))
+        table.add_row(user.username, str(user_before), str(user.balance))
+
+        Console().print(table)
+```
+
+E para usar podemos fazer:
+
+```console
+$ docker-compose exec api dundie transaction jim-halpert 900
+          Transaction           
+┏━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃ user        ┃ before ┃ after ┃
+┡━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ admin       │ 0      │ -900  │
+│ jim-halpert │ 0      │ 900   │
+└─────────────┴────────┴───────┘
+```
+
+O usuário admin será ficará com saldo negativo e não tem limite de transferencia, 
+assim como qualquer usuário que seja super-user.
+
+## Transaction API 
+
+Agora podemos finalmente criar o endpoint na API que vai fornecer a mesma funcionalidade,
+porém com algumas diferenças, no caso da API o `from_user` será o usuário que estiver autenticado.
+
+
+**Edite** `dundie/routes/transaction.py` e adicione o seguinte código:
+
+```python
+from fastapi import APIRouter, Body, HTTPException
+from dundie.auth import AuthenticatedUser
+from dundie.db import ActiveSession
+from dundie.models import User
+from dundie.tasks.transaction import add_transaction, TransactionError
+from sqlmodel import select, Session
+
+router = APIRouter()
+
+
+@router.post('/{username}/', status_code=201)
+async def create_transaction(
+    *,
+    username: str,
+    value: int = Body(embed=True),
+    current_user: User = AuthenticatedUser,
+    session: Session = ActiveSession
+):
+    """Adds a new transaction to the specified user."""
+    user = session.exec(select(User).where(User.username == username)).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    try:
+        add_transaction(user=user, from_user=current_user, value=value, session=session)
+    except TransactionError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    # At this point there was no error, so we can return
+    return {"message": "Transaction added"}
+```
+
+
+Agora podemos adicionar essas rotas no router principal editando `dundie/routes/__init__.py`
+
+```python
+from fastapi import APIRouter
+from .auth import router as auth_router
+from .user import router as user_router
+from .transaction import router as transaction_router
+
+main_router = APIRouter()
+
+main_router.include_router(auth_router, tags=["auth"])
+main_router.include_router(user_router, prefix="/user", tags=["user"])
+main_router.include_router(transaction_router, prefix="/transaction", tags=["transaction"])
+```
+
+Neste momento o endpoint já deve aparecer na API.
+
+![](images/transaction_docs.png)
+
+
+E podemos testar fazendo uma requisição HTTP.
+
+> **Lembre-se** de trocar o token pelo token gerado a partir da URL /token/, por exemplo, gerando um token para o usuário `admin` ou outro superuser permitirá a adição de pontos infinitos.
+
+```console
+$ curl -X 'POST' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtaWNoYWVsLXNjb3R0IiwiZnJlc2giOnRydWUsImV4cCI6MTY3MzQwNjI4MCwic2NvcGUiOiJhY2Nlc3NfdG9rZW4ifQ.qO9ZSwZkDlxsOrkwpbw3zuqCzZ94lm3XPkBVWFzGnBE' \
+  --data-raw '{"value": 300}' \
+  -k 'http://localhost:8000/transaction/bruno-rocha/'
+```
+
+## Consultando transactions 
+
+Agora que já podemos trocar pontos entre usuários vamos criar endpoints onde será possivel consultar
+as transações e saldos.
+
+- `POST /transaction/{username}` (feito) - adiciona transação 
+- `GET /transaction/` - Lista todas as transações 
+    - Se `superuser` exibe todas, caso contrário apenas as próprias.
+    - permite filtros: `?from_user=username`, `?to_user=username`, `?date=...`
+    - permite ordenação: `?order_by=from_user,user,value`
+    - permite paginação: `?limit=10&offset=0` 
+
+```python
+
+```
 
 
 ---
