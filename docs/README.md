@@ -2329,6 +2329,17 @@ o usuário será o `admin`
 # Imports
 
 from dundie.tasks.transaction import add_transaction
+from dundie.models.transaction import Transaction, Balance
+
+# No comando `shell`
+def shell():
+    ...
+    _vars = {
+      ...
+      "Transaction": Transaction,
+      "Balance": Balance,
+      "add_transaction": add_transaction,
+    }
 
 # Comando
 
@@ -2461,284 +2472,333 @@ as transações e saldos.
 - `POST /transaction/{username}` (feito) - adiciona transação 
 - `GET /transaction/` - Lista todas as transações 
     - Se `superuser` exibe todas, caso contrário apenas as próprias.
-    - permite filtros: `?from_user=username`, `?to_user=username`, `?date=...`
+    - permite filtros: `?from_user=username`, `?to_user=username`
     - permite ordenação: `?order_by=from_user,user,value`
-    - permite paginação: `?limit=10&offset=0` 
+    - permite paginação: `?page=1&size=10` 
+
+
+Antes de criarmos o endpoint precisamos criar um model de saida, `TransactionResponse`
+para evitar o retorno do próprio model do banco de dados.
+
+Se fizermos isso em `dundie/models/transaction.py` teremos um problema de circular imports.
 
 ```python
+# !!!! Exemplo em dundie/models/transaction.py
+from dundie.models.user import User   # <- CIRCULAR IMPORT 
 
+
+class TransactionResponse(BaseModel):
+  user: User
 ```
 
+Para contornar este problema vamos agora criar um novo arquivo 
 
----
 
-> TODO: Daqui para baixo tudo muda
+> Primeiramente vamos colocar o serializar para Transaction e futuramente
+movemos todos os serializers definidos em `models/user.py` para este mesmo módulo.
 
-## Adicionando Models de conteúdo
+Neste serializer vamos utilizar `root_validator` para criar campos que são calculados no 
+momento da serialização.
 
-Vamos definir a tabela e serializers para posts.
-
-`dundie/models/post.py`
+*CRIE* `dundie/models/serializers.py`
 ```python
-"""Post related data models"""
-
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
-from pydantic import BaseModel, Extra
-from sqlmodel import Field, Relationship, SQLModel
+from pydantic import BaseModel, root_validator
+from sqlmodel import Session
 
-if TYPE_CHECKING:
-    from dundie.models.user import User
+from dundie.db import engine
 
-
-class Post(SQLModel, table=True):
-    """Represents the Post Model"""
-
-    id: Optional[int] = Field(default=None, primary_key=True)
-    text: str
-    date: datetime = Field(default_factory=datetime.utcnow, nullable=False)
-
-    user_id: Optional[int] = Field(foreign_key="user.id")
-    parent_id: Optional[int] = Field(foreign_key="post.id")
-
-    # It populates a `.posts` attribute to the `User` model.
-    user: Optional["User"] = Relationship(back_populates="posts")
-
-    # It populates `.replies` on this model
-    parent: Optional["Post"] = Relationship(
-        back_populates="replies",
-        sa_relationship_kwargs=dict(remote_side="Post.id"),
-    )
-    # This lists all children to this post
-    replies: list["Post"] = Relationship(back_populates="parent")
-
-    def __lt__(self, other):
-        """This enables post.replies.sort() to sort by date"""
-        return self.date < other.date
-
-
-class PostResponse(BaseModel):
-    """Serializer for Post Response"""
-
-    id: int
-    text: str
-    date: datetime
-    user_id: int
-    parent_id: Optional[int]
-
-
-class PostResponseWithReplies(PostResponse):
-    replies: Optional[list["PostResponse"]] = None
-
-    class Config:
-        orm_mode = True
-
-
-class PostRequest(BaseModel):
-    """Serializer for Post request payload"""
-
-    parent_id: Optional[int]
-    text: str
-
-    class Config:
-        extra = Extra.allow
-        arbitrary_types_allowed = True
-
-```
-
-Vamos adicionar uma back-reference em `User` para ser mais fácil obter todos
-os seus posts.
-
-`dundie/models/user.py`
-```python
-
-# No topo do arquivo
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from dundie.models.post import Post
-
-
-class User...
-    ...
-    # it populates the .user attribute on the Content Model
-    posts: List["Post"] = Relationship(back_populates="user")
-```
-
-E agora vamos colocar o model Post na raiz do módulo models.
-
-`dundie/models/__init__.py`
-```python
-from sqlmodel import SQLModel
-
-from .post import Post
 from .user import User
 
-__all__ = ["User", "SQLModel", "Post"]
+
+class TransactionResponse(BaseModel, extra="allow"):
+    id: int
+    value: int
+    date: datetime
+
+    # These 2 fields will be calculated at response time.
+    user: Optional[str] = None
+    from_user: Optional[str] = None
+
+    @root_validator(pre=True)
+    def get_usernames(cls, values: dict):
+        with Session(engine) as session:
+            user = session.get(User, values["user_id"])
+            values["user"] = user and user.username
+            from_user = session.get(User, values["from_id"])
+            values["from_user"] = from_user and from_user.username
+        return values
 ```
 
-E para facilitar a vida vamos adicionar também ao `cli.py` dentro do comando
-shell no dict `_vars` adicione o model `Post`.
-
-`dundie/cli.py`
-```python
-from .models import Post, User
-...
-_vars = {
-    ...
-    "Post": Post,
-}
-```
-
-## Database Migration
-
-Agora precisamos chamar o **alembic** para gerar a database migration relativa
-a  nova tabela `post`.
-
-Dentro do container shell
+Podemos testar no shell com:
 
 ```console
-$ alembic revision --autogenerate -m "post"
-INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
-INFO  [alembic.runtime.migration] Will assume transactional DDL.
-INFO  [alembic.autogenerate.compare] Detected added table 'post'
-INFO  [alembic.ddl.postgresql] Detected sequence named 'user_id_seq' as owned by integer column 'user(id)', assuming SERIAL and omitting
-  Generating /home/app/api/migrations/versions/f9b269f8d5f8_post.py ...  done
-```
-e aplicamos com
+$ docker-compose exec api dundie shell
+Auto imports: ['settings', 'engine', 'select', 'session', 'User', 
+               'Transaction', 'Balance', 'add_transaction']
 
-```console
-$ alembic upgrade head
-INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
-INFO  [alembic.runtime.migration] Will assume transactional DDL.
-INFO  [alembic.runtime.migration] Running upgrade 4634e842ac70 -> f9b269f8d5f8, post
-```
+In [1]: from dundie.models.serializers import TransactionResponse
 
-## Pode testar no cli dentro do container
+In [2]: t = session.get(Transaction, 1)
 
-```console
-$ dundie shell
-Auto imports: ['settings', 'engine', 'select', 'session', 'User', 'Post']
-
-In [1]: session.exec(select(Post)).all()
-Out[1]: []
-```
-
-## Adicionando rotas de conteúdo
-
-Agora os endpoints para listar e adicionar posts
-
-- `GET /post/` lista todos os posts
-- `POST /post/` cria um novo post (exige auth)
-- `GET /post/{id}` pega um post pelo ID com suas respostas
-- `GET /post/user/{username}` Lista posts de um usuário especifico
-
-`dundie/routes/post.py`
-
-```python
-from typing import List
-
-from fastapi import APIRouter
-from fastapi.exceptions import HTTPException
-from sqlmodel import Session, select
-
-from dundie.auth import AuthenticatedUser
-from dundie.db import ActiveSession
-from dundie.models.post import (
-    Post,
-    PostRequest,
-    PostResponse,
-    PostResponseWithReplies,
+In [3]: TransactionResponse.parse_obj(t)
+Out[3]: TransactionResponse(
+    value=100, 
+    date=datetime.datetime(2023, 1, 6, 12, 21, 55, 30204), 
+    user='bruno-rocha', 
+    from_user='michael-scott', 
+    user_id=2, 
+    from_id=1, 
+    id=1
 )
-from dundie.models.user import User
-
-router = APIRouter()
-
-
-@router.get("/", response_model=List[PostResponse])
-async def list_posts(*, session: Session = ActiveSession):
-    """List all posts without replies"""
-    query = select(Post).where(Post.parent == None)
-    posts = session.exec(query).all()
-    return posts
-
-
-@router.get("/{post_id}/", response_model=PostResponseWithReplies)
-async def get_post_by_post_id(
-    *,
-    session: Session = ActiveSession,
-    post_id: int,
-):
-    """Get post by post_id"""
-    query = select(Post).where(Post.id == post_id)
-    post = session.exec(query).first()
-    if not post:
-        raise HTTPException(status_code=404, detail="Post not found")
-    return post
-
-
-@router.get("/user/{username}/", response_model=List[PostResponse])
-async def get_posts_by_username(
-    *,
-    session: Session = ActiveSession,
-    username: str,
-    include_replies: bool = False,
-):
-    """Get posts by username"""
-    filters = [User.username == username]
-    if not include_replies:
-        filters.append(Post.parent == None)
-    query = select(Post).join(User).where(*filters)
-    posts = session.exec(query).all()
-    return posts
-
-
-@router.post("/", response_model=PostResponse, status_code=201)
-async def create_post(
-    *,
-    session: Session = ActiveSession,
-    user: User = AuthenticatedUser,
-    post: PostRequest,
-):
-    """Creates new post"""
-
-    post.user_id = user.id
-
-    db_post = Post.from_orm(post)  # transform PostRequest in Post
-    session.add(db_post)
-    session.commit()
-    session.refresh(db_post)
-    return db_post
 ```
 
-Adicionamos as rotas de `post` em nosso router principal.
+Agora vamos **editar** o arquivo `dundie/routes/transaction.py`
 
-`dundie/routes/__init__.py`
-No topo linha 4
 ```python
-from .post import router as post_router
+# import 
+
+from fastapi_pagination import Page, Params
+from fastapi_pagination.ext.sqlmodel import paginate
+from dundie.models import Transaction
+from dundie.models.serializers import TransactionResponse
+
+# No final do arquivo
+
+@router.get("/", response_model=Page[TransactionResponse])
+async def list_transactions(
+    *,
+    current_user: User = AuthenticatedUser,
+    session: Session = ActiveSession,
+    params: Params = Depends(),
+    from_user: Optional[str] = None,
+    user: Optional[str] = None,
+    order_by: Optional[str] = None,
+):
+    query = select(Transaction)
+
+    # Optional `AND` filters
+    if user:
+        query = query.join(User, Transaction.user_id == User.id).where(User.username == user)
+    if from_user:
+        FromUser = aliased(User)  # aliased needed to desambiguous the join
+        query = query.join(FromUser, Transaction.from_id == FromUser.id).where(
+            FromUser.username == from_user
+        )
+
+    # Mandatory access filter
+    # regular users can only see their own transactions
+    if not current_user.superuser:
+        query = query.where(
+            (Transaction.user_id == current_user.id) | (Transaction.from_id == current_user.id)
+        )
+
+    # Ordering based on &order_by=date (asc) or -date (desc)
+    if order_by:
+        order_text = text(order_by.replace("-", "") + " " + ("desc" if "-" in order_by else "asc"))
+        query = query.order_by(order_text)
+
+    # wrap response_model in a pagination object {"items": [], total, page, size }
+    return paginate(query=query, session=session, params=params)
 ```
-E no final na linha 11
+
+Agora temos um novo endpoint listando todas as transactions e com os filtros que especificamos.
+
+![](images/transaction_list.png)
+
+```console
+$ curl 'GET' -H 'Content-Type: application/json' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJicnVuby1yb2NoYSIsImZyZXNoIjp0cnVlLCJleHAiOjE2NzM0ODg0NzksInNjb3BlIjoiYWNjZXNzX3Rva2VuIn0.TLDOYKsA5TRU049_xjlir4wklhyTi0D-tkdES4KDako' \
+    -k 'http://localhost:8000/transaction/\
+    ?page=1&size=2&from_user=michael-scott&user=bruno-rocha&order_by=-date'
+```
+```json
+#+RESPONSE
+{
+  "items": [
+    {
+      "id": 12,
+      "value": 300,
+      "date": "2023-01-10T17:08:29.953452",
+      "user": "bruno-rocha",
+      "from_user": "michael-scott",
+      "from_id": 1,
+      "user_id": 2
+    },
+    {
+      "id": 11,
+      "value": 112,
+      "date": "2023-01-10T17:07:49.296277",
+      "user": "bruno-rocha",
+      "from_user": "michael-scott",
+      "from_id": 1,
+      "user_id": 2
+    }
+  ],
+  "total": 6,
+  "page": 1,
+  "size": 2
+}
+#+END
+```
+
+## Revisão da API 
+
+Agora que já temos bastante funcionalidade na API vamos revisar e identificar o que está faltando.
+
+### Auth 
+
+- POST /token - login via formulário para gerar acccess token 
+- POST /refresh_token - Obter um novo token sem a necessidade de fazer login novamente
+
+### User 
+
+- GET /user/ -  Lista todos os usuários
+- GET /user/{username} - Lista um usuário específico
+- POST🔒 /user/ - Cria um novo usuário 
+- PATCH🔒 /user/{username} - Altera informações do usuário 
+- POST  /user/{username}/password - Altera a senha do usuário (?pwd_reset_token ou 🔒)
+- POST /user/pwd_reset_token/ - Solicita um token via email para resetar a senha (?email)
+
+### Transaction 
+
+- POST🔒 /transaction/ - Cria uma nova transaction de `from_user para user`
+- GET🔒 /transaction/ - Lista transactions do usuário logado (ou todas em caso de superuser)
+    - filters: `user`, `from_user`
+    - sort: `order_by=date` (asc) ou `-date` (desc)
+    - pagination: `page`, `size`
+
+
+## Exibir saldo total em `/user/`
+
+Na listagem de usuário está faltando exibir o saldo total do usuário, 
+esta é uma informação sensivel e portanto estará disponível apenas em
+alguns casos.
+
+- `?add_balance=true` for passado na URL das rotas GET de /user/
+- O usuário logado é superuser ou
+- O usuário logado está acessando sua própria conta
+
+
+**EDITE** o arquivo `dundie/auth.py` e vamos adicionar mais uma dependencia 
+baseada em autenticação.
+
 ```python
-main_router.include_router(post_router, prefix="/post", tags=["post"])
+
+async def show_balance_field(
+    *,
+    request: Request,
+    show_balance: Optional[bool] = False,  # from /user/?show_balance=true
+) -> bool:
+    """Returns True if one of the conditions is met.
+    1. show_balance is True AND
+    2. authenticated_user.superuser OR
+    3. authenticated_user.username == username
+    """
+    if not show_balance:
+        return False
+
+    username = request.path_params.get("username")
+
+    try:
+        authenticated_user = get_current_user(token="", request=request)
+    except HTTPException:
+        authenticated_user = None
+
+    if any(
+        [
+            authenticated_user and authenticated_user.superuser,
+            authenticated_user and authenticated_user.username == username,
+        ]
+    ):
+        return True
+
+    return False
+
+
+ShowBalanceField = Depends(show_balance_field)
 ```
 
-Agora temos uma API quase toda funcional e pode testar clicando
-em `Authorize` usando as senhas criadas pelo CLI ou então crie um novo
-user antes de postar.
+Agora precisamos de um serializer contendo o campo `balance`
 
-![](auth.png)
-
-![](auth2.png)
-
-A API final
-
-![](api_user_post.png)
+**EDITE** `dundie/models/user.py`
 
 
-> **NOTA** Ainda está faltando adicionar models e rotas para seguir usuários e
-> para dar like em post.
+```python
+# Logo abaixo da classe UserResponse
+
+class UserResponseWithBalance(UserResponse):
+    balance: Optional[int] = None
+
+    @root_validator(pre=True)
+    def set_balance(cls, values: dict):
+        """Sets the balance of the user"""
+        instance = values["_sa_instance_state"].object
+        values["balance"] = instance.balance
+        return values
+```
+
+
+Agora **EDITE** o `dundie/routes/user.py` e vamos usar a dependencia
+nos endpoints `list_users` e `get_user_by_username`
+
+```python
+# IMPORTS 
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+from pydantic import parse_obj_as
+from dundie.auth import ShowBalanceField
+from dundie.models.user import UserResponseWithBalance
+
+# list_users 
+
+@router.get(
+    "/",
+    response_model=List[UserResponse] | List[UserResponseWithBalance],
+    response_model_exclude_unset=True,
+)
+async def list_users(
+    *, session: Session = ActiveSession, show_balance_field: bool = ShowBalanceField
+):
+    """List all users.
+
+    NOTES:
+    - This endpoint can be accessed with a token authentication
+    - show_balance query parameter takes effect only for authenticated superuser.
+    """
+    users = session.exec(select(User)).all()
+    if show_balance_field:
+        users_with_balance = parse_obj_as(List[UserResponseWithBalance], users)
+        return JSONResponse(jsonable_encoder(users_with_balance))
+    return users
+
+# get user by username 
+@router.get(
+    "/{username}/",
+    response_model=UserResponse | UserResponseWithBalance,
+    response_model_exclude_unset=True,
+)
+async def get_user_by_username(
+    *, session: Session = ActiveSession, username: str, show_balance_field: bool = ShowBalanceField
+):
+    """Get user by username"""
+    query = select(User).where(User.username == username)
+    user = session.exec(query).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    if show_balance_field:
+        user_with_balance = parse_obj_as(UserResponseWithBalance, user)
+        return JSONResponse(jsonable_encoder(user_with_balance))
+    return user
+```
+
+## A API está pronta!
+
+![](images/api_final.png)
+
+Bom.. nada está pronto enquanto não tiver cobertura de testes.
 
 ## Testando
 
@@ -2755,8 +2815,13 @@ Vamos adicionar um comando `reset_db` no cli
 
 > **NOTA** muito cuidado com esse comando!!!
 
-edite `dundie/cli.py` e adicione ao final
+edite `dundie/cli.py`
 ```python
+# imports
+from .db import engine, SQLModel
+
+
+# Final
 @main.command()
 def reset_db(
     force: bool = typer.Option(
@@ -2767,11 +2832,13 @@ def reset_db(
     force = force or typer.confirm("Are you sure?")
     if force:
         SQLModel.metadata.drop_all(engine)
-
 ```
 
 Em um ambiente de CI geralmente usamos `Github Actions` ou `Jenkins` para executar
-esses passos, em nosso caso vamos criar um script em bash para executar essas tarefas.
+esses passos, em nosso caso vamos usar um script em bash para executar essas tarefas.
+
+> **NOTA** esses mesmos passos podem ser traduzidos para um job no Github actions, inclusive 
+> reaproveitando o mesmo script.
 
 `test.sh`
 ```bash
@@ -2800,20 +2867,20 @@ docker-compose down
 Para os tests vamos utilizar o Pytest para testar algumas rotas da API,
 com o seguinte fluxo
 
-1. Criar usuário1
-2. Obter um token para o usuário1
-3. Criar um post1 com o usuário1
-4. Criar usuario2
-5. Obter um token para o usuario2
-6. Responder o post1 com o usuario2
-7. Consultar `/post` e garantir que apareçam os posts
-8. COnsultar `/post/id` e garantir que apareça o post com a resposta
-9. Consultar `/post/user/usuario1` e garantir que os posts são listados
+# Setup 
 
+01. Obter um token para o usuário admin
+00. Criar usuário1
+00. Obter um token para o usuário1
+00. Criar usuario2
+00. Obter um token para o usuario2
+
+Durante o setup teremos **fixtures** do Pytest já configuradas com clientes
+HTTP para acessar a API com qualquer um dos usuários ou de forma anonima.
 
 Começamos configurando o Pytest
 
-`tests/conftest.py`
+**EDITE** `tests/conftest.py`
 ```python
 import os
 
