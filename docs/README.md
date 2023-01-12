@@ -2296,7 +2296,7 @@ def upgrade() -> None:
         try:
             session.add(admin)
             session.commit()
-        except sa.exc.IntegityError:
+        except sa.exc.IntegrityError:
             session.rollback()
 
 
@@ -2854,7 +2854,11 @@ sleep 5
 docker-compose exec api dundie reset-db -f
 docker-compose exec api alembic stamp base
 
-# run migrations
+# run migrations interactively so ensure unlocked transactions.
+docker-compose exec api alembic upgrade base
+docker-compose exec api alembic upgrade +1
+
+# Data migrations cannot run on locked so run separately
 docker-compose exec api alembic upgrade head
 
 # run tests
@@ -2896,15 +2900,17 @@ os.environ["DUNDIE_DB__uri"] = "postgresql://postgres:postgres@db:5432/dundie_te
 
 @pytest.fixture(scope="function")
 def api_client():
+    """Unauthenticated test client"""
     return TestClient(app)
 
 
-def create_api_client_authenticated(username):
-
-    try:
-        create_user(f"{username}@dundie.com", username, username)
-    except IntegrityError:
-        pass
+def create_api_client_authenticated(username, dept="sales", create=True):
+    """Creates a new api client authenticated for the specified user."""
+    if create:
+        try:
+            create_user(name=username, email=f"{username}@dm.com", password=username, dept=dept)
+        except IntegrityError:
+            pass
 
     client = TestClient(app)
     token = client.post(
@@ -2917,106 +2923,141 @@ def create_api_client_authenticated(username):
 
 
 @pytest.fixture(scope="function")
+def api_client_admin():
+    return create_api_client_authenticated("admin", create=False)
+
+
+@pytest.fixture(scope="function")
 def api_client_user1():
-    return create_api_client_authenticated("user1")
+    return create_api_client_authenticated("user1", dept="management")
 
 
 @pytest.fixture(scope="function")
 def api_client_user2():
     return create_api_client_authenticated("user2")
+
+
+@pytest.fixture(scope="function")
+def api_client_user3():
+    return create_api_client_authenticated("user3")
 ```
 
-E agora adicionamos os testes
+E agora adicionamos alguns testes em `tests/test_api.py`
 
 ```python
 import pytest
 
+USER_RESPONSE_KEYS = {"name", "username", "dept", "avatar", "bio", "currency"}
+USER_RESPONSE_WITH_BALANCE_KEYS = USER_RESPONSE_KEYS | {"balance"}
+
 
 @pytest.mark.order(1)
-def test_post_create_user1(api_client_user1):
-    """Create 2 posts with user 1"""
-    for n in (1, 2):
-        response = api_client_user1.post(
-            "/post/",
-            json={
-                "text": f"hello test {n}",
-            },
-        )
-        assert response.status_code == 201
-        result = response.json()
-        assert result["text"] == f"hello test {n}"
-        assert result["parent_id"] is None
+def test_user_list(
+    api_client,
+    api_client_user1,  # pyright: ignore
+    api_client_user2,  # pyright: ignore
+    api_client_user3,  # pyright: ignore
+):
+    """Ensure that all needed users are created and showing on the /user/ API
+
+    NOTE: user fixtures are called just to trigger creation of users.
+    """
+    users = api_client.get("/user/").json()
+    expected_users = ["admin", "user1", "user2", "user3"]
+    assert len(users) == len(expected_users)
+    for user in users:
+        assert user["username"] in expected_users
+        assert user["dept"] in ["management", "sales"]
+        assert user["currency"] == "USD"
+        assert set(user.keys()) == USER_RESPONSE_KEYS
 
 
 @pytest.mark.order(2)
-def test_reply_on_post_1(api_client, api_client_user1, api_client_user2):
-    """each user will add a reply to the first post"""
-    posts = api_client.get("/post/user/user1/").json()
-    first_post = posts[0]
-    for n, client in enumerate((api_client_user1, api_client_user2), 1):
-        response = client.post(
-            "/post/",
-            json={
-                "text": f"reply from user{n}",
-                "parent_id": first_post["id"],
-            },
-        )
-        assert response.status_code == 201
-        result = response.json()
-        assert result["text"] == f"reply from user{n}"
-        assert result["parent_id"] == first_post["id"]
+def test_user_detail(api_client):
+    """Ensure that the /user/{username} API is working"""
+    user = api_client.get("/user/user1/").json()
+    assert user["username"] == "user1"
+    assert set(user.keys()) == USER_RESPONSE_KEYS
 
 
 @pytest.mark.order(3)
-def test_post_list_without_replies(api_client):
-    response = api_client.get("/post/")
-    assert response.status_code == 200
-    results = response.json()
-    assert len(results) == 2
-    for result in results:
-        assert result["parent_id"] is None
-        assert "hello test" in result["text"]
+def test_update_user_profile_by_admin(api_client_admin):
+    """Ensure that admin can patch any user data"""
+    data = {"avatar": "https://example.com/avatar.png", "bio": "I am a user1"}
+    api_client_admin.patch("/user/user1/", json=data)
+    user = api_client_admin.get("/user/user1/").json()
+    assert user["avatar"] == data["avatar"]
+    assert user["bio"] == data["bio"]
 
 
 @pytest.mark.order(3)
-def test_post1_detail(api_client):
-    posts = api_client.get("/post/user/user1/").json()
-    first_post = posts[0]
-    first_post_id = first_post["id"]
-
-    response = api_client.get(f"/post/{first_post_id}/")
-    assert response.status_code == 200
-    result = response.json()
-    assert result["id"] == first_post_id
-    assert result["user_id"] == first_post["user_id"]
-    assert result["text"] == "hello test 1"
-    assert result["parent_id"] is None
-    replies = result["replies"]
-    assert len(replies) == 2
-    for reply in replies:
-        assert reply["parent_id"] == first_post_id
-        assert "reply from user" in reply["text"]
+def test_update_user_profile_by_user(api_client_user2):
+    """Ensure that user can patch their own data"""
+    data = {"avatar": "https://example.com/avatar.png", "bio": "I am a user2"}
+    api_client_user2.patch("/user/user2/", json=data)
+    user = api_client_user2.get("/user/user2/").json()
+    assert user["avatar"] == data["avatar"]
+    assert user["bio"] == data["bio"]
 
 
 @pytest.mark.order(3)
-def test_all_posts_from_user1(api_client):
-    response = api_client.get("/post/user/user1/")
-    assert response.status_code == 200
-    results = response.json()
-    assert len(results) == 2
-    for result in results:
-        assert result["parent_id"] is None
-        assert "hello test" in result["text"]
+def test_fail_update_user_profile_by_other_user(api_client_user2):
+    """User 2 will attempt to patch User 1 profile and it will fail"""
+    response = api_client_user2.patch("/user/user1/", json={})
+    assert response.status_code == 403
 
 
-@pytest.mark.order(3)
-def test_all_posts_from_user1_with_replies(api_client):
-    response = api_client.get(
-        "/post/user/user1/", params={"include_replies": True}
-    )
-    assert response.status_code == 200
-    results = response.json()
-    assert len(results) == 3
+@pytest.mark.order(4)
+def test_add_transaction_for_users_from_admin(api_client_admin):
+    """Admin user adds a transaction for all users"""
+    usernames = ["user1", "user2", "user3"]
+
+    for username in usernames:
+        api_client_admin.post(f"/transaction/{username}/", json={"value": 500})
+
+    for username in usernames:
+        user = api_client_admin.get(f"/user/{username}/?show_balance=true").json()
+        assert user["balance"] == 500
+
+
+@pytest.mark.order(5)
+def test_user1_transfer_20_points_to_user2(api_client_user1):
+    """Ensure that user1 can transfer points to user2"""
+    api_client_user1.post("/transaction/user2/", json={"value": 20})
+    user1 = api_client_user1.get("/user/user1/?show_balance=true").json()
+    assert user1["balance"] == 480
+
+    # user1 can see balance of user2 because user1 is a manager
+    user2 = api_client_user1.get("/user/user2/?show_balance=true").json()
+    assert user2["balance"] == 520
+
+
+@pytest.mark.order(6)
+def test_user_list_with_balance(api_client_admin):
+    """Ensure that admin can see user balance"""
+    users = api_client_admin.get("/user/?show_balance=true").json()
+    expected_users = ["admin", "user1", "user2", "user3"]
+    assert len(users) == len(expected_users)
+    for user in users:
+        assert user["username"] in expected_users
+        assert set(user.keys()) == USER_RESPONSE_WITH_BALANCE_KEYS
+
+
+@pytest.mark.order(6)
+def test_admin_can_list_all_transactions(api_client_admin):
+    """Admin can list all transactions"""
+    transactions = api_client_admin.get("/transaction/").json()
+    assert transactions["total"] == 4
+
+
+@pytest.mark.order(6)
+def test_regular_user_can_see_only_own_transaction(api_client_user3):
+    """Regular user can see only own transactions"""
+    transactions = api_client_user3.get("/transaction/").json()
+    assert transactions["total"] == 1
+    assert transactions["items"][0]["value"] == 500
+    assert transactions["items"][0]["user"] == "user3"
+    assert transactions["items"][0]["from_user"] == "admin"
 ```
 
 E para executar os tests podemos ir na raiz do projeto **FORA DO CONTAINER**
