@@ -38,6 +38,8 @@ Treinamento Python Web API na https://LINUXtips.io
 Primeiro precisamos de um ambiente virtual para instalar
 as dependencias do projeto.
 
+
+
 ```console
 python -m venv .venv
 ```
@@ -50,6 +52,8 @@ source .venv/bin/activate
 # Windows Power Shell
 .\venv\Scripts\activate.ps1
 ```
+
+> **NOTA** Se você estiver ridando no gitpod.io não é preciso criar a virtualenv, pode usar o Python global do sistema.
 
 Vamos instalar ferramentas de produtividade neste ambiente que estão listadas no arquivo `requirements-dev.txt`
 
@@ -94,27 +98,13 @@ para funcionários da empresa **Dunder Mifflin**.
 ### Usuários
 
 - Registro de novos funcionários **via CLI e via API**
-  - CLI: `dundie add-user [Nome] [Email] [Departamento] [Password Inicial]`
+  - CLI: `dundie create-user [Nome] [Email] [Password Inicial] [departamento]`
   - API: `POST /user/ data={nome:.., email:.., departamento:.., password:..}`
-  - Cada usuário no momento da criação recebe uma nova transação adicionando 100 pontos
-  - Durante o setup do sistema um usuário `admin` será criado com um saldo de 10.000 pontos.
-  - Usuários `Manager` recebem 1000 pontos para poder distribuir.
+  - Usuários do departamento `management` são considerados super usuáripos
   - O `username` é gerado a partir do slug do nome do usuário `Pam Besly` -> `pam-besly`
 - Autenticação de usuários com JWT token
-  - Para usar a API será necessário uma chamada `GET /token data={username, password}` e todas as chamadas subsequentes precisarão do token informado nos `HEADERS`. 
-- Remoção de usuários via API 
-  - Apenas o usuário do departamento `Manager` poderá fazer uma chamada `DELETE /user/username/` e a deleção do usuário será permitida apenas se o saldo de pontos estiver vazio.
-
-
-Endpoints:
-- `POST /user/` cria um novo usuário 
-  - Acesso: `Manager`
-- `GET /user/username/` retorna os detalhes do usuário
-  - Acesso: `Geral`
-- `DELETE /user/username/` deleta um usuário
-  - Acesso: `Manager`
-  - Validação: Saldo zerado
-
+  - Para usar a API será necessário uma chamada `GET /token data={username, password}` e todas as chamadas subsequentes precisarão do token informado nos `HEADERS`.
+- O usuário pode requisitar um token para alteração de senha
 
 ### Transações 
 
@@ -127,17 +117,11 @@ Endpoints:
 Endpoints:
 
 - `POST /transaction/username/` - Registra uma transação para um usuário
-  - Execução: Task Queue
-  - Resposta: `{task_id}`  
   - Acesso: `Geral`
   - Validação: O usuário autenticado é o `from_id` da transação e deve ter saldo suficiente.
 - `GET /transaction/username/` - Retorna as transações de um usuário incluindo seu `balance` (saldo todal) 
   - Acesso: `Manager` ou `username == current_user`
 - `GET /transaction/` - Retorna todas as transações
-  - Acesso: `Manager`
-- `GET /transaction/status/{id}/` - Retorna o status de uma transação
-  - Response: enum[pending, running, success, failure]
-  - Acesso: `Geral`
 
 ## Estrutura de pastas e arquivos
 
@@ -433,7 +417,7 @@ precisamos agora garantir que a estrutura da tabela existe dentro do banco
 de dados.
 
 Para isso vamos usar a biblioteca `alembic` que gerencia migrações, ou seja,
-alterações na estrutura das tabelas.
+alterações na estrutura das tabelas e automação de alteração em dados.
 
 Começamos na raiz do repositório e rodando:
 
@@ -479,29 +463,27 @@ import sqlmodel  # linha NOVA
 ```
 
 Agora sim podemos começar a usar o **alembic** para gerenciar as
-migrations, precisamos executar este comando dentro do container
-portando execute
+migrations, precisamos executar este comando dentro do shell do container.
 
-**IMPORTANTE!!!**: todos os comandos a partir de agora serão executados no shell dentro do container!!!
+> **IMPORTANTE!!!**: todos os comandos a partir de agora serão executados no shell dentro do container!!!
+> E para fazer isso usaremos `docker-compose exec`
 
 
 ```console
 $ docker-compose exec api /bin/bash
-app@c5dd026e8f92:~/api$ # este é o shell dentro do container
+app@c5dd026e8f92:~/api$ # este é o shell dentro do container api
+# digite exit para sair
 ```
 
-E dentro do prompt do container rode:
+Podemos redirecionar comandos diretamente para dentro do container com `docekr-compose exec api [comando a ser executado]` portanto execute:
 
 ```console
-$ alembic revision --autogenerate -m "initial"
+$ docker-compose exec api alembic revision --autogenerate -m "initial"
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
 INFO  [alembic.autogenerate.compare] Detected added table 'user'
   Generating /home/app/api/migrations/versions/ee59b23815d3_initial.py ...  done
 ```
-
-
-> **DICA** alternativamente pode executar `docker-compose exec api COMANDO` ex: `docker-compose exec api python -V`
 
 Repare que o alembic identificou o nosso model `User` e gerou uma migration
 inicial que fará a criação desta tabela no banco de dados.
@@ -509,7 +491,7 @@ inicial que fará a criação desta tabela no banco de dados.
 Podemos aplicar a migration rodando dentro do container:
 
 ```console
-$ alembic upgrade head
+$ docker-compose exec api alembic upgrade head
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
 INFO  [alembic.runtime.migration] Running upgrade  -> ee59b23815d3, initial
@@ -523,11 +505,9 @@ pode usar um client como https://antares-sql.app para se conectar ao banco de da
 
 
 ```console
-# Dentro do shell do container
-# alternativa: docker-compose exec api ipython
-
-$ ipython
->>>
+$ docker-compose exec api ipython
+# Agora está no ipython dentro do shell do container
+In [1]: 
 ```
 
 Digite
@@ -546,13 +526,13 @@ usuário no banco de dados.
 
 Foi preciso muito **boilerplate** para conseguir se conectar ao banco de dados para facilitar a nossa vida vamos adicionar uma aplicação `cli` onde vamos poder executar tarefas administrativas no shell.
 
+Digite `exit` para sair do ipython.
+
 ## Criando a CLI base
 
 **EDITE** `dundie/cli.py`
 
 ```python
-
-
 import typer
 from rich.console import Console
 from rich.table import Table
@@ -604,7 +584,9 @@ def user_list():
     Console().print(table)
 ```
 
-E agora no shell do container podemos executar
+> Não se esqueça de salvar os arquivo modificado :) 
+
+E agora podemos executar.
 
 ```console
 $ docker-compose exec api dundie --help
@@ -645,10 +627,9 @@ Out[2]: <Box: {'connect_args': {}, 'uri': 'postgresql://postgres:postgres@db:543
 ```
 
 Ainda não temos usuários cadastrados pois ainda está faltando uma parte importante
-**criptografar as senhas** para os usuários.
+que é o **hash de senhas** para os usuários.
 
 ## Hash passwords
-
 
 Precisamos ser capazes de encryptar as senhas dos usuários e para isso tem alguns
 requisitos, primeiro precisamos de uma chave em nosso arquivo de settings:
@@ -761,9 +742,6 @@ def generate_username(name: str) -> str:
     return name.lower().replace(" ", "-")
 ```
  
- 
- 
- 
 ## Adicionando usuários pelo cli
 
 **EDITE** `dundie/cli.py` e adicione 
@@ -804,7 +782,7 @@ def create_user(
 E no terminal do container execute
 
 ```console
-❯ docker-compose exec api dundie create-user --help
+$ docker-compose exec api dundie create-user --help
                                                     
  Usage: dundie create-user [OPTIONS] NAME EMAIL     
                            PASSWORD DEPT            
@@ -832,8 +810,7 @@ E no terminal do container execute
 E então
 
 ```console
-$ docker-compose exec api dundie create-user \     
-    "Michael Scott" mscott@dm.com boss123 management 
+$ docker-compose exec api dundie create-user "Michael Scott" mscott@dm.com boss123 management 
 created michael-scott user
 
 $ docker-compose exec api dundie user-list
@@ -857,14 +834,12 @@ através da CLI, teremos as seguintes rotas:
 - `POST /user/` - Cadastro de novo usuário
 - `GET /user/{username}/` - Detalhe de um usuário
 
-> **TODO:** A exclusão de usuários será implementada depois.
-
 ### Serializers
 
 A primeira coisa que precisamos é definir serializers, que são models
 intermediários usados para serializar e de-serializar dados de entrada e saída
 da API e eles são necessários pois não queremos export o model do
-banco de dados diretamente na API.
+banco de dados diretamente na API e também queremos a possibilidade de serializar campos opcionais dependendo do nível de acesso do usuário, por exemplo, admins poderão ver mais campos que usuários regulares.
 
 **EDITE** `dundie/models/user.py`
 
@@ -908,7 +883,7 @@ class UserRequest(BaseModel):
         return values
 ```
 
-Podemos testar os serializers em nosso shell.
+Podemos testar os serializers em nosso shell só para ter certeza do funcionamento correto.
 
 ```python
 $ docker-compose exec api dundie shell    
@@ -1181,10 +1156,12 @@ curl -X 'GET' \
 ]
 ```
 
+Só tem um pequeno problema: Qualquer um consegue criar usuários em nossa API sem estar autenticado e isso não é desejável.
+
 ## Autenticação
 
 Agora que já podemos criar usuários é importante conseguirmos autenticar
-os usuários pois desta forma podemos começar a criar postagens via API
+os usuários pois desta forma podemos limitar o acesso a alguns endpoints.
 
 Esse será arquivo com a maior quantidade de código **boilerplate**.
 
@@ -1345,8 +1322,8 @@ async def validate_token(token: str = Depends(oauth2_scheme)) -> User:
 > através dele que iremos garantir que nossas rotas estejas protegidas
 > com token.
 
-A simples presença das urls `/token` e `/refresh_token` fará o FastAPI
-incluir autenticação na API portanto vamos definir essas urls:
+Agora precisamos mapear a função de geração e validação de tokens na API, expondo a 
+URL `/token` para que possamos gerar um token para um usuário.
 
 **EDITE** `dundie/routes/auth.py`
 ```python
@@ -1441,7 +1418,7 @@ E depois na linha 9
 main_router.include_router(auth_router, tags=["auth"])
 ```
 
-Vamos testar a aquisição de um token via curl ou através da UI.
+Vamos testar a aquisição de um token via curl.
 
 ```bash
 curl -X 'POST' \
@@ -1450,8 +1427,7 @@ curl -X 'POST' \
   -H 'Content-Type: application/x-www-form-urlencoded' \
   -d 'username=michael-scott&password=boss123'
 ```
-
-
+Resposta:
 ```json
 {
   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImZyZXNoIjp0cnVlLCJleHAiOjE2Njg2Mjg0NjgsInNjb3BlIjoiYWNjZXNzX3Rva2VuIn0.P-F3onD2vFFIld_ls1irE9rOgLNk17SNDASls31lgkU",
@@ -1492,7 +1468,8 @@ No topo próximo a linha 9
 from dundie.auth import SuperUser
 ```
 
-E no roteamento da view `create_user` no final 
+E no roteamento da view `create_user` como parametro para o decorator `.post` passamos uma lista de
+dependencias que sejam satisfeitas pelo FAstAPI antes de executar o código da view, ou seja, o código só será executado caso o usuário autenticado via token seja um superusuário.
 
 ```python
 
@@ -1502,13 +1479,12 @@ async def create_user(*, session: Session = ActiveSession, user: UserRequest):
 
 ```
 
-Adicionamos `dependencies=[SuperUser]` no roteamento e isso é o suficiente para o FastAPI detectar que existe pelo menos uma URL que necessita de autenticação e agora já teremos os controles de autenticação na API.
+Como adicionamos `dependencies=[SuperUser]` no roteamento e isso é o suficiente para o FastAPI detectar que existe pelo menos uma URL que necessita de autenticação e agora já teremos os controles de autenticação na API.
 
 ![Auth](images/auth_form.png)
 
 
 Ao tentar criar um usuário sem autenticar teremos agora um erro `HTTP_401_UNAUTHORIZED` e se o usuário autenticado não for um superuser termos o erro `HTTP_403_FORBIDDEN`
-
 
 Os requests vão precisar do token, portanto o usuário primeiro precisa pedir um token na URL `/token` e depois usar este token na requisição protegida 
 
@@ -1589,18 +1565,7 @@ HTTP/1.1 409 Conflict
 
 E no caso de um outro erro de integridade ai invés de mostrar apenas o erro 500 gnérico informamos especificamente que se trata de um problema no banco de dados, porém sem expor o erro diretamente.
 
-> **NOTA** Uma boa prática seria colocar um logger ou um analisador de exceptions como o NewRElic.
-
-
-<!-- TODO:  
-
-0. Permitir que o usuário edite o perfil
-1. Permitir que o usuário altere a senha
-2. Permitir que o manager altere a senha
-3. Permitir que o usuário peça um email
-    de alteração de senha
-
--->
+> **NOTA** Uma boa prática seria colocar um logger ou um analisador de exceptions como o NewRelic ou o Sentry.
 
 
 ## Update profile 
@@ -1699,11 +1664,12 @@ class UserPasswordPatchRequest(BaseModel):
 Para editar o password do usuário teremos as seguintes condições 
 
 ```python
+# O usuário pode editar o próprio password
 current_user == user
-# OR
+# O usuário pode editar o password de outro usuário se for superuser
 current_user.supersuser is True
-# OR
-Query.token.is_valid
+# ou se o usuário tiver um token válido
+Query("?pwd_reset_token") is valid
 ```
 
 Vamos implementar a lógica acima como uma dependencia do FastAPI
@@ -1814,9 +1780,9 @@ vai fazer o seguinte:
 
 ## Background tasks
 
-O FastAPI já tem suporte a background tasks, assim que o usuário requisita o link para resetar o password, ao invés dele ficar esperando a resposta, nós criamos uma background task que vai executar asincronamente na mesma thread porém liberando a resposta do request.
+O FastAPI já tem suporte a background tasks, assim que o usuário requisita o link para resetar o password, ao invés dele ficar esperando a resposta, nós criamos uma background task que vai executar assincronamente na mesma thread porém liberando a resposta do request.
 
-> **NOTA** para processamento mais intensivo será recomendado utilizar um serviço dedicado a task queue o Celery ou o RQ, para tarefas simples como envio de email podemos fazer com asyncio.
+> **NOTA** para processamento mais intensivo será recomendado utilizar um serviço dedicado a task queue como o Celery oy **python-rq** que veremos na fase 2 do projero, para tarefas simples como envio de email podemos fazer com asyncio.
 
 Vamos começar criando uma função que irá receber alguns parametros e enviar um e-mail.
 
@@ -1949,17 +1915,20 @@ Out[3]:
 
 Cada e-mail enviado será adicionado ao arquivo email.log enquanto `settings.email.debug_mode` estiver ativado, futuramente podemos colocar os dados de um servidor smtp de verdade.
 
-Agora a parte principal é criar uma rota que permitirá ao iusuário solicitar o token de alteração de senha e disparar a task em background para o envio do e-mail.
+Agora a parte principal é criar uma rota que permitirá ao usuário solicitar o token de alteração de senha e disparar a task em background para o envio do e-mail.
 
 **EDITE** `dundie/routes/user.py` e no final vamos adicionar.
 
 
 ```python
+# import
 from dundie.tasks.user import try_to_send_pwd_reset_email
 
 
+# view
 @router.post("/pwd_reset_token/")
 async def send_password_reset_token(*, email: str = Body(embed=True)):
+    """Sends an email with the token to reset password."""
     try_to_send_pwd_reset_email(email)
     return {
         "message": "If we found a user with that email, we sent a password reset token to it."
@@ -1990,7 +1959,7 @@ content-type: application/json
 #+END
 ```
 
-> **NOTA** por questões de privacidade nós não podemos confirmar se a operação deu certo.
+> **NOTA** por questões de privacidade nós não podemos confirmar se a operação deu certo, o usuário terá que verificar na caixa de e-mail que em nosso caso é o arquivo de log.
 
 
 **Mas e as background tasks???**
@@ -2001,6 +1970,7 @@ Ao chamar a URL `/user/pwd_reset_token/` a resposta demorou 3 segundos pois esta
 **EDITE** `dundie/routes/user.py`
 
 ```python
+# IMPORT
 from fastpi import BackgroundTasks
 ...
 
@@ -2009,9 +1979,9 @@ from fastpi import BackgroundTasks
 async def send_password_reset_token(
     *,
     email: str = Body(embed=True),
-    background_tasks: BackgroundTasks,
+    background_tasks: BackgroundTasks,  # NEW
 ):
-    background_tasks.add_task(try_to_send_pwd_reset_email, email=email)
+    background_tasks.add_task(try_to_send_pwd_reset_email, email=email)  # NEW
     return {
         "message": "If we found a user with that email, we sent a password reset token to it."
     }
@@ -2147,7 +2117,7 @@ INFO  [alembic.ddl.postgresql] Detected sequence named 'user_id_seq' as owned by
 E em sequencia aplicamos para criar as tabelas no banco de dados:
 
 ```console
-❯ docker-compose exec api alembic upgrade head
+$ docker-compose exec api alembic upgrade head
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
 INFO  [alembic.runtime.migration] Running upgrade f39cbdb1efa7 -> b0abf3428204, transaction
@@ -2161,12 +2131,11 @@ Neste momento nossas tabelas `transaction` e `balance` já devem estar criadas.
 
 ## Adicionando transactions
 
-A operação de adicionar uma transação será feita com uma requisiçãp `POST` ao endpoint `/transaction/`
+A operação de adicionar uma transação será feita com uma requisição `POST` ao endpoint `/transaction/{username}/`
 e o corpo da transaction será:
 
 ```json
 {
-  "user_id": "integer",
   "value": "integer",
 }
 ```
@@ -2180,7 +2149,6 @@ preenchido automaticamente.
 
 - A operação de transaction deve:  
     01. Obter os usuários 
-    00. Iniciar uma database-transaction
     00. Procedimento permitido? 
         01. from_id.saldo >= value OR from_id.uperuser
             01. Criar `Transaction`
@@ -2188,7 +2156,6 @@ preenchido automaticamente.
             00. Dar commit na session
         00. saldo < value 
             01. Retornar com erro
-
 
 ### Atualizando Saldo
 
@@ -2271,9 +2238,8 @@ Create Date: 2023-01-06 13:13:37.907183
 from alembic import op
 import sqlalchemy as sa
 import sqlmodel
-from dundie.db import engine
-from dundie.models.user import User
-from sqlmodel import Session
+from dundie.models.user import User  # NEW
+from sqlmodel import Session  # NEW
 
 # revision identifiers, used by Alembic.
 revision = '9aa820fb7f01'
@@ -2282,22 +2248,24 @@ branch_labels = None
 depends_on = None
 
 
-def upgrade() -> None:
-    with Session(engine) as session:
-        # if admin user already exists it will raise IntegityError
-        admin = User(
-            name="Admin",
-            username="admin",
-            email="admin@dm.com",
-            dept="management",
-            currency="USD",
-            password="admin",  # pyright: ignore
-        )
-        try:
-            session.add(admin)
-            session.commit()
-        except sa.exc.IntegrityError:
-            session.rollback()
+def upgrade() -> None:  # NEW
+    bind = op.get_bind()
+    session = Session(bind=bind)
+
+    admin = User(
+        name="Admin",
+        username="admin",
+        email="admin@dm.com",
+        dept="management",
+        currency="USD",
+        password="admin",  # pyright: ignore
+    )
+    # if admin user already exists it will raise IntegrityError
+    try:
+        session.add(admin)
+        session.commit()
+    except sa.exc.IntegrityError:
+        session.rollback()
 
 
 def downgrade() -> None:
@@ -2469,11 +2437,11 @@ $ curl -X 'POST' \
 Agora que já podemos trocar pontos entre usuários vamos criar endpoints onde será possivel consultar
 as transações e saldos.
 
-- `POST /transaction/{username}` (feito) - adiciona transação 
+- `POST /transaction/{username}/` (feito) - adiciona transação 
 - `GET /transaction/` - Lista todas as transações 
     - Se `superuser` exibe todas, caso contrário apenas as próprias.
-    - permite filtros: `?from_user=username`, `?to_user=username`
-    - permite ordenação: `?order_by=from_user,user,value`
+    - permite filtros: `?from_user=username`, `?user=username`
+    - permite ordenação: `?order_by=from_user,user,value,date`
     - permite paginação: `?page=1&size=10` 
 
 
@@ -2482,13 +2450,9 @@ para evitar o retorno do próprio model do banco de dados.
 
 Se fizermos isso em `dundie/models/transaction.py` teremos um problema de circular imports.
 
-```python
-# !!!! Exemplo em dundie/models/transaction.py
-from dundie.models.user import User   # <- CIRCULAR IMPORT 
-
-
-class TransactionResponse(BaseModel):
-  user: User
+```diff
+- # !!!! Exemplo em dundie/models/transaction.py
+- from dundie.models.user import User   # <- CIRCULAR IMPORT 
 ```
 
 Para contornar este problema vamos agora criar um novo arquivo 
@@ -2644,6 +2608,8 @@ $ curl 'GET' -H 'Content-Type: application/json' \
 #+END
 ```
 
+> **NOTA** Repare que como usamos o plugin fastapi_pagination agora o formato da resposta está diferente contendo `items`, `total`, `page` e `size`
+
 ## Revisão da API 
 
 Agora que já temos bastante funcionalidade na API vamos revisar e identificar o que está faltando.
@@ -2798,7 +2764,7 @@ async def get_user_by_username(
 
 ![](images/api_final.png)
 
-Bom.. nada está pronto enquanto não tiver cobertura de testes.
+Não é bem assim... nada está pronto enquanto não tiver cobertura de testes.
 
 ## Testando
 
@@ -2854,11 +2820,7 @@ sleep 5
 docker-compose exec api dundie reset-db -f
 docker-compose exec api alembic stamp base
 
-# run migrations interactively so ensure unlocked transactions.
-docker-compose exec api alembic upgrade base
-docker-compose exec api alembic upgrade +1
-
-# Data migrations cannot run on locked so run separately
+# run migrations
 docker-compose exec api alembic upgrade head
 
 # run tests
@@ -2878,6 +2840,8 @@ com o seguinte fluxo
 00. Obter um token para o usuário1
 00. Criar usuario2
 00. Obter um token para o usuario2
+00. Criar usuario3
+00. Obter um token para o usuario3 
 
 Durante o setup teremos **fixtures** do Pytest já configuradas com clientes
 HTTP para acessar a API com qualquer um dos usuários ou de forma anonima.
@@ -2943,6 +2907,20 @@ def api_client_user3():
 ```
 
 E agora adicionamos alguns testes em `tests/test_api.py`
+
+**Plano de testes**
+
+- Como um usuário anonimo consigo listar os usuarios e não posso ver o saldo 
+- Como um usuário anonimo consigo listar os detalhes de um usuário sem o saldo 
+- Como usuário admin consigo atualizar o perfil de um usuário 
+- Como um usuário autenticado consigo atualziar meu próprio perfil 
+- Como um usuário autenticado não consigo atualizar o perfil de outro usuário 
+- Como usuário admin consigo transferir qualquer quantidade de pontos para todos os usuários
+- Como um usuário autenticado consigo tranferir 20 pontos para outro usuário e ver o saldo
+- Como um usuário admin consigo ver o saldo de todos os usuários 
+- Como um usuário admin consigo ver todas as transações
+- Como um usuário autenticado consigo ver apenas minhas transações
+
 
 ```python
 import pytest
@@ -3069,97 +3047,42 @@ e
 ```console
 $ ./test.sh
 [+] Running 3/3
- ⠿ Network fastapi-workshop_default  Created                      0.0s
- ⠿ Container fastapi-workshop-db-1   Started                      0.5s
- ⠿ Container fastapi-workshop-api-1  Started                      1.4s
-
+ ⠿ Network dundie-api_default  Created                                                     0.1s
+ ⠿ Container dundie-api-db-1   Started                                                     0.7s
+ ⠿ Container dundie-api-api-1  Started                                                     1.7s
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
-INFO  [alembic.runtime.migration] Running stamp_revision f432efb19d1a ->
+INFO  [alembic.runtime.migration] Running stamp_revision 9aa820fb7f01 -> 
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
-INFO  [alembic.runtime.migration] Running upgrade  -> ee59b23815d3, initial
-INFO  [alembic.runtime.migration] Running upgrade 4634e842ac70 -> f9b269f8d5f8, post
-
-========================= test session starts =========================
+INFO  [alembic.runtime.migration] Running upgrade  -> f39cbdb1efa7, initial
+INFO  [alembic.runtime.migration] Running upgrade f39cbdb1efa7 -> b0abf3428204, transaction
+INFO  [alembic.runtime.migration] Running upgrade b0abf3428204 -> 9aa820fb7f01, ensure_admin_user
+===================================== test session starts ======================================
 platform linux -- Python 3.10.8, pytest-7.2.0, pluggy-1.0.0 -- /usr/local/bin/python
 cachedir: .pytest_cache
-rootdir: /home/app/api
+rootdir: /home/app/api, configfile: pyproject.toml
 plugins: order-1.0.1, anyio-3.6.2
-collected 6 items
+collected 10 items                                                                             
 
-tests/test_api.py::test_post_create_user1 PASSED                [ 16%]
-tests/test_api.py::test_reply_on_post_1 PASSED                  [ 33%]
-tests/test_api.py::test_post_list_without_replies PASSED        [ 50%]
-tests/test_api.py::test_post1_detail PASSED                     [ 66%]
-tests/test_api.py::test_all_posts_from_user1 PASSED             [ 83%]
-tests/test_api.py::test_all_posts_from_user1_with_replies PASSED [100%]
+tests/test_api.py::test_user_list PASSED                                                 [ 10%]
+tests/test_api.py::test_user_detail PASSED                                               [ 20%]
+tests/test_api.py::test_update_user_profile_by_admin PASSED                              [ 30%]
+tests/test_api.py::test_update_user_profile_by_user PASSED                               [ 40%]
+tests/test_api.py::test_fail_update_user_profile_by_other_user PASSED                    [ 50%]
+tests/test_api.py::test_add_transaction_for_users_from_admin PASSED                      [ 60%]
+tests/test_api.py::test_user1_transfer_20_points_to_user2 PASSED                         [ 70%]
+tests/test_api.py::test_user_list_with_balance PASSED                                    [ 80%]
+tests/test_api.py::test_admin_can_list_all_transactions PASSED                           [ 90%]
+tests/test_api.py::test_regular_user_can_see_only_own_transaction PASSED                 [100%]
 
-========================== 6 passed in 1.58s ==========================
-
+====================================== 10 passed in 4.62s ======================================
 [+] Running 3/3
- ⠿ Container fastapi-workshop-api-1  Removed                      0.8s
- ⠿ Container fastapi-workshop-db-1   Removed                      0.6s
- ⠿ Network fastapi-workshop_default  Removed                      0.5s
+ ⠿ Container dundie-api-api-1  Removed                                                     1.2s
+ ⠿ Container dundie-api-db-1   Removed                                                     0.7s
+ ⠿ Network dundie-api_default  Removed                                                     0.3s
 ```
 
+## Fase 2 - Front-end
 
-## Desafios finais
 
-Lembra-se do nosso database?
-
-![](database.png)
-
-Em nosso projeto está faltando adicionar os models para `Social` e `Like`
-
-### Social
-
-O objetivo é que um usuário possa seguir outro usuário,
-para isso o usuário precisará estar autenticado e fazer um `post` request em
-`POST /user/follow/{id}` e sua tarefa é implementar esse endpoint armazenando
-o resultado na tabela `Social`.
-
-- Passo 1
-  Edite `dundie/models/user.py` e adicione a tabela `Social` com toda a
-  especificação e relacionamentos necessários. (adicione esse model ao `__init__.py`
-- Passo 2
-  Execute dentro do shell do container `alembic revision --autogenerate -m 'social'`
-  para criar a migração
-- Passo 3
-  Aplique as migrations de tabela com `alembic upgrade head`
-- Passo 4
-  Crie o Endpoint em `dundie/routes/user.py` com a lógica necessária e adicione ao
-  router `__init__.py`
-- Passo 5
-  Escreva um teste em `tests_user.py` para testar a funcionalidade de um usuário
-  seguir outro usuário
-- Passo 6
-  Em `dundie/routes/user.py` cria uma rota `/timeline` que ao acessar `/user/timeline`
-  irá listar todos os posts de todos os usuários que o user autenticado segue.
-
-### Like
-
-O objetivo é que um usuário possa enviar um like em um post e para isso
-precisará estar autenticado e fazer um `post` em `/post/{post_id}/like/`
-e a sua tarefa é implementar esse endpoint salvando o resultado na tabela `Like`.
-
-- Passo1
-  Edite `dundie/model/post.py` e adicione a tabela `Like` com toda a especificação
-  necessária com relacionamentos e adicione ao model `__init__.py`
-- Passo 2
-  Execute dentro do shell do container `alembic revision --autogenerate -m 'like'`
-  para criar a migração
-- Passo 3
-  Aplique as migrations de tabela com `alembic upgrade head`
-- Passo 4
-  Crie o endpoint em `dundie/routes/post.py` com a lógica necessária e adicione ao
-  routes `__init__.py`
-- Passo 5
-  Escreva um teste onde um user pode deixar um like em um post
-- Passo 6
-  Em `dundie/routes/post.py` crie uma rota `/likes/{username}/` que retorne
-  todos os posts que um user curtiu.
-
-### Desafio extra opcional
-
-Use React ou VueJS para criar um front-end para esta aplicação :)
