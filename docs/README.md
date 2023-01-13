@@ -38,8 +38,6 @@ Treinamento Python Web API na https://LINUXtips.io
 Primeiro precisamos de um ambiente virtual para instalar
 as dependencias do projeto.
 
-
-
 ```console
 python -m venv .venv
 ```
@@ -3043,7 +3041,7 @@ E para executar os tests podemos ir na raiz do projeto **FORA DO CONTAINER**
 ```console
 $ chmod +x test.sh
 ```
-e
+e o resultado:
 ```console
 $ ./test.sh
 [+] Running 3/3
@@ -3083,6 +3081,21 @@ tests/test_api.py::test_regular_user_can_see_only_own_transaction PASSED        
  ⠿ Network dundie-api_default  Removed                                                     0.3s
 ```
 
-## Fase 2 - Front-end
+## Fase 2
+
+
+### Tarefas agendadas
+
+
+### Front-end
+
+O foco deste treinamento não é front-end, no inicio do treinamento no day 1 até abordamos o
+básico sobre HTML, CSS e JS só apra contextualziar quem nunca trabalhou com tecnologias web.
+
+O Foco do treinamento é totalmente back-end mas é importante saber qual o fluxo de trabalho 
+quando um projeto de API como esse tem integração com front-end.
+
+Portanto em nossa aula extra faremos a integração com um projeto de UI já pronto e eu vou explicar
+o passo a passo dessa integração.
 
 
