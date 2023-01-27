@@ -1,0 +1,1 @@
+# Configurando SECRET_KEY
