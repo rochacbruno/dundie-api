@@ -32,8 +32,6 @@
 # CLI
 
 - [Criando a CLI](./15_cli.md)
-- [Criando um comando](./16_comando.md)
-- [Adicionando um shell](./17_shell.md)
 
 # Password Hash
 
