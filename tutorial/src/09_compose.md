@@ -61,6 +61,10 @@ O próximo passo é estando na raiz do repositório executar:
 ```bash
 docker-compose up -d
 ```
+```admonish info
+Na primeira execução poderá demorar mais termpo pois as imagens serão construidas.
+```
+
 
 Para verificar os serviços que estão rodando:
 

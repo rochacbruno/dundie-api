@@ -1,8 +1,5 @@
 # Projeto Dundie API
 
-```admonish tip
-Você pode mudar o tema dessa página, caso prefira pro exemplo dark ou light theme clicando no ícone <i class="fa fa-paint-brush"></i> na barra superior.
-```
 
 ## LINUXTips - Python Web API
 
@@ -38,5 +35,6 @@ Ahh e se você não usa o Discord, não tem problema, pode acessar https://LINUX
 
 Tudo pronto para começar?
 
-
-
+```admonish tip
+Você pode mudar o tema dessa página, caso prefira pro exemplo dark ou light theme clicando no ícone <i class="fa fa-paint-brush"></i> na barra superior.
+```

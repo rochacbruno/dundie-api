@@ -22,7 +22,7 @@ no arquivo `.secrets.toml` na raiz do repositório, isso é recomendável pois p
 arquivo `.secrets.toml` ao `.gitignore` para que ele não seja enviado para o repositório e desta 
 maneira evitamos expor a chave secreta.
 
-`.secrets.toml` (na raiz do repositório)
+**CRIE** o arquivo `.secrets.toml` (na raiz do repositório)
 ```toml
 [development]
 dynaconf_merge = true

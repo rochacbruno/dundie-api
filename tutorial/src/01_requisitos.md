@@ -2,7 +2,7 @@
 
 ## Opção 1: Executando localmente
 
-- Acesso a um computador com Python 3.10
+- Acesso a um computador com Python
 - Terminal Linux/Mac (ou WSL)
 - Docker e docker-compose
 - Editor de código de sua preferência (VSCode, vim, micro, emacs)

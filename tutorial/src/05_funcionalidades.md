@@ -64,3 +64,4 @@ graph TD;
     D --> B
 ```
 
+Agora vamos ver como será a estrutura dos arquivos -->

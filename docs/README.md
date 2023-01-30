@@ -978,34 +978,34 @@ async def create_user(*, session: Session = ActiveSession, user: UserRequest):
     return db_user
 ```
 
-Agora repare que estamos importando `ActiveSession` mas este objeto não existe
-em `dundie/db.py` então vamos criar
+<!-- Agora repare que estamos importando `ActiveSession` mas este objeto não existe -->
+<!-- em `dundie/db.py` então vamos criar -->
 
 
-No topo de `dundie/db.py` nas linhas 2 e 3
-```python
-from fastapi import Depends
-from sqlmodel import Session, create_engine
-```
+<!-- No topo de `dundie/db.py` nas linhas 2 e 3 -->
+<!-- ```python -->
+<!-- from fastapi import Depends -->
+<!-- from sqlmodel import Session, create_engine -->
+<!-- ``` -->
 
-No final de `dundie/db.py` após a linha 13
+<!-- No final de `dundie/db.py` após a linha 13 -->
 
-```python
-def get_session():
-    with Session(engine) as session:
-        yield session
+<!-- ```python -->
+<!-- def get_session(): -->
+<!--     with Session(engine) as session: -->
+<!--         yield session -->
 
 
-ActiveSession = Depends(get_session)
-```
+<!-- ActiveSession = Depends(get_session) -->
+<!-- ``` -->
 
-O objeto que `ActiveSession` é uma dependência para rotas do FastAPI
-quando usarmos este objeto como parâmetro de uma view o FastAPI
-vai executar de forma **lazy** este objeto e passar o retorno da função
-atrelada a ele como argumento da nossa view.
+<!-- O objeto que `ActiveSession` é uma dependência para rotas do FastAPI -->
+<!-- quando usarmos este objeto como parâmetro de uma view o FastAPI -->
+<!-- vai executar de forma **lazy** este objeto e passar o retorno da função -->
+<!-- atrelada a ele como argumento da nossa view. -->
 
-Neste caso teremos sempre uma conexão com o banco de dados dentro de cada
-view que marcarmos com `session: Session = ActiveSession`.
+<!-- Neste caso teremos sempre uma conexão com o banco de dados dentro de cada -->
+<!-- view que marcarmos com `session: Session = ActiveSession`. -->
 
 Agora podemos mapear as rotas na aplicação principal primeiro criamos um
 router principal que serve para agregar todas as rotas:

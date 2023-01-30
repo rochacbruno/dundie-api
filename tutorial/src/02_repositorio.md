@@ -16,9 +16,9 @@ Os blocos de código aqui apresentados que contém `$` significam que é um coma
 
 ## Opção 1: Rodando localmente em seu computador
 
-Faça o clone o projeto para uma pasta no seu ambiente local usando git:
+Faça o clone o projeto para uma pasta no seu ambiente local usando git, substituindo `USER` pelo seu nome de usuário do github:
 
-```console 
+```console
 $ cd pasta/onde/vc/guarda/seus/projetos
 $ git clone git@github.com:USER/dundie-api.git
 $ cd dundie-api
