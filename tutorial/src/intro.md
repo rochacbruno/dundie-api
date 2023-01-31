@@ -39,3 +39,12 @@ Tudo pronto para começar?
 ```admonish tip
 Você pode mudar o tema dessa página, caso prefira pro exemplo dark ou light theme clicando no ícone <i class="fa fa-paint-brush"></i> na barra superior.
 ```
+
+<!-- git commit & date are injected in this block -->
+<div style="font-size: 0.75em;">
+  <center>
+    <code>
+      {{ #include ../version.md }}
+    </code>
+  </center>
+</div>

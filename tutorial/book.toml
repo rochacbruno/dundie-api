@@ -31,7 +31,11 @@ on_failure = "bail"
 [output.html]
 additional-css = ["./theme/catppuccin.css", "./theme/catppuccin-highlight.css", "./theme/pagetoc.css", "./theme/mdbook-admonish.css"]
 additional-js = ["./theme/pagetoc.js", "mermaid.min.js", "mermaid-init.js"]
-
+git-repository-url = "https://github.com/rochacbruno/dundie-api"
+edit-url-template = "https://github.com/rochacbruno/dundie-api/edit/main/tutorial/{path}"
+default-theme = "light"
+preferred-dark-theme = "mocha"
+# no-section-label = false
 # [output.epub]
 # additional-css = ["./path/to/main.css"]
 # use-default-css = false
