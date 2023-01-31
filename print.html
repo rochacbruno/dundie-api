@@ -1,0 +1,3497 @@
+<!DOCTYPE HTML>
+<html lang="pt" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Dundie API - Curso Python LINUXtips</title>
+        <meta name="robots" content="noindex" />
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/catppuccin-highlight.css">
+        <link rel="stylesheet" href="./theme/pagetoc.css">
+        <link rel="stylesheet" href="./theme/mdbook-admonish.css">
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "mocha" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intro.html">Intro</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Ambiente</li><li class="chapter-item expanded "><a href="01_requisitos.html"><strong aria-hidden="true">1.</strong> Requisitos</a></li><li class="chapter-item expanded "><a href="02_repositorio.html"><strong aria-hidden="true">2.</strong> Repositório</a></li><li class="chapter-item expanded "><a href="03_ambiente.html"><strong aria-hidden="true">3.</strong> Ambiente dev</a></li><li class="chapter-item expanded affix "><li class="part-title">Conhecendo o Projeto</li><li class="chapter-item expanded "><a href="04_projeto.html"><strong aria-hidden="true">4.</strong> O Projeto</a></li><li class="chapter-item expanded "><a href="05_funcionalidades.html"><strong aria-hidden="true">5.</strong> Funcionalidades</a></li><li class="chapter-item expanded "><a href="06_estrutura.html"><strong aria-hidden="true">6.</strong> Estrutura de arquivos</a></li><li class="chapter-item expanded affix "><li class="part-title">Containers</li><li class="chapter-item expanded "><a href="07_api_base.html"><strong aria-hidden="true">7.</strong> Criando uma API base</a></li><li class="chapter-item expanded "><a href="08_container.html"><strong aria-hidden="true">8.</strong> Criando um container</a></li><li class="chapter-item expanded "><a href="09_compose.html"><strong aria-hidden="true">9.</strong> Orquestrando serviços</a></li><li class="chapter-item expanded affix "><li class="part-title">Banco de dados</li><li class="chapter-item expanded "><a href="10_modelagem.html"><strong aria-hidden="true">10.</strong> Modelagem com SQLModel</a></li><li class="chapter-item expanded "><a href="12_config.html"><strong aria-hidden="true">11.</strong> Configurações</a></li><li class="chapter-item expanded "><a href="13_conexao_db.html"><strong aria-hidden="true">12.</strong> Conexão com o DB</a></li><li class="chapter-item expanded "><a href="14_migrations.html"><strong aria-hidden="true">13.</strong> Migrations</a></li><li class="chapter-item expanded affix "><li class="part-title">CLI</li><li class="chapter-item expanded "><a href="15_cli.html"><strong aria-hidden="true">14.</strong> Criando a CLI</a></li><li class="chapter-item expanded affix "><li class="part-title">Password Hash</li><li class="chapter-item expanded "><a href="18_secret_key.html"><strong aria-hidden="true">15.</strong> Configurando SECRET_KEY</a></li><li class="chapter-item expanded "><a href="19_hash.html"><strong aria-hidden="true">16.</strong> Criando um hash</a></li><li class="chapter-item expanded "><a href="20_comando_usuario.html"><strong aria-hidden="true">17.</strong> Comando para criar usuários</a></li><li class="chapter-item expanded affix "><li class="part-title">User API endpoints</li><li class="chapter-item expanded "><a href="21_serializers.html"><strong aria-hidden="true">18.</strong> Definindo Serializers</a></li><li class="chapter-item expanded "><a href="22_injecao_dependencia.html"><strong aria-hidden="true">19.</strong> Injeção de dependência</a></li><li class="chapter-item expanded "><a href="23_view.html"><strong aria-hidden="true">20.</strong> Criando as Views</a></li><li class="chapter-item expanded "><a href="24_roteamento.html"><strong aria-hidden="true">21.</strong> Roteamento de URL</a></li><li class="chapter-item expanded affix "><li class="part-title">Autenticação</li><li class="chapter-item expanded "><a href="25_tokens.html"><strong aria-hidden="true">22.</strong> Gerando tokens</a></li><li class="chapter-item expanded "><a href="26_auth.html"><strong aria-hidden="true">23.</strong> Criando Endpoints de Auth</a></li><li class="chapter-item expanded "><a href="27_protegendo_rotas.html"><strong aria-hidden="true">24.</strong> Protegendo rotas</a></li><li class="chapter-item expanded affix "><li class="part-title">Tratando erros</li><li class="chapter-item expanded "><a href="28_erros_http.html"><strong aria-hidden="true">25.</strong> Erros HTTP</a></li><li class="chapter-item expanded affix "><li class="part-title">Alterando Dados</li><li class="chapter-item expanded "><a href="29_update_user.html"><strong aria-hidden="true">26.</strong> Update User</a></li><li class="chapter-item expanded "><a href="30_change_password.html"><strong aria-hidden="true">27.</strong> Change Password</a></li><li class="chapter-item expanded "><a href="31_esqueci_senha.html"><strong aria-hidden="true">28.</strong> Esqueci minha senha</a></li><li class="chapter-item expanded affix "><li class="part-title">Background Tasks</li><li class="chapter-item expanded "><a href="33_enviando_email_async.html"><strong aria-hidden="true">29.</strong> Enviando emails assíncronos</a></li><li class="chapter-item expanded affix "><li class="part-title">Transaction API Endpoints</li><li class="chapter-item expanded "><a href="34_transaction_modelagem_dados.html"><strong aria-hidden="true">30.</strong> Modelagem de dados</a></li><li class="chapter-item expanded "><a href="35_transaction_business_logic.html"><strong aria-hidden="true">31.</strong> Business Logic</a></li><li class="chapter-item expanded "><a href="36_admin_data_migrations.html"><strong aria-hidden="true">32.</strong> Data Migrations</a></li><li class="chapter-item expanded "><a href="37_transaction_cli.html"><strong aria-hidden="true">33.</strong> Transaction CLI</a></li><li class="chapter-item expanded "><a href="38_transaction_api.html"><strong aria-hidden="true">34.</strong> Transaction API</a></li><li class="chapter-item expanded "><a href="39_transaction_filtrando_dados.html"><strong aria-hidden="true">35.</strong> Filtrando dados</a></li><li class="chapter-item expanded "><a href="40_transaction_expondo_saldo.html"><strong aria-hidden="true">36.</strong> Expondo saldo do usuário</a></li><li class="chapter-item expanded affix "><li class="part-title">Testes</li><li class="chapter-item expanded "><a href="42_testes_pipeline.html"><strong aria-hidden="true">37.</strong> Definindo um pipeline</a></li><li class="chapter-item expanded "><a href="43_testes_configurando_pytest.html"><strong aria-hidden="true">38.</strong> Configurando Pytest</a></li><li class="chapter-item expanded "><a href="44_testes_api.html"><strong aria-hidden="true">39.</strong> Testes de API</a></li><li class="chapter-item expanded affix "><li class="part-title">Tarefas Agendadas</li><li class="chapter-item expanded affix "><li class="part-title">Front-end</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="final.html">Final</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Dundie API - Curso Python LINUXtips</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rochacbruno/dundie-api" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <div class="sidetoc"><nav class="pagetoc"></nav></div>
+                        <h1 id="projeto-dundie-api"><a class="header" href="#projeto-dundie-api">Projeto Dundie API</a></h1>
+<h2 id="linuxtips---python-web-api"><a class="header" href="#linuxtips---python-web-api">LINUXTips - Python Web API</a></h2>
+<p>Olá, este é o material de apoio do projeto desenvolvido durante o
+treinamento <a href="https://www.linuxtips.io/course/python-para-web-e-api">Python Web API</a>
+para ter acesso aos videos e grupo de alunos + emissão do certificado clique no link e matricule-se.</p>
+<p>Durante o treinamento, você vai aprender:</p>
+<ul>
+<li>Montar o ambiente de desenvolvimento</li>
+<li>Organizar as pastas do projeto</li>
+<li>Orquestrar os serviços com containers</li>
+<li>Modelar o banco de dados</li>
+<li>Fazer migração de dados</li>
+<li>Criar uma CLI para gerenciar o projeto</li>
+<li>Criar uma API com FastAPI</li>
+<li>Autenticar usuários com JWT</li>
+<li>Enviar e-mails com background tasks</li>
+<li>Trabalhar com task queue</li>
+<li>Planejar testes</li>
+<li>Preparar um pipeline de testes</li>
+<li>Escrever testes automatizados</li>
+<li>Usar protocolo web-sockets</li>
+<li>Integrar com um Front-End</li>
+</ul>
+<p>Se tiver qualquer dúvida não hesite em postar em nosso grupo do
+Discord, lá você vai obter ajuda do intrutor e também dos demais alunos.
+(O link para o grupo está no primeiro item lá na plataforma)</p>
+<p>Ahh e se você não usa o Discord, não tem problema, pode acessar <a href="https://linuxtips.io/social">https://LINUXtips/social</a> e postar lá aba referente ao treinamento.</p>
+<p>Faça parte do Discord da LINUXtips cliando em <a href="https://discord.gg/MpTwbWYhaF">Convite Discord Geral</a> (observação: no discord existem salas públicas e uma sala exclusiva para alunos.)</p>
+<p>Siga o autor deste treinamento no twitter <a href="https://twitter.com/rochacbruno">Bruno Rocha</a></p>
+<p>Tudo pronto para começar?</p>
+<div id="admonition-tip" class="admonition tip">
+<div class="admonition-title">
+<p>Tip</p>
+<p><a class="admonition-anchor-link" href="intro.html#admonition-tip"></a></p>
+</div>
+<div>
+<p>Você pode mudar o tema dessa página, caso prefira pro exemplo dark ou light theme clicando no ícone <i class="fa fa-paint-brush"></i> na barra superior.</p>
+</div>
+</div>
+<!-- git commit & date are injected in this block -->
+<div style="font-size: 0.75em;">
+  <center>
+    <code>
+      <!--
+  This is a dummy file, the git version & date will be appended here
+  via `netlify.toml` or `github actions` configuration when the book is deployed.
+-->
+commit f0256d0 on 2023-01-31 20:02:46
+    </code>
+  </center>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="requisitos"><a class="header" href="#requisitos">Requisitos</a></h1>
+<h2 id="opção-1-executando-localmente"><a class="header" href="#opção-1-executando-localmente">Opção 1: Executando localmente</a></h2>
+<ul>
+<li>Acesso a um computador com Python</li>
+<li>Terminal Linux/Mac (ou WSL)</li>
+<li>Docker e docker-compose</li>
+<li>Editor de código de sua preferência (VSCode, vim, micro, emacs)</li>
+</ul>
+<div id="admonition-info" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="01_requisitos.html#admonition-info"></a></p>
+</div>
+<div>
+<p>Durante as aulas em video o instrutor estará usando o editor vim mas você pode usar o editor de sua preferência.</p>
+</div>
+</div>
+<hr />
+<h2 id="opção-2-executando-online-no-gitpod"><a class="header" href="#opção-2-executando-online-no-gitpod">Opção 2: Executando online no Gitpod</a></h2>
+<ul>
+<li>Browser (Chrome ou Firefox)</li>
+<li>Conta no https://gitpod.io</li>
+</ul>
+<div id="admonition-tip" class="admonition tip">
+<div class="admonition-title">
+<p>Tip</p>
+<p><a class="admonition-anchor-link" href="01_requisitos.html#admonition-tip"></a></p>
+</div>
+<div>
+<p>A conta gratuita do gitpod oferece 50 horas por mês de uso e no ambiente já tem editor (VSCode), terminal Linux e containers, tudo isso rodando diretamenteem seu navegador.</p>
+</div>
+</div>
+<hr />
+<div id="admonition-warning" class="admonition warning">
+<div class="admonition-title">
+<p>Warning</p>
+<p><a class="admonition-anchor-link" href="01_requisitos.html#admonition-warning"></a></p>
+</div>
+<div>
+<p>Os comandos apresentados serão todos executados em um terminal Linux, se estiver no Windows recomendo usar o WSL, uma máquina virtual ou um container Linux, ou por conta própria adaptar os comandos necessários.</p>
+</div>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="repositório"><a class="header" href="#repositório">Repositório</a></h1>
+<h2 id="obtenha-uma-cópia-do-repositório"><a class="header" href="#obtenha-uma-cópia-do-repositório">Obtenha uma cópia do Repositório</a></h2>
+<ol>
+<li>Faça login no github e faça um fork do respositório deste projeto clicando em:
+<ul>
+<li><a href="https://github.com/rochacbruno/dundie-api/fork">https://github.com/rochacbruno/dundie-api/fork</a></li>
+</ul>
+</li>
+</ol>
+<div id="admonition-important" class="admonition tip">
+<div class="admonition-title">
+<p>Important</p>
+<p><a class="admonition-anchor-link" href="02_repositorio.html#admonition-important"></a></p>
+</div>
+<div>
+<p>Continue apenas após ter feito o fork do repositório para a sua conta do Github.</p>
+</div>
+</div>
+<hr />
+<div id="admonition-warning" class="admonition warning">
+<div class="admonition-title">
+<p>Warning</p>
+<p><a class="admonition-anchor-link" href="02_repositorio.html#admonition-warning"></a></p>
+</div>
+<div>
+<p>Os blocos de código aqui apresentados que contém <code>$</code> significam que é um comando que deve ser executado no terminal, o simbolo <code>$</code> não faz parte do comando, este simbolo indica o prompt e provavelmente o seu terminal irá exibir <code>$</code> ou algum caracter de marcação similar como <code>&gt;</code> ou <code>#</code>.</p>
+<p>É recomendado que você digite os comandos ao invés de copiar e colar, mas caso prefira copiar e colar lembre-se que o sinal de <code>$</code> não precisa ser copiado.</p>
+</div>
+</div>
+<hr />
+<h1 id="obtendo-os-arquivos"><a class="header" href="#obtendo-os-arquivos">Obtendo os arquivos</a></h1>
+<h3 id="opção-1-rodando-localmente-em-seu-computador"><a class="header" href="#opção-1-rodando-localmente-em-seu-computador">Opção 1: Rodando localmente em seu computador</a></h3>
+<p>Faça o clone o projeto para uma pasta no seu ambiente local usando git, substituindo <code>USER</code> pelo seu nome de usuário do github:</p>
+<pre><code class="language-console">$ cd pasta/onde/vc/guarda/seus/projetos
+$ git clone git@github.com:USER/dundie-api.git
+$ cd dundie-api
+</code></pre>
+<div id="admonition-help" class="admonition question">
+<div class="admonition-title">
+<p>Help</p>
+<p><a class="admonition-anchor-link" href="02_repositorio.html#admonition-help"></a></p>
+</div>
+<div>
+<p>Para clonar usando <code>git@...</code> você precisa ter seu git local configurado com chave ssh, caso contrário terá que clonar usando o endereço <code>https://github.com/USER/dundie-api</code></p>
+</div>
+</div>
+<hr />
+<h3 id="opção-2-rodando-no-seu-navegador-com-gitpod"><a class="header" href="#opção-2-rodando-no-seu-navegador-com-gitpod">Opção 2: Rodando no seu navegador com gitpod</a></h3>
+<p>Caso tenha optado por utilizar o gitpod basta acessar <a href="https://gitpod.io">https://gitpod.io</a> e efetuar o login <strong>utilizando sua conta do Github.</strong></p>
+<div id="admonition-copie-e-cole-no-navegador-substituindo-user-pelo-seu-nome-de-usuário" class="admonition success">
+<div class="admonition-title">
+<p>copie e cole no navegador substituindo USER pelo seu nome de usuário.</p>
+<p><a class="admonition-anchor-link" href="02_repositorio.html#admonition-copie-e-cole-no-navegador-substituindo-user-pelo-seu-nome-de-usuário"></a></p>
+</div>
+<div>
+<p>https://gitpod.io/#https://github.com/USER/dundie-api</p>
+</div>
+</div>
+<p>O gitpod irá criar um ambiente virtual para você, com tudo configurado para rodar o projeto e você terá acesso ao editor e ao terminal.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ambiente-de-desenvolvimento"><a class="header" href="#ambiente-de-desenvolvimento">Ambiente de Desenvolvimento</a></h1>
+<p>Ambiente Dev é para fins de programação o conjunto de ferramentas, bibliotecas e variáveis que precisam estar disponíveis para desenvolver, testar e manter o projeto.</p>
+<h2 id="preparando-o-ambiente"><a class="header" href="#preparando-o-ambiente">Preparando o Ambiente</a></h2>
+<h3 id="opção-1-rodando-no-seu-computador-local"><a class="header" href="#opção-1-rodando-no-seu-computador-local">Opção 1: Rodando no seu computador local</a></h3>
+<p>Dentro da pasta <code>dundie-api</code> e crie um ambiente virtual.</p>
+<pre><code class="language-console">$ python -m venv .venv
+</code></pre>
+<p>E ative a virtualenv</p>
+<p>No Linux/Mac ou Windows WSL</p>
+<pre><code class="language-console">$ source .venv/bin/activate
+</code></pre>
+<p>No Windows Power Shell</p>
+<pre><code class="language-console">$ .\venv\Scripts\activate.ps1
+</code></pre>
+<div id="admonition-success" class="admonition success">
+<div class="admonition-title">
+<p>Success</p>
+<p><a class="admonition-anchor-link" href="03_ambiente.html#admonition-success"></a></p>
+</div>
+<div>
+<p>O ambiente virtual ativado fará com que seu terminal exiba <code>(.venv)</code> juntamente do prompt, você ainda pode digitar no terminal <code>which python</code> para confirmar se o ambiente está mesmo ativado, o output deverá ser <code>[...]/.venv/bin/python</code></p>
+</div>
+</div>
+<h3 id="opção-2-rodando-online-com-o-gitpod"><a class="header" href="#opção-2-rodando-online-com-o-gitpod">Opção 2: Rodando online com o gitpod</a></h3>
+<blockquote>
+<p>No gitpod.io não é preciso criar um abiente virtual, o ambiente já vem configurado isoladamente.</p>
+</blockquote>
+<h2 id="instalando-as-dependências"><a class="header" href="#instalando-as-dependências">Instalando as dependências</a></h2>
+<p>Com o ambiente pronto podemos agora instalar as dependências básicas do projeto que estão contidas no arquivo <code>requirements-dev.txt</code>.</p>
+<p>Confirme que o arquivo já contém a lista de todas as ferramentas que usaremos para fins de desenvolvimento e debugging, confira o conteúdo do arquivo abrindo em seu editor ou através do comando <code>cat</code> no terminal Linux.</p>
+<pre><code class="language-console">$ cat requirements-dev.txt
+
+ipython         # terminal
+ipdb            # debugger
+sdb             # debugger remoto
+pip-tools       # lock de dependencias
+pytest          # execução de testes
+pytest-order    # ordenação de testes
+httpx           # requests async para testes
+black           # auto formatação
+flake8          # linter
+</code></pre>
+<p>Instalaremos as dependencias com a ferramenta <code>pip</code> que é um módulo do Python.</p>
+<ol>
+<li>
+<p>Atualizamos o pip</p>
+<pre><code class="language-console">$ python -m pip install --upgrade pip
+</code></pre>
+</li>
+<li>
+<p>Instalamos as dependencias de desenvolvimento</p>
+<pre><code class="language-console">$ python -m pip install -r requirements-dev.txt
+</code></pre>
+</li>
+<li>
+<p>Instalamos o projeto em modo de desenvolvimento.</p>
+<p>Esta instalação permite maior facilidade nos testes e auto-complete
+do editor de código</p>
+<pre><code class="language-console">$ python -m pip install -e &quot;.[dev]&quot;
+</code></pre>
+</li>
+</ol>
+<div id="admonition-info" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="03_ambiente.html#admonition-info"></a></p>
+</div>
+<div>
+<p>Os metadados de instalação estão definidos no arquivo <code>pyproject.toml</code>, neste arquivo estão listados os atributos do projeto, os arquivos e módulos que fazem parte, a versão e as dependencias.</p>
+</div>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="o-problema-que-vamos-resolver"><a class="header" href="#o-problema-que-vamos-resolver">O problema que vamos resolver</a></h1>
+<div align="center">
+<p><img src="./images/logo.png" alt="logo" /></p>
+<img src="./images/dunder.jpg" alt="dunder" width="200" />
+</div>
+<p>A Dunder Mifflin é a maior e mais bem sucedida empresa de papéis do mundo</p>
+<hr />
+<img src="./images/michael.jpg" alt="dunder" style="float: left;" />
+<p>Este é Michael Scott, gerente regional da Dunder Mifflin
+de Scranton, Pensilvania.</p>
+<p>Ele se acha o melhor gerente do mundo, mas na verdade
+é <a href="https://youtu.be/i7b7ldR8N_g">bem sem graça e as vezes até inconveniente</a>.</p>
+<br>
+<hr />
+<p>Este é o time de funcionários que o Michael gerencia, eles estão 
+com cara de alegres (com excessão da Angela), porém nem todos estão felizes, eles estão na verdade bastante desmotivados e começaram a reclamar das piadas sem graça do Michael e da falta de reconhecimento da empresa. </p>
+<figure>
+  <img src="./images/people.jpg" alt="dunder" />
+  <figcaption>Equipe: Michael, Pam, Jim, Andy, Angela, Dwight, Kelly</figcaption>
+</figure>
+<hr />
+<h2 id="projeto-dundie-rewards"><a class="header" href="#projeto-dundie-rewards">Projeto Dundie Rewards</a></h2>
+<p>A Dunder Mifflin nos contratou para desenvolver uma API para o 
+novo projeto <strong>Dundie Rewards</strong>, que consiste em um sistema de 
+recompensas onde <strong>cada funcionário terá uma conta</strong> e irá <strong>ganhar pontos</strong>.</p>
+<p>Esses pontos poderão ser atribuidos pelo Michael quando ele achar
+que um funcionário merece, automaticamente em datas especiais
+ou em batimento de metas, e os funcionários poderão trocar pontos
+entre eles como forma de reconhecimento do trabalho dos colegas.</p>
+<p>Ao final do ano, os funcionários vão poder trocar seus pontos por
+dinheiro para gastar como quiserem.</p>
+<p>Vamos começar este projeto desenvolvendo a estrutura de pastas, a orquestração do ambiente, a modelagem de dados e a API.</p>
+<p>Futuramente na fase 2 iremos integrar com um front-end.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="funcionalidades"><a class="header" href="#funcionalidades">Funcionalidades</a></h1>
+<h2 id="usuários"><a class="header" href="#usuários">Usuários</a></h2>
+<ul>
+<li>Registro de novos funcionários <strong>via CLI e via API</strong>
+<ul>
+<li>CLI: <code>dundie create-user [Nome] [Email] [Password Inicial] [departamento]</code></li>
+<li>API: <code>POST /user/ data={nome:.., email:.., departamento:.., password:..}</code></li>
+<li>Usuários do departamento <code>management</code> são considerados super usuáripos</li>
+<li>O <code>username</code> é gerado a partir do slug do nome do usuário <code>Pam Besly</code> -&gt; <code>pam-besly</code></li>
+</ul>
+</li>
+<li>Autenticação de usuários com JWT token
+<ul>
+<li>Para usar a API será necessário uma chamada <code>GET /token data={username, password}</code> e todas as chamadas subsequentes precisarão do token informado nos <code>HEADERS</code>.</li>
+</ul>
+</li>
+<li>O usuário pode requisitar um token para alteração de senha</li>
+</ul>
+<h2 id="transações"><a class="header" href="#transações">Transações</a></h2>
+<ul>
+<li>Transações não podem ser deletadas ou canceladas, cada transação
+é um item no histórico da conta do usuário em questão.</li>
+<li>Qualquer usuário com um token poderá fazer uma chamada para <code>POST /transaction/username/ data={value=100}</code> esta chamada adiciona um novo registro na tabela <code>Transaction</code> contento <code>user_id: &lt;usuario_dono_da_conta&gt;, from_id: &lt;usuário que fez o depósito&gt;, value: &lt;integer&gt;, date: &lt;timestamp&gt;</code></li>
+<li>O usuário só poderá fazer uma transação caso o saldo da sua própria conta seja suficiente para cobrir o custo da transação.</li>
+<li>O saldo de um usuário é a soma de todas as suas transações.</li>
+</ul>
+<p>Endpoints:</p>
+<ul>
+<li><code>POST /transaction/username/</code> - Registra uma transação para um usuário
+<ul>
+<li>Acesso: <code>Geral</code></li>
+<li>Validação: O usuário autenticado é o <code>from_id</code> da transação e deve ter saldo suficiente.</li>
+</ul>
+</li>
+<li><code>GET /transaction/username/</code> - Retorna as transações de um usuário incluindo seu <code>balance</code> (saldo todal) 
+<ul>
+<li>Acesso: <code>Manager</code> ou <code>username == current_user</code></li>
+</ul>
+</li>
+<li><code>GET /transaction/</code> - Retorna todas as transações</li>
+</ul>
+<h2 id="api-spec"><a class="header" href="#api-spec">API Spec</a></h2>
+<p><img src="./images/api_final.png" alt="" /></p>
+<h2 id="arquitetura"><a class="header" href="#arquitetura">Arquitetura</a></h2>
+<h3 id="fase-1"><a class="header" href="#fase-1">Fase 1</a></h3>
+<ul>
+<li>1 Serviço de API </li>
+<li>1 Serviço de Banco de Dados</li>
+</ul>
+<pre class="mermaid">graph LR;
+    A[&quot;API (FastAPI) fa:fa-globe&quot;]
+    B[(&quot;Banco de Dados (PG) fa:fa-cubes&quot;)]
+    A --&gt; B
+</pre>
+<h3 id="fase-2"><a class="header" href="#fase-2">Fase 2</a></h3>
+<ul>
+<li>1 Serviço de API</li>
+<li>1 Serviço de Banco de Dados</li>
+<li>1 Serviço consumidor de tarefas (RQ)</li>
+<li>1 Serviço de fila de mensagens (Redis)</li>
+</ul>
+<pre class="mermaid">graph TD;
+    A[&quot;API (FastAPI) fa:fa-globe&quot;]
+    B[(&quot;Banco de Dados (PG) fa:fa-cubes&quot;)]
+    C&gt;&quot;Fila de mensagens (Redis) fa:fa-bars&quot;]
+    D[[&quot;Consumidor de tarefas (RQ) fa:fa-gears&quot;]]
+    A --&gt; B
+    A --&gt; C
+    D --&gt; C
+    D --&gt; B
+</pre>
+<p>Agora vamos ver como será a estrutura dos arquivos --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="estrutura-de-arquivos"><a class="header" href="#estrutura-de-arquivos">Estrutura de arquivos</a></h1>
+<p>Esta é estrutura deste repositório, os arquivos com <code>*</code> são os que você vai precisar editar ao longo deste guia.</p>
+<pre><code class="language-console">$ tree --filesfirst -L 3 -I docs
+.
+├── docker-compose.yaml          # Container Orchestration
+├── Dockerfile.dev               # Container Dev Image
+├── MANIFEST.in                  # Arquivos do projeto
+├── pyproject.toml               # Metadados do projeto
+├── requirements-dev.txt         # Dev tools
+├── requirements.in              # Dependencies
+├── settings.toml                # Config por ambiente
+├── setup.py                     # Setuptools bootstrap
+├── test.sh                      # CI Pipeline
+├── dundie                       # Main Package
+│   ├── app.py*                  # FastAPI app
+│   ├── auth.py*                 # Token JWT
+│   ├── cli.py*                  # CLI app
+│   ├── config.py                # Config management
+│   ├── db.py*                   # Database connection
+│   ├── default.toml             # Default settings
+│   ├── __init__.py
+│   ├── security.py*             # Password Hashing
+│   ├── VERSION.txt              # SCM versioning
+│   ├── models
+│   │   ├── __init__.py*
+│   │   ├── transaction.py*      # Models for transaction
+│   │   └── user.py*             # Models for User
+│   ├── routes
+│   │    ├── auth.py*             # Token and Auth URLs
+│   │    ├── __init__.py*
+│   │    ├── transaction.py*      # Transaction URLs
+│   │    └── user.py*             # User URLs
+│   └── tasks
+│       ├── __init__.py*
+│       ├── transaction.py*      # Transaction Taks
+│       └── user.py*             # User Tasks
+├── postgres
+│   ├── create-databases.sh      # DB startup
+│   └── Dockerfile               # DB image
+└── tests
+    ├── conftest.py*             # Pytest config
+    ├── __init__.py
+    └── test_api.py*             # API tests
+</code></pre>
+<div id="admonition-info" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="06_estrutura.html#admonition-info"></a></p>
+</div>
+<div>
+<p>Todos os arquivos acima já estão criados no repositório, você vai precisar apenas editar,
+alguns arquivos como o <code>.secrets.toml</code> (para guardar dados sensiveis) você irá criar localmente
+pois este arquivo não deverá ser comitado ao repositório.</p>
+</div>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="criando-uma-api-base"><a class="header" href="#criando-uma-api-base">Criando uma API base</a></h1>
+<p>Vamos editar o arquivo <code>dundie/app.py</code> e colocar a minima aplicação FastAPI 
+só para que possamos rodar o container e testar se tudo está funcionando.</p>
+<p><code>dundie/app.py</code></p>
+<pre><code class="language-python">from fastapi import FastAPI
+
+app = FastAPI(
+    title=&quot;dundie&quot;,
+    version=&quot;0.1.0&quot;,
+    description=&quot;dundie is a rewards API&quot;,
+)
+</code></pre>
+<p>Salve as alterações e agora vamos partir para a definição do container -&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="criando-um-container"><a class="header" href="#criando-um-container">Criando um container</a></h1>
+<p>Vamos agora verificar o <code>Dockerfile.dev</code> que está na raiz do repositório e será a imagem responsável por executar nossa api.</p>
+<p><code>Dockerfile.dev</code></p>
+<pre><code class="language-bash"># Build the app image
+FROM python:3.10
+
+# Create directory for the app user
+RUN mkdir -p /home/app
+
+# Create the app user
+RUN groupadd app &amp;&amp; useradd -g app app
+
+# Create the home directory
+ENV APP_HOME=/home/app/api
+RUN mkdir -p $APP_HOME
+WORKDIR $APP_HOME
+
+# install
+COPY . $APP_HOME
+RUN pip install -r requirements-dev.txt
+RUN pip install -e .
+
+RUN chown -R app:app $APP_HOME
+USER app
+
+CMD [&quot;uvicorn&quot;,&quot;dundie.app:app&quot;,&quot;--host=0.0.0.0&quot;,&quot;--port=8000&quot;,&quot;--reload&quot;]
+
+</code></pre>
+<p>O arquivo acima define o passo a passo para construir uma imagem de container customizada a partir da <code>python:3.10</code>, neste script de cosntrução da imagem estamos criando diretórios, ajustando permissões, copiando arquivos da aplicação e isntalando dependencias, além de definirmos o comando principal de execução do programa.</p>
+<p>Com esta definição pronta o próximo passo é construir a imagem do container:</p>
+<pre><code class="language-bash">docker build -f Dockerfile.dev -t dundie:latest .
+</code></pre>
+<p>Agora em nosso sistema teremos uma imagem chamada <code>dundie</code> com a tag <code>latest</code> e podemos executar.</p>
+<pre><code class="language-console">$ docker run --rm -it -v $(pwd):/home/app/api -p 8000:8000 dundie
+
+INFO:     Will watch for changes in these directories: ['/home/app/api']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [1] using StatReload
+INFO:     Started server process [8]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+</code></pre>
+<p>Acesse: <a href="http://0.0.0.0:8000/docs">http://0.0.0.0:8000/docs</a> e terá acesso a página default da OpenAPI spec que acompanha o FastAPI.</p>
+<p><img src="images/api_first.png" alt="API" /></p>
+<p>Ainda não temos rotas definidas portanto podemos passar o próximo passo.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="orquestrando-serviços"><a class="header" href="#orquestrando-serviços">Orquestrando serviços</a></h1>
+<p>Os serviços:</p>
+<pre class="mermaid">graph LR;
+    A[&quot;API (FastAPI) fa:fa-globe&quot;]
+    B[(&quot;Banco de Dados (PG) fa:fa-cubes&quot;)]
+    A --&gt; B
+</pre>
+<h2 id="docker-compose"><a class="header" href="#docker-compose">Docker compose</a></h2>
+<p>Para iniciar a nossa <strong>API</strong> + o <strong>Banco de dados</strong> vamos precisar de um
+orquestrador de containers, em produção isso será feito com Kubernetes
+mas no ambiente de desenvolvimento podemos usar o <strong>docker-compose</strong>.</p>
+<p>No arquivo <code>docker-compose.yaml</code></p>
+<ul>
+<li>Definimos 2 serviços <code>api</code> e <code>db</code></li>
+<li>Informamos os parametros de build com os dockerfiles</li>
+<li>Na <code>api</code> abrimos a porta <code>8000</code></li>
+<li>Na <code>api</code> passamos 2 variáveis de ambiente <code>DUNDIE_DB__uri</code> e <code>DUNDIE_DB_connect_args</code> para usarmos na conexão com o DB</li>
+<li>Marcamos que a <code>api</code> depende do <code>db</code> para iniciar.</li>
+<li>No <code>db</code> informamos o setup básico do postgres e pedimos para criar 2 bancos de dados, um para a app e um para testes.</li>
+</ul>
+<p><code>docker-compose.yaml</code></p>
+<pre><code class="language-yaml">version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - &quot;8000:8000&quot;
+    environment:
+      DUNDIE_DB__uri: &quot;postgresql://postgres:postgres@db:5432/${DUNDIE_DB:-dundie}&quot;
+      DUNDIE_DB__connect_args: &quot;{}&quot;
+    volumes:
+      - .:/home/app/api
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+  db:
+    build: postgres
+    image: dundie_postgres-13-alpine-multi-user
+    volumes:
+      - $HOME/.postgres/dundie_db/data/postgresql:/var/lib/postgresql/data
+    ports:
+      - &quot;5432:5432&quot;
+    environment:
+      - POSTGRES_DBS=dundie, dundie_test
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+</code></pre>
+<p>O próximo passo é estando na raiz do repositório executar:</p>
+<pre><code class="language-bash">docker-compose up -d
+</code></pre>
+<div id="admonition-info" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="09_compose.html#admonition-info"></a></p>
+</div>
+<div>
+<p>Na primeira execução poderá demorar mais termpo pois as imagens serão construidas.</p>
+</div>
+</div>
+<p>Para verificar os serviços que estão rodando:</p>
+<pre><code class="language-console">$ docker-compose ps
+       Name                     Command               State           Ports
+    api_1             /bin/sh -c uvicorn dundie...     Up             8000
+    db_1             docker-entrypoint.sh postgres     Up             5432
+</code></pre>
+<div id="admonition-tip" class="admonition tip">
+<div class="admonition-title">
+<p>Tip</p>
+<p><a class="admonition-anchor-link" href="09_compose.html#admonition-tip"></a></p>
+</div>
+<div>
+<p>Os serviços ficarão em execução em segundo plano, se quiser manter o terminal aberto para acompanhar os logs pode omitir o <code>-d</code> ou então abrir um segundo terminal e executar <code>docker-compose logs --follow</code></p>
+</div>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="modelagem"><a class="header" href="#modelagem">Modelagem</a></h1>
+<h2 id="definindo-os-models-com-pydantic"><a class="header" href="#definindo-os-models-com-pydantic">Definindo os models com Pydantic</a></h2>
+<p>Esta será a modelagem do banco de dados completo, mas começaremos apenas com a tabela de usuários.</p>
+<p><img src="images/database.png" alt="database" /></p>
+<p><a href="https://dbdesigner.page.link/GqDU95ApwZs7a9RH9">https://dbdesigner.page.link/GqDU95ApwZs7a9RH9</a></p>
+<p>Vamos modelar o banco de dados definido acima usando o SQLModel, que é
+uma biblioteca que integra o SQLAlchemy e o Pydantic e funciona muito bem
+com o FastAPI.</p>
+<p>Vamos começar a estruturar os model principal para armazenar os usuários</p>
+<p><strong>EDITE</strong> o arquivo <code>dundie/models/user.py</code></p>
+<pre><code class="language-python">&quot;&quot;&quot;User related data models&quot;&quot;&quot;
+from typing import Optional
+from sqlmodel import Field, SQLModel
+
+
+class User(SQLModel, table=True):
+    &quot;&quot;&quot;Represents the User Model&quot;&quot;&quot;
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    email: str = Field(unique=True, nullable=False)
+    username: str = Field(unique=True, nullable=False)
+    avatar: Optional[str] = None
+    bio: Optional[str] = None
+    password: str = Field(nullable=False)
+    name: str = Field(nullable=False)
+    dept: str = Field(nullable=False)
+    currency: str = Field(nullable=False)
+
+    @property
+    def superuser(self):
+        &quot;&quot;&quot;&quot;Users belonging to management dept are admins.&quot;&quot;&quot;
+        return self.dept == &quot;management&quot;
+</code></pre>
+<p>Para que seja possivel importar e o <strong>SQLAlchemy</strong> reconhecer o nosso objeto <strong>EDITE</strong> arquivo <code>dundie/models/__init__.py</code> adicione</p>
+<pre><code class="language-python">from sqlmodel import SQLModel
+from .user import User
+
+__all__ = [&quot;User&quot;, &quot;SQLModel&quot;]
+</code></pre>
+<blockquote>
+<p><strong>NOTA</strong> as tabelas Balance e Transaction iremos definir posteriormente.</p>
+</blockquote>
+<p>Agora podemos nos conectar com o banco de dados -&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="configurações"><a class="header" href="#configurações">Configurações</a></h1>
+<p>Agora que temos pelo menos uma tabela mapeada para uma classe precisamos
+estabelecer conexão com o banco de dados e para isso precisamos carregar
+configurações</p>
+<p>Verifique o arquivo <code>dundie/default.toml</code></p>
+<pre><code class="language-toml">[default]
+
+[default.db]
+uri = &quot;&quot;
+connect_args = {check_same_thread=false}
+echo = false
+</code></pre>
+<p>Lembra que no <code>docker-compose.yaml</code> passamos as variáveis <code>DUNDIE_DB...</code>
+aquelas variáveis vão sobrescrever os valores definidos no <code>default.toml</code>, por exemplo, <code>DUNDIE_DB__uri=...</code> irá preencher o valor <code>uri</code> na seção <code>[default.db]</code> do arquivo <code>default.toml</code></p>
+<p>Para carregar as configurações vamos usar o plugin <code>dynaconf</code> que já está instalado e só precisamos carregar criando uma instancia de <code>settings</code> que será o objeto usado durante toda a aplicação para acessar as configurações:</p>
+<p>Veja em <code>dundie/config.py</code> como estamos inicializando o plugin de configurações.</p>
+<pre><code class="language-python">&quot;&quot;&quot;Settings module&quot;&quot;&quot;
+import os
+
+from dynaconf import Dynaconf
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+settings = Dynaconf(
+    envvar_prefix=&quot;dundie&quot;,
+    preload=[os.path.join(HERE, &quot;default.toml&quot;)],
+    settings_files=[&quot;settings.toml&quot;, &quot;.secrets.toml&quot;],
+    environments=[&quot;development&quot;, &quot;production&quot;, &quot;testing&quot;],
+    env_switcher=&quot;dundie_env&quot;,
+    load_dotenv=False,
+)
+</code></pre>
+<p>No arquivo acima estamos definindo que o objeto <code>settings</code> irá
+carregar variáveis do arquivo <code>default.toml</code> e em seguida dos arquivos
+<code>settings.toml</code> e <code>.secrets.toml</code> e que será possivel usar <code>DUNDIE_</code> como
+prefixo nas variáveis de ambiente para sobrescrever os valores.</p>
+<p>Agora já podemos acessar esses valores e criar a conexão com o banco de dados --&gt; </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="conexão-com-o-db"><a class="header" href="#conexão-com-o-db">Conexão com o DB</a></h1>
+<p>Para conectar com o banco de dados, precisamos criar um objeto <code>engine</code>, este objeto armazena as configurações
+como o endereço do banco, usuário e senha. O objeto <code>engine</code> é o responsável por executar as consultas SQL que
+usaremos para definir as tabelas e também para consultar e alterar dados.</p>
+<p><strong>EDITE</strong> o arquivo <code>dundie/db.py</code> e deixe conforme o código abaixo:</p>
+<p><code>dundie/db.py</code></p>
+<pre><code class="language-python">&quot;&quot;&quot;Database connection&quot;&quot;&quot;
+from sqlmodel import create_engine
+from .config import settings
+
+engine = create_engine(
+    settings.db.uri,  # pyright: ignore
+    echo=settings.db.echo,  # pyright: ignore
+    connect_args=settings.db.connect_args,  # pyright: ignore
+)
+</code></pre>
+<p>Criamos um objeto <code>engine</code> que aponta para uma conexão com o banco de
+dados e para isso usamos as variáveis que lemos do <code>settings</code>, o objeto <code>settings</code> será capaz de carregar 
+essas variáveis do ambiente ou dos arquivos <code>.toml</code> que definimos para configuração.</p>
+<div id="admonition-note" class="admonition note">
+<div class="admonition-title">
+<p>Note</p>
+<p><a class="admonition-anchor-link" href="13_conexao_db.html#admonition-note"></a></p>
+</div>
+<div>
+<p>O comentário <code># pyright: ignore</code> só é necessário caso você esteja usando um editor com LSP que faz verificação
+de tipos, como o VSCode ou Neovim. Este comentário faz com que o LSP ignore a checagem de tipos para essas linhas,
+e é útil pois como esses valores são dinâmicos podemos receber qualquer tipo.</p>
+</div>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="migrations"><a class="header" href="#migrations">Migrations</a></h1>
+<p>Portanto agora já temos uma tabela mapeada e um conexão com o banco de dados
+precisamos agora garantir que a estrutura da tabela existe dentro do banco
+de dados.</p>
+<p>Para isso vamos usar a biblioteca <code>alembic</code> que gerencia migrações, ou seja,
+alterações na estrutura das tabelas e automação de alteração em dados.</p>
+<p>Começamos na raiz do repositório, no seu terminal rodando:</p>
+<pre><code class="language-bash">alembic init migrations
+</code></pre>
+<p>O alembic irá criar um arquivo chamado <code>alembic.ini</code> e uma pasta chamada <code>migrations</code> que servirá para armazenar o histórico de alterações do banco de dados.</p>
+<p>Começaremos <strong>editando</strong> o arquivo <code>migrations/env.py</code></p>
+<blockquote>
+<p>Atenção nos comentários do snippet abaixo explicando exatamente onde efetuar cada uma das edições</p>
+</blockquote>
+<pre><code class="language-python"># 1 - No topo do arquivo adicionamos
+from dundie import models
+from dundie.db import engine
+from dundie.config import settings
+
+
+# 2 - Perto da linha 23 mudamos de
+# target_metadata = None
+# para:
+target_metadata = models.SQLModel.metadata
+
+# 3 - Na função `run_migrations_offline()` mudamos
+# url = config.get_main_option(&quot;sqlalchemy.url&quot;)
+# para:
+url = settings.db.uri
+
+# 4 - Na função `run_migration_online` mudamos
+# connectable = engine_from_config...
+# para:
+connectable = engine
+</code></pre>
+<p>Agora precisamos fazer só mais um ajuste
+<strong>edite</strong> <code>migrations/script.py.mako</code> e em torno da linha 10
+adicione</p>
+<pre><code class="language-python">#from alembic import op
+#import sqlalchemy as sa
+import sqlmodel  # linha NOVA
+</code></pre>
+<p>Agora sim podemos começar a usar o <strong>alembic</strong> para gerenciar as
+migrations, precisamos executar este comando dentro do shell do container.</p>
+<h2 id="executando-comandos-dentro-do-container"><a class="header" href="#executando-comandos-dentro-do-container">Executando comandos dentro do container</a></h2>
+<div id="admonition-importante" class="admonition tip">
+<div class="admonition-title">
+<p>IMPORTANTE</p>
+<p><a class="admonition-anchor-link" href="14_migrations.html#admonition-importante"></a></p>
+</div>
+<div>
+<p>Todos os comandos a partir de agora serão executados no shell dentro do container e para fazer isso usaremos sempre <code>docker-compose exec</code> antes que qualquer comando.</p>
+</div>
+</div>
+<p>Experimente: <code>docker-compose exec api /bin/bash</code></p>
+<pre><code class="language-console">$ docker-compose exec api /bin/bash
+app@c5dd026e8f92:~/api$ # este é o shell dentro do container api
+
+# digite exit para sair
+</code></pre>
+<p>Podemos redirecionar comandos diretamente para dentro do container com <code>docker-compose exec api [comando a ser executado]</code> </p>
+<h2 id="gerando-e-aplicando-migrations"><a class="header" href="#gerando-e-aplicando-migrations">Gerando e aplicando migrations</a></h2>
+<p>Agora para gerar um registro inicial de migration usaremos o comando <code>alembic revision --autogenerate</code> e isso será executado dentro do container conforme exemplo abaixo:</p>
+<pre><code class="language-console">$ docker-compose exec api alembic revision --autogenerate -m &quot;initial&quot;
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.autogenerate.compare] Detected added table 'user'
+  Generating /home/app/api/migrations/versions/ee59b23815d3_initial.py ...  done
+</code></pre>
+<p>Repare que o alembic identificou o nosso model <code>User</code> e gerou uma migration
+inicial que fará a criação desta tabela no banco de dados.</p>
+<p>Podemos aplicar a migration rodando dentro do container com <code>alembic upgrade head</code>:</p>
+<pre><code class="language-console">$ docker-compose exec api alembic upgrade head
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -&gt; ee59b23815d3, initial
+</code></pre>
+<p>E neste momento a tabela será criada no Postgres e já podemos começar a interagir via SQL client ou através da classe <code>User</code> que modelamos anteriormente.</p>
+<div id="admonition-dica" class="admonition tip">
+<div class="admonition-title">
+<p>DICA</p>
+<p><a class="admonition-anchor-link" href="14_migrations.html#admonition-dica"></a></p>
+</div>
+<div>
+<p>Pode usar um client como <a href="https://antares-sql.app">https://antares-sql.app</a> para se conectar ao banco de dados, usar o <strong>psql</strong> na linha de comando ou abrir o shell do ipython dentro do container.</p>
+</div>
+</div>
+<h2 id="acessando-o-banco-de-dados-através-do-shell"><a class="header" href="#acessando-o-banco-de-dados-através-do-shell">Acessando o banco de dados através do shell</a></h2>
+<pre><code class="language-console">$ docker-compose exec api ipython
+# Agora está no ipython dentro do shell do container
+In [1]: 
+</code></pre>
+<p>Digite</p>
+<pre><code class="language-python">from sqlmodel import Session, select
+from dundie.db import engine
+from dundie.models import User
+
+with Session(engine) as session:
+    print(list(session.exec(select(User))))
+</code></pre>
+<p>O resultado será uma lista vazia <code>[]</code> indicando que ainda não temos nenhum usuário no banco de dados.</p>
+<blockquote>
+<p>Digite <code>exit</code> para sair do ipython.</p>
+</blockquote>
+<div id="admonition-conclusão" class="admonition note">
+<div class="admonition-title">
+<p>Conclusão</p>
+<p><a class="admonition-anchor-link" href="14_migrations.html#admonition-conclusão"></a></p>
+</div>
+<div>
+<p>Foi preciso muito <strong>boilerplate</strong> para conseguir interagir com banco de dados através do shell portanto para facilitar a nossa vida vamos adicionar uma aplicação <code>cli</code> onde vamos poder executar tarefas administrativas via linha de comando como criar ou listar usuários. --&gt;</p>
+</div>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="criando-a-cli"><a class="header" href="#criando-a-cli">Criando a CLI</a></h1>
+<p>Command Line Interface é uma parte importante de todo serviço, é através dessa ferramanta que geralmente
+os administradores do serviço interagem com ele, seja para realizar tarefas de manutenção, configuração
+ou recuperar o sistema em caso de falhas.</p>
+<p>Vamos criar uma CLI para o nosso serviço, para isso vamos usar o <a href="https://typer.tiangolo.com/">typer</a>,
+que é uma das melhores bibliotecas para criar CLIs em Python.</p>
+<p>Começaremos adicionando um comando <code>shell</code> que abrirá um shell interativo com os objetos da aplicação e um outro
+comando <code>user-list</code> para listar todos os usuários cadastrados.</p>
+<p><strong>EDITE</strong> <code>dundie/cli.py</code></p>
+<pre><code class="language-python">import typer
+from rich.console import Console
+from rich.table import Table
+from sqlmodel import Session, select
+
+from .config import settings
+from .db import engine
+from .models import User
+
+main = typer.Typer(name=&quot;dundie CLI&quot;, add_completion=False)
+
+
+@main.command()
+def shell():
+    &quot;&quot;&quot;Opens interactive shell&quot;&quot;&quot;
+    _vars = {
+        &quot;settings&quot;: settings,
+        &quot;engine&quot;: engine,
+        &quot;select&quot;: select,
+        &quot;session&quot;: Session(engine),
+        &quot;User&quot;: User,
+    }
+    typer.echo(f&quot;Auto imports: {list(_vars.keys())}&quot;)
+    try:
+        from IPython import start_ipython
+
+        start_ipython(
+            argv=[&quot;--ipython-dir=/tmp&quot;, &quot;--no-banner&quot;], user_ns=_vars
+        )
+    except ImportError:
+        import code
+
+        code.InteractiveConsole(_vars).interact()
+
+
+@main.command()
+def user_list():
+    &quot;&quot;&quot;Lists all users&quot;&quot;&quot;
+    table = Table(title=&quot;dundie users&quot;)
+    fields = [&quot;name&quot;, &quot;username&quot;, &quot;dept&quot;, &quot;email&quot;, &quot;currency&quot;]
+    for header in fields:
+        table.add_column(header, style=&quot;magenta&quot;)
+
+    with Session(engine) as session:
+        users = session.exec(select(User))
+        for user in users:
+            table.add_row(*[getattr(user, field) for field in fields])
+
+    Console().print(table)
+</code></pre>
+<div id="admonition-tip" class="admonition tip">
+<div class="admonition-title">
+<p>Tip</p>
+<p><a class="admonition-anchor-link" href="15_cli.html#admonition-tip"></a></p>
+</div>
+<div>
+<p>Não se esqueça de salvar os arquivo modificado :)</p>
+</div>
+</div>
+<p>E agora podemos executar.</p>
+<pre><code class="language-console">$ docker-compose exec api dundie --help
+
+ Usage: dundie [OPTIONS] COMMAND [ARGS]...
+
+╭─ Options ──────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                │
+╰────────────────────────────────────────────────────────────╯
+╭─ Commands ─────────────────────────────────────────────────╮
+│ shell              Opens interactive shell                 │
+│ user-list          Lists all users                         │
+╰────────────────────────────────────────────────────────────╯
+</code></pre>
+<p>E cada um dos comandos:</p>
+<p>O comando <code>user-list</code> para listar todos os usuários (que por enquanto irá retornar uma tabela vazia)</p>
+<pre><code class="language-console">$ docker-compose exec api dundie user-list
+                dundie users
+┏━━━━━━┳━━━━━━━━━━┳━━━━━━┳━━━━━━━┳━━━━━━━━━━┓
+┃ name ┃ username ┃ dept ┃ email ┃ currency ┃
+┡━━━━━━╇━━━━━━━━━━╇━━━━━━╇━━━━━━━╇━━━━━━━━━━┩
+└──────┴──────────┴──────┴───────┴──────────┘
+</code></pre>
+<p>e o comando <code>shell</code> que irá abrir um shell interativo com os objetos da aplicação.</p>
+<pre><code class="language-console">$ docker-compose exec api dundie shell
+Auto imports: ['settings', 'engine', 'select', 'session', 'User']
+
+In [1]: session.exec(select(User))
+Out[1]: &lt;sqlalchemy.engine.result.ScalarResult at 0x7fb539d5e170&gt;
+
+In [2]: settings.db
+Out[2]: &lt;Box: {'connect_args': {}, 'uri': 'postgresql://postgres:postgres@db:5432/dundie', 'echo': False}&gt;
+</code></pre>
+<p>Ainda não temos usuários cadastrados pois ainda está faltando uma parte importante
+que é o <strong>hash de senhas</strong> para os usuários, vamos resolver --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="configurando-secret_key"><a class="header" href="#configurando-secret_key">Configurando SECRET_KEY</a></h1>
+<p>Precisamos ser capazes de encryptar tokens e gerar hash para as senhas dos usuários 
+e para isso temos alguns requisitos, primeiro precisamos de uma chave secreta em nosso 
+arquivo de settings, esta chave será usada em nosso algoritmo de criptografia quando
+começarmos a gerar tokens.</p>
+<p><strong>EDITE</strong> <code>dundie/default.toml</code> e adicione ao final</p>
+<p><code>dundie/default.toml</code></p>
+<pre><code class="language-toml">[default.security]
+# Set secret key in .secrets.toml
+# SECRET_KEY = &quot;&quot;
+ALGORITHM = &quot;HS256&quot;
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+REFRESH_TOKEN_EXPIRE_MINUTES = 600
+</code></pre>
+<p>Como explicado no próprio comentário do arquivo <code>default.toml</code>, vamos colocar uma secret key separada 
+no arquivo <code>.secrets.toml</code> na raiz do repositório, isso é recomendável pois podemos adicionar o 
+arquivo <code>.secrets.toml</code> ao <code>.gitignore</code> para que ele não seja enviado para o repositório e desta 
+maneira evitamos expor a chave secreta.</p>
+<p><strong>CRIE</strong> o arquivo <code>.secrets.toml</code> (na raiz do repositório)</p>
+<pre><code class="language-toml">[development]
+dynaconf_merge = true
+
+[development.security]
+# openssl rand -hex 32
+SECRET_KEY = &quot;ONLYFORDEVELOPMENT&quot;
+</code></pre>
+<div id="admonition-nota" class="admonition note">
+<div class="admonition-title">
+<p>NOTA</p>
+<p><a class="admonition-anchor-link" href="18_secret_key.html#admonition-nota"></a></p>
+</div>
+<div>
+<p>Repare que estamos agora usando a seção <code>environment</code> e isso tem a ver
+com o modo como o dynaconf gerencia os settings, esses valores serão
+carregados apenas durante a execução em fase de desenvolvimento, em produção 
+o dynaconf carrega apenas valores das variáveis de ambiente (recomendado) ou
+de uma seção similar nomeada <code>[production]</code>.</p>
+</div>
+</div>
+<div id="admonition-dica" class="admonition tip">
+<div class="admonition-title">
+<p>DICA</p>
+<p><a class="admonition-anchor-link" href="18_secret_key.html#admonition-dica"></a></p>
+</div>
+<div>
+<p>Você pode gerar uma secret key mais segura se quiser usando:</p>
+<pre><code>$ python -c &quot;print(__import__('secrets').token_hex(32))&quot;
+b9483cc8a0bad1c2fe31e6d9d6a36c4a96ac23859a264b69a0badb4b32c538f8
+
+# OU no Linux
+
+$ openssl rand -hex 32
+b9483cc8a0bad1c2fe31e6d9d6a36c4a96ac23859a264b69a0badb4b32c538f8
+</code></pre>
+</div>
+</div>
+<p>Agora sim podemos adicionar o código para geração de hash do password --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="criando-um-hash"><a class="header" href="#criando-um-hash">Criando um hash</a></h1>
+<p>Para fazer com que o password dos usuários seja salvo como um hash ao invés de plain-text
+vamos criar uma função para criar o hash e outra para verificar.</p>
+<p>Além disso vamos criar uma classe herdando de <code>str</code> e customizar o método <code>validate</code>
+desta forma podemos usar esta classe na definição de campo do nosso model <code>User</code> e 
+o pydantic vai chamar o método <code>validate</code> para transformar o valor do campo em um hash.</p>
+<p><strong>EDITE</strong> Agora vamos o <code>dundie/security.py</code> e adicione alguns elementos</p>
+<pre><code class="language-python">&quot;&quot;&quot;Security utilities&quot;&quot;&quot;
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=[&quot;bcrypt&quot;], deprecated=&quot;auto&quot;)
+
+
+def verify_password(plain_password, hashed_password) -&gt; bool:
+    &quot;&quot;&quot;Verifies a hash against a password&quot;&quot;&quot;
+    return pwd_context.verify(plain_password, hashed_password)
+
+
+def get_password_hash(password) -&gt; str:
+    &quot;&quot;&quot;Generates a hash from plain text&quot;&quot;&quot;
+    return pwd_context.hash(password)
+
+
+class HashedPassword(str):
+    &quot;&quot;&quot;Takes a plain text password and hashes it.
+    use this as a field in your SQLModel
+    class User(SQLModel, table=True):
+        username: str
+        password: HashedPassword
+    &quot;&quot;&quot;
+
+    @classmethod
+    def __get_validators__(cls):
+        # one or more validators may be yielded which will be called in the
+        # order to validate the input, each validator will receive as an input
+        # the value returned from the previous validator
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v):
+        &quot;&quot;&quot;Accepts a plain text password and returns a hashed password.&quot;&quot;&quot;
+        if not isinstance(v, str):
+            raise TypeError(&quot;string required&quot;)
+
+        hashed_password = get_password_hash(v)
+        # you could also return a string here which would mean model.password
+        # would be a string, pydantic won't care but you could end up with some
+        # confusion since the value's type won't match the type annotation
+        # exactly
+        return cls(hashed_password)
+</code></pre>
+<p><strong>EDITE</strong> agora o arquivo <code>dundie/models/user.py</code></p>
+<p>No topo na linha 4</p>
+<pre><code class="language-python">from dundie.security import HashedPassword
+</code></pre>
+<p>E no model mudamos o campo <code>password</code> na linha 18 para</p>
+<pre><code class="language-python">password: HashedPassword
+</code></pre>
+<p>E no final de <code>dundie/models/user.py</code> uma função para gerar os usernames, transformando nomes completos como <strong>Bruno Rocha</strong> em um <strong>slug</strong> como <strong>bruno-rocha</strong></p>
+<pre><code class="language-python">def generate_username(name: str) -&gt; str:
+    &quot;&quot;&quot;Generates a slug username from a name&quot;&quot;&quot;
+    return name.lower().replace(&quot; &quot;, &quot;-&quot;)
+</code></pre>
+<p>Agora sim está tudo pronto para adicionarmos ao nosso CLI um comando para criar novos usuários --&gt; </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="comando-para-criar-usuários"><a class="header" href="#comando-para-criar-usuários">Comando para criar usuários</a></h1>
+<p><strong>EDITE</strong> <code>dundie/cli.py</code> e adicione no topo do arquivo:</p>
+<pre><code class="language-python">from dundie.models.user import generate_username
+</code></pre>
+<p>e no final adicione um novo comando:</p>
+<pre><code class="language-python">@main.command()
+def create_user(
+    name: str,
+    email: str,
+    password: str,
+    dept: str,
+    username: str | None = None,
+    currency: str = &quot;USD&quot;,
+):
+    &quot;&quot;&quot;Create user&quot;&quot;&quot;
+    with Session(engine) as session:
+        user = User(
+            name=name,
+            email=email,
+            password=password,  # pyright: ignore
+            dept=dept,
+            username=username or generate_username(name),
+            currency=currency,
+        )
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+        typer.echo(f&quot;created {user.username} user&quot;)
+        return user
+</code></pre>
+<p>A função <code>create_user</code> será exposta na CLI como o subcomando  <code>create-user</code>, ou seja, <code>_</code> será substituido por <code>-</code> então no terminal execute para ver a mensagem de ajuda <code>dundie create-user --help</code>:</p>
+<pre><code class="language-console">$ docker-compose exec api dundie create-user --help
+                                                    
+ Usage: dundie create-user [OPTIONS] NAME EMAIL PASSWORD DEPT            
+                                                    
+ Create user                                        
+                                                    
+╭─ Arguments ──────────────────────────────────────╮
+│ *    name          TEXT  [default: None]         │
+│                          [required]              │
+│ *    email         TEXT  [default: None]         │
+│                          [required]              │
+│ *    password      TEXT  [default: None]         │
+│                          [required]              │
+│ *    dept          TEXT  [default: None]         │
+│                          [required]              │
+╰──────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────╮
+│ --username        TEXT  [default: None]          │
+│ --currency        TEXT  [default: USD]           │
+│ --help                  Show this message and    │
+│                         exit.                    │
+╰──────────────────────────────────────────────────╯
+</code></pre>
+<p>E então execute o comando para criar o usuário para o gerente <strong>Michael Scott</strong></p>
+<div id="admonition-tip" class="admonition tip">
+<div class="admonition-title">
+<p>Tip</p>
+<p><a class="admonition-anchor-link" href="20_comando_usuario.html#admonition-tip"></a></p>
+</div>
+<div>
+<p>No terminal quando uma linha fica muito longa podemos adicionar 
+uma quebra de linha com <code>\</code> e o terminal vai entender que é uma
+única linha.</p>
+<p>E no caso de argumentos com espaço como o nome &quot;Michael Scott&quot; precisamos 
+usar aspas para o terminal entender que é um único argumento.</p>
+</div>
+</div>
+<p>Crie o usuário:</p>
+<pre><code class="language-console">$ docker-compose exec api dundie create-user \
+&quot;Michael Scott&quot; mscott@dm.com boss123 management 
+
+created michael-scott user
+</code></pre>
+<p>E para listar o usuário criado:</p>
+<pre><code class="language-console">$ docker-compose exec api dundie user-list
+
+                              dundie users                               
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃ name          ┃ username      ┃ dept       ┃ email         ┃ currency ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━╇━━━━━━━━━━┩
+│ Michael Scott │ michael-scott │ management │ mscott@dm.com │ USD      │
+└───────────────┴───────────────┴────────────┴───────────────┴──────────┘
+</code></pre>
+<p>Agora podemos finalmente começar a criar a nossa API --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="definindo-serializers"><a class="header" href="#definindo-serializers">Definindo Serializers</a></h1>
+<p>Agora vamos criar endpoints na API para efetuar as operações que fizemos
+através da CLI, teremos as seguintes rotas:</p>
+<ul>
+<li><code>GET /user/</code> - Lista todos os usuários</li>
+<li><code>POST /user/</code> - Cadastro de novo usuário</li>
+<li><code>GET /user/{username}/</code> - Detalhe de um usuário</li>
+</ul>
+<h3 id="serializers"><a class="header" href="#serializers">Serializers</a></h3>
+<p>A primeira coisa que precisamos é definir serializers, que são models
+intermediários usados para serializar e de-serializar dados de entrada e saída
+da API e eles são necessários pois não queremos export o model do
+banco de dados diretamente na API e também queremos a possibilidade de serializar 
+campos opcionais dependendo do nível de acesso do usuário, 
+por exemplo, admins poderão ver mais campos que usuários regulares.</p>
+<p><strong>EDITE</strong> <code>dundie/models/user.py</code></p>
+<p>No topo na linha 5</p>
+<pre><code class="language-python">from pydantic import BaseModel, root_validator
+</code></pre>
+<p>No final após a linha 20</p>
+<pre><code class="language-python">class UserResponse(BaseModel):
+    &quot;&quot;&quot;Serializer for User Response&quot;&quot;&quot;
+
+    name: str
+    username: str
+    dept: str
+    avatar: Optional[str] = None
+    bio: Optional[str] = None
+    currency: str
+
+
+class UserRequest(BaseModel):
+    &quot;&quot;&quot;Serializer for User request payload&quot;&quot;&quot;
+
+    name: str
+    email: str
+    dept: str
+    password: str
+    currency: str = &quot;USD&quot;
+    username: Optional[str] = None
+    avatar: Optional[str] = None
+    bio: Optional[str] = None
+
+    @root_validator(pre=True)
+    def generate_username_if_not_set(cls, values):
+        &quot;&quot;&quot;Generates username if not set&quot;&quot;&quot;
+        if values.get(&quot;username&quot;) is None:
+            values[&quot;username&quot;] = generate_username(values[&quot;name&quot;])
+        return values
+</code></pre>
+<p>Podemos testar os serializers em nosso shell só para ter certeza do funcionamento correto.</p>
+<pre><code class="language-python">$ docker-compose exec api dundie shell    
+Auto imports: ['settings', 'engine', 'select', 'session', 'User']
+
+In [1]: from dundie.models.user import UserRequest
+
+In [2]: new = UserRequest(
+   ...:     name=&quot;Bruno Rocha&quot;,
+   ...:     email=&quot;bruno@dm.com&quot;,
+   ...:     dept=&quot;Sales&quot;,
+   ...:     password=&quot;1234&quot;,
+   ...:  )
+
+In [3]: new.username
+Out[3]: 'bruno-rocha'
+
+In [4]: new.currency
+Out[4]: 'USD'
+
+In [5]: db_user = User.from_orm(new)
+
+In [6]: session.add(db_user)
+
+In [7]: session.commit()
+
+
+In [12]: session.exec(select(User).where(User.username==&quot;bruno-rocha&quot;)).first()
+
+Out[12]: User(bio=None, email='bruno@dm.com', username='bruno-rocha', name='Bruno Rocha', currency=
+'USD', id=2, avatar=None, password='$2b$12$v/1h3sKAFCOuiKuXsThAXOBuny46TPYzKyoaBVisCFHlwaxPlKWpu', 
+dept='Sales')
+
+</code></pre>
+<p>Como pode ver acima podemos criar usuários via API e serializar usando o <code>UserRequest</code> e só a partir dele criar a instancia de <code>User</code>  que iremos salvar no banco de dados.</p>
+<p>E da mesma forma podemos fazer o caminho inverso, serializando do banco de dados para a API em JSON.</p>
+<pre><code class="language-python">In [19]: bruno = session.exec(select(User).where(User.username==&quot;bruno-rocha&quot;)).first()
+
+In [20]: from dundie.models.user import UserResponse
+
+In [21]: UserResponse.parse_obj(bruno).json()
+Out[21]: '{&quot;name&quot;: &quot;Bruno Rocha&quot;, &quot;username&quot;: &quot;bruno-rocha&quot;, &quot;dept&quot;: &quot;Sales&quot;, &quot;avatar&quot;: null, &quot;bio&quot;
+: null, &quot;currency&quot;: &quot;USD&quot;}'
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="injeção-de-dependência"><a class="header" href="#injeção-de-dependência">Injeção de dependência</a></h1>
+<p>O FastAPI tem um excelente sistema de injeção de dependêcias, isto é util por 
+exemplo para quando quisermos que um endpoint seja acessivel apenas por usuários
+administradores, ao invés de colocarmos lógica para verificar o nivel de permissão
+do usuário diretamente em cada view, podemos criar uma dependência.</p>
+<p>Outro exemplo (que vamos aplicar agora) é precisarmos garantir que cada endpoint,
+ao ter sua função view invocada, uma sessão de conexão com o banco de dados já esteja
+disponível.</p>
+<p>Vamos criar uma dependência chamada <code>ActiveSession</code> que posteriormente será usada
+na definição das views.</p>
+<p>No topo de <code>dundie/db.py</code> nas linhas 2 e 3</p>
+<pre><code class="language-python">from fastapi import Depends
+from sqlmodel import Session, create_engine
+</code></pre>
+<p>No final de <code>dundie/db.py</code> após a linha 13</p>
+<pre><code class="language-python">def get_session():
+    with Session(engine) as session:
+        yield session
+
+
+ActiveSession = Depends(get_session)
+</code></pre>
+<p>O objeto que <code>ActiveSession</code> é uma dependência para rotas do FastAPI
+quando usarmos este objeto como parâmetro de uma view o FastAPI
+vai executar de forma <strong>lazy</strong> este objeto e passar o retorno da função
+atrelada a ele como argumento da nossa view.</p>
+<p>Neste caso teremos sempre uma conexão com o banco de dados dentro de cada
+view que marcarmos com <code>session: Session = ActiveSession</code>.</p>
+<p>Veremos a seguir como usar esta dependência --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="criando-as-views"><a class="header" href="#criando-as-views">Criando as Views</a></h1>
+<p>Agora criaremos as views (funções) para expor os serializers com os usuários que acessaremos
+usando a sessão de conexão ao banco de dados.</p>
+<p><strong>edite</strong> <code>dundie/routes/user.py</code></p>
+<pre><code class="language-python">from typing import List
+
+from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
+from sqlmodel import Session, select
+
+from dundie.db import ActiveSession
+from dundie.models.user import User, UserRequest, UserResponse
+
+router = APIRouter()
+
+
+@router.get(&quot;/&quot;, response_model=List[UserResponse])
+async def list_users(*, session: Session = ActiveSession):
+    &quot;&quot;&quot;List all users.&quot;&quot;&quot;
+    users = session.exec(select(User)).all()
+    return users
+
+
+@router.get(&quot;/{username}/&quot;, response_model=UserResponse)
+async def get_user_by_username(
+    *, session: Session = ActiveSession, username: str
+):
+    &quot;&quot;&quot;Get user by username&quot;&quot;&quot;
+    query = select(User).where(User.username == username)
+    user = session.exec(query).first()
+    if not user:
+        raise HTTPException(status_code=404, detail=&quot;User not found&quot;)
+    return user
+
+
+@router.post(&quot;/&quot;, response_model=UserResponse, status_code=201)
+async def create_user(*, session: Session = ActiveSession, user: UserRequest):
+    &quot;&quot;&quot;Creates new user&quot;&quot;&quot;
+    db_user = User.from_orm(user)  # transform UserRequest in User
+    session.add(db_user)
+    session.commit()
+    session.refresh(db_user)
+    return db_user
+</code></pre>
+<p>Acima criamos 3 views, uma para listar todos os usuários, uma para listar apenas um usuário e outra para criar um novo usuário.</p>
+<p>repare que a rota de criação de um novo usuário temos 2 detalhes diferentes: 1) estamos usando o método <code>post</code> e 2) estamos retornando o status code <code>201</code> (criado) em caso de sucesso.</p>
+<p>Em todas as views estamos usando os serializers e a injeção de dependência.</p>
+<p>Apesar de termos criados as funções, o FastAPI ainda não sabe disso, o próximo passo será fazer o roteamento de URL --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="roteamento-de-url"><a class="header" href="#roteamento-de-url">Roteamento de URL</a></h1>
+<p>Com as funções já prontas agora podemos fazer o roteamento, que é o processo
+de mapear uma URL como <code>/user/</code> a uma função como a <code>user_list</code> que criarmos,
+ou seja, sempre que o servidor receber um request na URL <code>/user/</code> irá executar
+a função mapeada passando todo o contexto HTTP e o FastAPI se encarrega de fazer
+a injeção das dependências.</p>
+<p>Vamos começar criando um <strong>router</strong> principal que irá agrerar todas as rotas:</p>
+<p><strong>EDITE</strong> <code>dundie/router/__init__.py</code></p>
+<pre><code class="language-python">from fastapi import APIRouter
+
+from .user import router as user_router
+
+main_router = APIRouter()
+
+main_router.include_router(user_router, prefix=&quot;/user&quot;, tags=[&quot;user&quot;])
+</code></pre>
+<p>E agora <strong>EDITE</strong> <code>dundie/app.py</code></p>
+<p>NO topo na linha 4</p>
+<pre><code class="language-python">from .routes import main_router
+</code></pre>
+<p>Logo depois de <code>app = FastAPI(...)</code> após a linha 11</p>
+<pre><code class="language-python">app.include_router(main_router)
+</code></pre>
+<p>E agora sim pode acessar a API e verá as novas rotas prontas para serem usadas,
+<a href="http://0.0.0.0:8000/docs/">http://0.0.0.0:8000/docs/</a></p>
+<p><img src="images/user_routes1.png" alt="user routes" /></p>
+<p>Pode tentar pela web interface ou com um http client puro:</p>
+<pre><code class="language-http"># rest_nvim
+GET http://localhost:8000/user/
+#+END
+HTTP/1.1 200 OK
+date: Fri, 23 Dec 2022 18:04:23 GMT
+server: uvicorn
+content-length: 220
+content-type: application/json
+
+#+RESPONSE
+[
+  {
+    &quot;name&quot;: &quot;Michael Scott&quot;,
+    &quot;username&quot;: &quot;michael-scott&quot;,
+    &quot;dept&quot;: &quot;management&quot;,
+    &quot;avatar&quot;: null,
+    &quot;bio&quot;: null,
+    &quot;currency&quot;: &quot;USD&quot;
+  },
+  {
+    &quot;name&quot;: &quot;Bruno Rocha&quot;,
+    &quot;username&quot;: &quot;bruno-rocha&quot;,
+    &quot;dept&quot;: &quot;Sales&quot;,
+    &quot;avatar&quot;: null,
+    &quot;bio&quot;: null,
+    &quot;currency&quot;: &quot;USD&quot;
+  }
+]
+#+END
+</code></pre>
+<p>Ou diretamente via cURL</p>
+<pre><code class="language-bash">curl -X 'GET' -k 'http://localhost:8000/user/'
+</code></pre>
+<p>Ou criar um usuário</p>
+<pre><code class="language-bash">curl -X 'POST' -H 'Content-Type: application/json' \
+  --data-raw '{&quot;email&quot;: &quot;pam@dm.com&quot;, &quot;dept&quot;: &quot;Accounting&quot;, &quot;password&quot;: &quot;jimjim&quot;, &quot;name&quot;: &quot;Pam Besly&quot;}' \
+  -k 'http://localhost:8000/user/'
+</code></pre>
+<p>Pegar um usuário pelo username</p>
+<pre><code class="language-bash">curl -X 'GET' -k 'http://localhost:8000/user/michael-scott/'
+</code></pre>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;Michael Scott&quot;,
+  &quot;username&quot;: &quot;michael-scott&quot;,
+  &quot;dept&quot;: &quot;management&quot;,
+  &quot;avatar&quot;: null,
+  &quot;bio&quot;: null,
+  &quot;currency&quot;: &quot;USD&quot;
+}
+</code></pre>
+<p>Listar todos</p>
+<pre><code class="language-bash">curl -X 'GET' \
+  'http://0.0.0.0:8000/user/' \
+  -H 'accept: application/json'
+</code></pre>
+<pre><code class="language-json">[
+  {
+    &quot;name&quot;: &quot;Michael Scott&quot;,
+    &quot;username&quot;: &quot;michael-scott&quot;,
+    &quot;dept&quot;: &quot;management&quot;,
+    &quot;avatar&quot;: null,
+    &quot;bio&quot;: null,
+    &quot;currency&quot;: &quot;USD&quot;
+  },
+  {
+    &quot;name&quot;: &quot;Bruno Rocha&quot;,
+    &quot;username&quot;: &quot;bruno-rocha&quot;,
+    &quot;dept&quot;: &quot;Sales&quot;,
+    &quot;avatar&quot;: null,
+    &quot;bio&quot;: null,
+    &quot;currency&quot;: &quot;USD&quot;
+  },
+  {
+    &quot;name&quot;: &quot;Dwight Schrute&quot;,
+    &quot;username&quot;: &quot;dwight-schrute&quot;,
+    &quot;dept&quot;: &quot;Sales&quot;,
+    &quot;avatar&quot;: null,
+    &quot;bio&quot;: null,
+    &quot;currency&quot;: &quot;USD&quot;
+  },
+  {
+    &quot;name&quot;: &quot;Pam Besly&quot;,
+    &quot;username&quot;: &quot;pam-besly&quot;,
+    &quot;dept&quot;: &quot;Accounting&quot;,
+    &quot;avatar&quot;: null,
+    &quot;bio&quot;: null,
+    &quot;currency&quot;: &quot;USD&quot;
+  },
+  {
+    &quot;name&quot;: &quot;Jim Halpert&quot;,
+    &quot;username&quot;: &quot;jim-halpert&quot;,
+    &quot;dept&quot;: &quot;Sales&quot;,
+    &quot;avatar&quot;: null,
+    &quot;bio&quot;: null,
+    &quot;currency&quot;: &quot;USD&quot;
+  }
+]
+</code></pre>
+<p>Só tem um pequeno problema: Qualquer um consegue criar usuários em nossa API sem estar autenticado e isso não é desejável,
+vamos resolver este problema implementando autenticação --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="gerando-tokens"><a class="header" href="#gerando-tokens">Gerando tokens</a></h1>
+<p>Agora que já podemos criar usuários é importante conseguirmos autenticar
+os usuários pois desta forma podemos limitar o acesso a alguns endpoints.</p>
+<blockquote>
+<p>Esse será arquivo com a maior quantidade de código <strong>boilerplate</strong>.</p>
+</blockquote>
+<p><strong>EDITE</strong> o arquivo <code>dundie/auth.py</code> vamos criar as classes e funções necessárias
+para a implementação de JWT que é a autenticação baseada em token e vamos
+usar o algoritmo selecionado no arquivo de configuração.</p>
+<p>Neste arquivo vamos criar os seguintes objetos:</p>
+<ul>
+<li>Um esquema de autenticação baseado em oauth, este objeto é usado pelo FastAPI para exibir um formulário de login e outros controles de autenticação na página /docs.</li>
+<li>Classes para serializar os 3 tipos de token que criaremos (token, refresh_token, reset_password_token)</li>
+<li>Fução que cria um token usando o algoritmo especificado</li>
+<li>Função que recebe o token e valida sua autenticidade</li>
+<li>Funções para retornar o objeto <code>User</code> sempre que precisarmos saber qual usuário está autenticado</li>
+<li>Dependência para injetarmos em todas as funções que necessitem de autenticação</li>
+</ul>
+<p><code>dundie/auth.py</code></p>
+<pre><code class="language-python">&quot;&quot;&quot;Token based auth&quot;&quot;&quot;
+from datetime import datetime, timedelta
+from typing import Callable, Optional, Union
+from functools import partial
+
+from fastapi import Depends, HTTPException, Request, status
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError, jwt
+from pydantic import BaseModel
+from sqlmodel import Session, select
+
+from dundie.config import settings
+from dundie.db import engine
+from dundie.models.user import User
+from dundie.security import verify_password
+
+SECRET_KEY = settings.security.secret_key  # pyright: ignore
+ALGORITHM = settings.security.algorithm  # pyright: ignore
+
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=&quot;token&quot;)
+
+
+# Models
+
+
+class Token(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str
+
+
+class RefreshToken(BaseModel):
+    refresh_token: str
+
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+
+
+# Functions
+
+
+def create_access_token(
+    data: dict,
+    expires_delta: Optional[timedelta] = None,
+    scope: str = &quot;access_token&quot;,
+) -&gt; str:
+    &quot;&quot;&quot;Creates a JWT Token from user data
+
+    scope: access_token or refresh_token
+    &quot;&quot;&quot;
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+    to_encode.update({&quot;exp&quot;: expire, &quot;scope&quot;: scope})
+    encoded_jwt = jwt.encode(
+        to_encode,
+        SECRET_KEY,  # pyright: ignore
+        algorithm=ALGORITHM,  # pyright: ignore
+    )
+    return encoded_jwt
+
+
+create_refresh_token = partial(create_access_token, scope=&quot;refresh_token&quot;)
+
+
+def authenticate_user(
+    get_user: Callable, username: str, password: str
+) -&gt; Union[User, bool]:
+    &quot;&quot;&quot;Authenticate the user&quot;&quot;&quot;
+    user = get_user(username)
+    if not user:
+        return False
+    if not verify_password(password, user.password):
+        return False
+    return user
+
+
+def get_user(username) -&gt; Optional[User]:
+    &quot;&quot;&quot;Get user from database&quot;&quot;&quot;
+    query = select(User).where(User.username == username)
+    with Session(engine) as session:
+        return session.exec(query).first()
+
+
+def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    request: Request = None,  # pyright: ignore
+    fresh=False
+) -&gt; User:
+    &quot;&quot;&quot;Get current user authenticated&quot;&quot;&quot;
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail=&quot;Could not validate credentials&quot;,
+        headers={&quot;WWW-Authenticate&quot;: &quot;Bearer&quot;},
+    )
+
+    if request:
+        if authorization := request.headers.get(&quot;authorization&quot;):
+            try:
+                token = authorization.split(&quot; &quot;)[1]
+            except IndexError:
+                raise credentials_exception
+
+    try:
+        payload = jwt.decode(
+            token,
+            SECRET_KEY,  # pyright: ignore
+            algorithms=[ALGORITHM]  # pyright: ignore
+        )
+        username: str = payload.get(&quot;sub&quot;)  # pyright: ignore
+
+        if username is None:
+            raise credentials_exception
+        token_data = TokenData(username=username)
+    except JWTError:
+        raise credentials_exception
+    user = get_user(username=token_data.username)
+    if user is None:
+        raise credentials_exception
+    if fresh and (not payload[&quot;fresh&quot;] and not user.superuser):
+        raise credentials_exception
+
+    return user
+
+
+# FastAPI dependencies
+
+async def get_current_active_user(
+    current_user: User = Depends(get_current_user),
+) -&gt; User:
+    &quot;&quot;&quot;Wraps the sync get_active_user for sync calls&quot;&quot;&quot;
+    return current_user
+
+
+AuthenticatedUser = Depends(get_current_active_user)
+
+
+async def validate_token(token: str = Depends(oauth2_scheme)) -&gt; User:
+    &quot;&quot;&quot;Validates user token&quot;&quot;&quot;
+    user = get_current_user(token=token)
+    return user
+</code></pre>
+<div id="admonition-nota" class="admonition note">
+<div class="admonition-title">
+<p>NOTA</p>
+<p><a class="admonition-anchor-link" href="25_tokens.html#admonition-nota"></a></p>
+</div>
+<div>
+<p>O objeto <code>AuthenticatedUser</code> é uma dependência do FastAPI e é
+através dele que iremos garantir que nossas rotas estejas protegidas
+com token.</p>
+</div>
+</div>
+<p>Agora só falta registrarmos as URLs responsáveis por gerar a validar o token --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="criando-endpoints-de-auth"><a class="header" href="#criando-endpoints-de-auth">Criando Endpoints de Auth</a></h1>
+<p>Agora precisamos mapear a função de geração e validação de tokens na API, expondo a 
+URL <code>/token</code> para que possamos gerar um token para um usuário.</p>
+<p><strong>EDITE</strong> <code>dundie/routes/auth.py</code></p>
+<pre><code class="language-python">from datetime import timedelta
+
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+
+from dundie.auth import (
+    RefreshToken,
+    Token,
+    User,
+    authenticate_user,
+    create_access_token,
+    create_refresh_token,
+    get_user,
+    validate_token,
+)
+from dundie.config import settings
+
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.security.access_token_expire_minutes  # pyright: ignore
+REFRESH_TOKEN_EXPIRE_MINUTES = settings.security.refresh_token_expire_minutes  # pyright: ignore
+
+router = APIRouter()
+
+
+@router.post(&quot;/token&quot;, response_model=Token)
+async def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+):
+    user = authenticate_user(get_user, form_data.username, form_data.password)
+    if not user or not isinstance(user, User):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=&quot;Incorrect username or password&quot;,
+            headers={&quot;WWW-Authenticate&quot;: &quot;Bearer&quot;},
+        )
+
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)  # pyright: ignore
+    access_token = create_access_token(
+        data={&quot;sub&quot;: user.username, &quot;fresh&quot;: True},
+        expires_delta=access_token_expires,
+    )
+
+    refresh_token_expires = timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)  # pyright: ignore
+    refresh_token = create_refresh_token(
+        data={&quot;sub&quot;: user.username}, expires_delta=refresh_token_expires
+    )
+
+    return {
+        &quot;access_token&quot;: access_token,
+        &quot;refresh_token&quot;: refresh_token,
+        &quot;token_type&quot;: &quot;bearer&quot;,
+    }
+
+
+@router.post(&quot;/refresh_token&quot;, response_model=Token)
+async def refresh_token(form_data: RefreshToken):
+    user = await validate_token(token=form_data.refresh_token)
+
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)  # pyright: ignore
+    access_token = create_access_token(
+        data={&quot;sub&quot;: user.username, &quot;fresh&quot;: False},
+        expires_delta=access_token_expires,
+    )
+
+    refresh_token_expires = timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)  # pyright: ignore
+    refresh_token = create_refresh_token(
+        data={&quot;sub&quot;: user.username}, expires_delta=refresh_token_expires
+    )
+
+    return {
+        &quot;access_token&quot;: access_token,
+        &quot;refresh_token&quot;: refresh_token,
+        &quot;token_type&quot;: &quot;bearer&quot;,
+    }
+</code></pre>
+<p>E agora vamos adicionar essas URLS ao router principal</p>
+<p><strong>EDITE</strong> <code>dundie/routes/__init__.py</code></p>
+<p>No topo na linha 3</p>
+<pre><code class="language-python">from .auth import router as auth_router
+</code></pre>
+<p>E depois na linha 9</p>
+<pre><code class="language-python">main_router.include_router(auth_router, tags=[&quot;auth&quot;])
+</code></pre>
+<p>Vamos testar a aquisição de um token via curl. (ou pode utilizar algum outro cliente HTTP de sua preferencia como o Imsomnia ou Postman)</p>
+<pre><code class="language-bash">curl -X 'POST' \
+  'http://localhost:8000/token' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -d 'username=michael-scott&amp;password=boss123'
+</code></pre>
+<blockquote>
+<p>passe como parametro os dados de um usuário que tenha criado via linha de comando.</p>
+</blockquote>
+<p>Resposta:</p>
+<pre><code class="language-json">{
+  &quot;access_token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImZyZXNoIjp0cnVlLCJleHAiOjE2Njg2Mjg0NjgsInNjb3BlIjoiYWNjZXNzX3Rva2VuIn0.P-F3onD2vFFIld_ls1irE9rOgLNk17SNDASls31lgkU&quot;,
+  &quot;refresh_token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY2ODY2MjY2OCwic2NvcGUiOiJyZWZyZXNoX3Rva2VuIn0.AWV8QtySYmcukxTgTa9GedLK00o6wrbyMt9opW42eyQ&quot;,
+  &quot;token_type&quot;: &quot;bearer&quot;
+}
+</code></pre>
+<p>agora sim já conseguimos gerar o token, só falta proteger as URLs --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="protegendo-rotas"><a class="header" href="#protegendo-rotas">Protegendo rotas</a></h1>
+<p>Apenas super usuários terão permissão para criar novos usuários, portanto
+vamos proteger a view <code>POST /user/</code> com autenticação via <strong>TOKEN</strong></p>
+<p><strong>EDITE</strong> <code>dundie/auth.py</code> e adicione no final uma dependencia para 
+garantir que o usuário autenticado é super usuário.</p>
+<pre><code class="language-python">async def get_current_super_user(
+    current_user: User = Depends(get_current_user),
+) -&gt; User:
+    if not current_user.superuser:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail=&quot;Not a super user&quot;
+        )
+    return current_user
+
+
+SuperUser = Depends(get_current_super_user)
+</code></pre>
+<p>Agora vamos usar essa dependencia para garantir o super usuário em nossa rota 
+<strong>EDITE</strong> <code>dundie/routes/user.py</code></p>
+<p>No topo próximo a linha 9</p>
+<pre><code class="language-python">from dundie.auth import SuperUser
+</code></pre>
+<p>E no roteamento da view <code>create_user</code> como parametro para o decorator <code>.post</code> passamos uma lista de
+dependencias que sejam satisfeitas pelo FAstAPI antes de executar o código da view, ou seja, o código só será executado caso o usuário autenticado via token seja um superusuário.</p>
+<pre><code class="language-python">
+@router.post(&quot;/&quot;, response_model=UserResponse, status_code=201, dependencies=[SuperUser])
+async def create_user(*, session: Session = ActiveSession, user: UserRequest):
+    ...
+
+</code></pre>
+<p>Como adicionamos <code>dependencies=[SuperUser]</code> no roteamento e isso é o suficiente para o FastAPI detectar que existe pelo menos uma URL que necessita de autenticação e agora já teremos os controles de autenticação na API.</p>
+<p><img src="images/auth_form.png" alt="Auth" /></p>
+<p>Ao tentar criar um usuário sem autenticar teremos agora um erro <code>HTTP_401_UNAUTHORIZED</code> e se o usuário autenticado não for um superuser termos o erro <code>HTTP_403_FORBIDDEN</code></p>
+<p>Os requests vão precisar do token, portanto o usuário primeiro precisa pedir um token na URL <code>/token</code> e depois usar este token na requisição protegida </p>
+<pre><code class="language-bash">curl -X 'POST' \
+  'http://localhost:8000/user/?fresh=false' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtaWNoYWVsLXNjb3R0IiwiZnJlc2giOnRydWUsImV4cCI6MTY3MTgyOTc2NCwic2NvcGUiOiJhY2Nlc3NfdG9rZW4ifQ.wdIUyJS9TX2Ku8BMI_AIJhAXQb-TSHmX11qKs5C4PF0' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  &quot;name&quot;: &quot;Kevin Malone&quot;,
+  &quot;email&quot;: &quot;kevin@dm.com&quot;,
+  &quot;dept&quot;: &quot;Sales&quot;,
+  &quot;password&quot;: &quot;stacy&quot;
+}'
+
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="erros-http"><a class="header" href="#erros-http">Erros HTTP</a></h1>
+<p>Quando as coisas dão errado precisamos informar o cliente HTTP com o código de status correto, erros podem acontecer
+quando ocorre uma falha inesperada no servidor, quando o recurdo solicitado não existe ou quando o cliente efetua 
+uma requisição inválida.</p>
+<p>Vamos tentar duplicar a criação de um usuário fazendo novamente a mesma chamada POST e a mensagem que receberemos é:</p>
+<p>Faça essa chamada mais de 1x:</p>
+<pre><code class="language-console">curl -X 'POST' -H 'Content-Type: application/json' \
+  --data-raw '{&quot;email&quot;: &quot;pam@dm.com&quot;, &quot;dept&quot;: &quot;Accounting&quot;, &quot;password&quot;: &quot;jimjim&quot;, &quot;name&quot;: &quot;Pam Besly&quot;}' \
+  -k 'http://localhost:8000/user/'
+</code></pre>
+<pre><code class="language-http">HTTP/1.1 500 Internal Server Error
+
+Internal Server Error
+</code></pre>
+<p>A mensagem de erro não ajuda muito a sabermos o que ocorreu de fato e portanto podemos curtomizar este comportamento.</p>
+<p>Quando temos este caso expecifico o código de erro correto é o <code>409 Conflict</code> que innforma que o estado interno está em conflito com o estado que está sendo enviado no request, ou seja, estamos tentando criar um usuário que já existe.</p>
+<p>Para customizar este comportamento podemos editar o arquivo <code>routes/user.py</code></p>
+<pre><code class="language-python"># No topo
+from sqlalchemy.exc import IntegrityError
+
+# Na função `create_user`
+async def create_user(.......):
+    ...
+    try:
+        session.commit()
+    except IntegrityError:
+        raise HTTPException(status_code=409, detail=&quot;User already exists&quot;)
+</code></pre>
+<p>A exception <code>IntegrityError</code> será levantada para qualquer problemas encontrado no banco de dados portanto não é ainda a melhor opção, precisamos ser mais especificos para ajudar quem está usando a API, portanto vamos fazer as seguintes modificações:</p>
+<ol>
+<li>Continuar tratando a IntegrityError porém com o código 500 e mensagem de erro genérica.</li>
+<li>Adicionar um guard para garantir que o usuário a ser criado não existe.</li>
+</ol>
+<pre><code class="language-python">@router.post(
+    &quot;/&quot;, response_model=UserResponse, status_code=201, dependencies=[SuperUser]
+)
+async def create_user(*, session: Session = ActiveSession, user: UserRequest):
+    &quot;&quot;&quot;Creates new user&quot;&quot;&quot;
+    if session.exec(select(User).where(User.username == user.username)).first():
+        raise HTTPException(status_code=409, detail=&quot;Username already taken&quot;)
+
+    db_user = User.from_orm(user)  # transform UserRequest in User
+    session.add(db_user)
+    try:
+        session.commit()
+    except IntegrityError:
+        raise HTTPException(status_code=500, detail=&quot;Database IntegrityError&quot;)
+
+    session.refresh(db_user)
+    return db_user
+</code></pre>
+<p>E agora sim teremos o retorno esperado</p>
+<pre><code class="language-http">HTTP/1.1 409 Conflict
+Username already taken
+</code></pre>
+<p>E no caso de um outro erro de integridade ai invés de mostrar apenas o erro 500 genérico informamos especificamente que se trata de um problema no banco de dados, porém sem expor o erro diretamente.</p>
+<div id="admonition-nota" class="admonition note">
+<div class="admonition-title">
+<p>NOTA</p>
+<p><a class="admonition-anchor-link" href="28_erros_http.html#admonition-nota"></a></p>
+</div>
+<div>
+<p>Uma boa prática seria colocar um logger ou um analisador de exceptions como o NewRelic ou o Sentry, faremos isso em outra parte do treinamento.</p>
+</div>
+</div>
+<p>Vamos agora continuar implementando as rotas de usuário --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="update-user"><a class="header" href="#update-user">Update User</a></h1>
+<p>Agora vamos adicionar uma rota para que o usuário possa alterar o próprio perfil.</p>
+<p>O usuário será capaz de mudar apenas os campos <code>bio</code> e <code>avatar</code><br />
+bio será um texto e avatar a URL de uma imagem, e é claro, o usuário só
+poderá alterar o seu próprio perfil.</p>
+<p>Vamos começar criando o serializer que irá receber essas informações a serem alteradas:</p>
+<p><strong>EDITE</strong> <code>models/user.py</code> e adicione:</p>
+<pre><code class="language-python">class UserProfilePatchRequest(BaseModel):
+    avatar: Optional[str] = None
+    bio: Optional[str] = None
+</code></pre>
+<p>E agora <strong>EDITE</strong> <code>routes/user.py</code> e adicione ao final.</p>
+<pre><code class="language-python">@router.patch(&quot;/{username}/&quot;, response_model=UserResponse)
+async def update_user(
+    *,
+    session: Session = ActiveSession,
+    patch_data: UserProfilePatchRequest,
+    current_user: User = AuthenticatedUser,
+    username: str
+):
+    user = session.exec(select(User).where(User.username == username)).first()
+    if not user:
+        raise HTTPException(status_code=404, detail=&quot;User not found&quot;)
+    if user.id != current_user.id and not current_user.superuser:
+        raise HTTPException(status_code=403, detail=&quot;You can only update your own profile&quot;)
+
+    # Update
+    user.avatar = patch_data.avatar
+    user.bio = patch_data.bio
+
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
+</code></pre>
+<p>Agora podemos testar a rota fazendo a alteração do perfil do usuário michael-scott, lembre-se que primeiro
+será necessário obter um token válido com uma chamada na rota <code>/token</code></p>
+<pre><code class="language-bash">curl -X 'PATCH' \
+ -H 'Authorization: Bearer ...' \
+ -H 'Content-Type: application/json' 
+ --data-raw '{&quot;avatar&quot;: &quot;https://test.com/MichaelScott.png&quot;, &quot;bio&quot;: &quot;I am the boss&quot;}' \
+ -k 'http://localhost:8000/user/michael-scott/'
+</code></pre>
+<p>O usuário também precisará alterar a senha caso ele esqueça, vamos implementar esta funcionalidade --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="change-password"><a class="header" href="#change-password">Change Password</a></h1>
+<p>O endpoint de alteração de senha precisa ficar separado do perfil pois este endpoint precisa de alguns detalhes extras:</p>
+<ol>
+<li>O usuário precisa preencher a senha e a confirmação</li>
+<li>A mudança pode ser feita pelo próprio usuário, pelo superuser ou através de um token requisitado por email (funcionalidade de <strong>esqueci a senha</strong>)</li>
+</ol>
+<p>Começamos adicionando o serializer para receber o request da alteração do password.</p>
+<p><strong>EDITE</strong> <code>models/user.py</code></p>
+<pre><code class="language-python">
+# No topo
+from fastapi import HTTPException, status
+from dundie.security import get_password_hash
+
+...
+
+# No final
+class UserPasswordPatchRequest(BaseModel):
+    password: str
+    password_confirm: str
+
+    @root_validator(pre=True)
+    def check_passwords_match(cls, values):
+        &quot;&quot;&quot;Checks if passwords match&quot;&quot;&quot;
+        if values.get(&quot;password&quot;) != values.get(&quot;password_confirm&quot;):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=&quot;Passwords do not match&quot;
+            )
+        return values
+
+    @property
+    def hashed_password(self) -&gt; str:
+        &quot;&quot;&quot;Returns hashed password&quot;&quot;&quot;
+        return get_password_hash(self.password)
+</code></pre>
+<p>Para editar o password do usuário teremos as seguintes condições</p>
+<pre><code class="language-python"># O usuário pode editar o próprio password
+current_user == user
+
+# O usuário pode editar o password de outro usuário se for superuser
+current_user.supersuser is True
+
+# ou se o usuário tiver um token válido
+Query(&quot;?pwd_reset_token&quot;) is valid
+</code></pre>
+<p>Vamos implementar a lógica acima como uma dependencia do FastAPI, usaremos esta dependencia na rota 
+de alteração de senha e a dependência irá garantir que pelo menos um dos requisitos seja satisfeito.</p>
+<p><strong>EDITE</strong> <code>dundie/auth.py</code> e no final:</p>
+<pre><code class="language-python">async def get_user_if_change_password_is_allowed(
+    *,
+    request: Request,
+    pwd_reset_token: Optional[str] = None,  # from path?pwd_reset_token=xxxx
+    username: str,  # from /path/{username}
+) -&gt; User:
+    &quot;&quot;&quot;Returns User if one of the conditions is met.
+    1. There is a pwd_reset_token passed as query parameter and it is valid OR
+    2. authenticated_user is supersuser OR
+    3. authenticated_user is User
+    &quot;&quot;&quot;
+    target_user = get_user(username)  # The user we want to change the password
+    if not target_user:
+        raise HTTPException(status_code=404, detail=&quot;User not found&quot;)
+
+    try:
+        valid_pwd_reset_token = get_current_user(token=pwd_reset_token or &quot;&quot;) == target_user
+    except HTTPException:
+        valid_pwd_reset_token = False
+
+    try:
+        authenticated_user = get_current_user(token=&quot;&quot;, request=request)
+    except HTTPException:
+        authenticated_user = None
+
+    if any(
+        [
+            valid_pwd_reset_token,
+            authenticated_user and authenticated_user.superuser,
+            authenticated_user and authenticated_user.id == target_user.id,
+        ]
+    ):
+        return target_user
+
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail=&quot;You are not allowed to change this user's password&quot;,
+    )
+
+
+CanChangeUserPassword = Depends(get_user_if_change_password_is_allowed)
+</code></pre>
+<p>Agora temos <code>CanChangeUserPassword</code> como dependencia para usar em uma rota do FastAPI
+isso vai garantir que a URL só será executada se todas as condições da dependencia foram
+resolvidas.</p>
+<p>E agora em <code>routes/user.py</code> vamos criar uma rota com o método <code>POST</code></p>
+<div id="admonition-nota" class="admonition note">
+<div class="admonition-title">
+<p>NOTA</p>
+<p><a class="admonition-anchor-link" href="30_change_password.html#admonition-nota"></a></p>
+</div>
+<div>
+<p>O ideal para seguir a semantica REST seria criar este método como <strong>PATCH</strong> porém formulários HTML permitem apenas GET e POST e para facilitar o trabalho do front-end vamos usar POST.</p>
+</div>
+</div>
+<pre><code class="language-python">@router.post(&quot;/{username}/password/&quot;, response_model=UserResponse)
+async def change_password(
+    *,
+    session: Session = ActiveSession,
+    patch_data: UserPasswordPatchRequest,
+    user: User = CanChangeUserPassword
+):
+    user.password = patch_data.hashed_password  # pyright: ignore
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
+</code></pre>
+<p>Agora podemos testar a rota de alteração de senha, autenticando com o token válido para o usuário michael-scott por exemplo:</p>
+<pre><code class="language-bash">curl -X 'POST' \
+ -H 'Authorization: Bearer ...' \
+ -H 'Content-Type: application/json' 
+ --data-raw '{&quot;password&quot;: &quot;boss1234&quot;, &quot;password_confirm&quot;: &quot;boss1234&quot;}' \
+ -k 'http://localhost:8000/user/michael-scott/password/'
+</code></pre>
+<p>O usuário <code>michael-scott</code> sendo um superuser, também tem permissão para alterar senha de outros usuários,</p>
+<p>Agora imagine que um usuário esqueceu a própria senha, mas ao invés de pedir para o gerente ele quer ele
+mesmo alterar a senha, para isso vamos criar um endpoint para enviar um email com um token válido para
+alterar a senha e acessar o mesmo endpoint. --&gt; </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="esqueci-minha-senha"><a class="header" href="#esqueci-minha-senha">Esqueci minha senha</a></h1>
+<p>O próximo passo para completar a gestão de usuários é criarmos uma URL onde o usuário irá informar o seu <code>email</code> e o sistema vai verificar se existe um usuário com este e-mail cadastrado e então enviar um e-mail com o token para permitir a alteração de senha.</p>
+<p>Nós já temos uma função que é capaz de gerar um token em <code>dundie/auth.py</code> chamada <code>create_access_token</code></p>
+<p>E vamos usar esta função para gerar o token de alteração de senha.</p>
+<p>O fluxo será o seguinte:</p>
+<ol>
+<li>Usuário requisita um token de senha em 
+:</li>
+</ol>
+<pre><code class="language-http">POST /user/pwd_reset_token/
+
+{
+  &quot;email&quot;: &quot;michael-scott@dm.com&quot;
+}
+</code></pre>
+<pre><code class="language-http">Response: 200 Ok
+&quot;Email will be sent if user is registered&quot;
+</code></pre>
+<ol start="2">
+<li>A view roteada em <code>/user/pwd_reset_token</code> vai fazer o seguinte:</li>
+</ol>
+<ul>
+<li>Invocar a função: <code>try_to_send_pwd_reset_email(email)</code>.</li>
+</ul>
+<ol start="3">
+<li>
+<p>A função <code>try_to_send_pwd_reset_email</code> irá fazer o seguinte:</p>
+</li>
+<li>
+<p>Procurar o usuário pelo e-mail</p>
+</li>
+<li>
+<p>Criar um token com expiração curta (o tempo de expiração será definido nos settings)</p>
+</li>
+<li>
+<p>Renderizar um template com o link para redefinir senha</p>
+</li>
+<li>
+<p>Enviar o e-mail</p>
+</li>
+</ol>
+<h2 id="enviando-email"><a class="header" href="#enviando-email">Enviando Email</a></h2>
+<p>Vamos começar criando uma função que irá receber alguns parametros e enviar um e-mail, 
+teremos uma versão da função que de fato envia um e-mail via HTTP, e teremos outra
+que apenas escreve a mensagem em um arquivo de log simulando o envio de e-mail que será
+útil para testes.</p>
+<p><strong>EDITE</strong> <code>dundie/tasks/user.py</code></p>
+<pre><code class="language-python">import smtplib
+from datetime import timedelta
+from time import sleep
+
+from sqlmodel import Session, select
+
+from dundie.auth import create_access_token
+from dundie.config import settings
+from dundie.db import engine
+from dundie.models.user import User
+
+
+def send_email(email: str, message: str):
+    if settings.email.debug_mode is True:  # pyright: ignore
+        _send_email_debug(email, message)
+    else:
+        _send_email_smtp(email, message)
+
+
+def _send_email_debug(email: str, message: str):
+    &quot;&quot;&quot;Mock email sending by printing to a file&quot;&quot;&quot;
+    with open(&quot;email.log&quot;, &quot;a&quot;) as f:
+        sleep(3)  # pretend it takes 3 seconds
+        f.write(f&quot;--- START EMAIL {email} ---\n&quot; f&quot;{message}\n&quot; &quot;--- END OF EMAIL ---\n&quot;)
+
+
+def _send_email_smtp(email: str, message: str):
+    &quot;&quot;&quot;Connect to SMTP server and send email&quot;&quot;&quot;
+    with smtplib.SMTP_SSL(
+        settings.email.smtp_server, settings.email.smtp_port  # pyright: ignore  # pyright: ignore
+    ) as server:
+        server.login(settings.email.smtp_user, settings.email.smtp_password)  # pyright: ignore
+        server.sendmail(
+            settings.email.smtp_sender,  # pyright: ignore
+            email,
+            message.encode(&quot;utf8&quot;),
+        )
+
+
+MESSAGE = &quot;&quot;&quot;\
+From: Dundie &lt;{sender}&gt;
+To: {to}
+Subject: Password reset for Dundie
+
+Please use the following link to reset your password:
+{url}?pwd_reset_token={pwd_reset_token}
+
+This link will expire in {expire} minutes.
+&quot;&quot;&quot;
+
+def try_to_send_pwd_reset_email(email):
+    &quot;&quot;&quot;Given an email address sends email if user is found&quot;&quot;&quot;
+    with Session(engine) as session:
+        user = session.exec(select(User).where(User.email == email)).first()
+        if not user:
+            return
+
+        sender = settings.email.smtp_sender  # pyright: ignore
+        url = settings.security.PWD_RESET_URL  # pyright: ignore
+        expire = settings.security.RESET_TOKEN_EXPIRE_MINUTES  # pyright: ignore
+
+        pwd_reset_token = create_access_token(
+            data={&quot;sub&quot;: user.username},
+            expires_delta=timedelta(minutes=expire),  # pyright: ignore
+            scope=&quot;pwd_reset&quot;,
+        )
+
+        send_email(
+            email=user.email,
+            message=MESSAGE.format(
+                sender=sender,
+                to=user.email,
+                url=url,
+                pwd_reset_token=pwd_reset_token,
+                expire=expire,
+            ),
+        )
+</code></pre>
+<p>O próximo passo é editar o arquivo <code>dundie/default.toml</code> e adicionar os settings necessários para o serviço de emails.</p>
+<pre><code class="language-toml">[default.security]
+...
+RESET_TOKEN_EXPIRE_MINUTES = 10
+PWD_RESET_URL = &quot;https://dm.com/reset_password&quot;
+
+[default.email]
+debug_mode = true
+smtp_sender = &quot;no-reply@dm.com&quot;
+smtp_server = &quot;localhost&quot;
+smtp_port = 1025
+smtp_user = &quot;&lt;replace in .secrets.toml&gt;&quot;
+smtp_password = &quot;&lt;replace in .secrets.toml&gt;&quot;
+</code></pre>
+<p>Agora podemos abrir um terminal e testar essas funções</p>
+<pre><code class="language-python">$ docker-compose exec api dundie shell
+
+Auto imports: ['settings', 'engine', 'select', 'session', 'User']
+
+In [1]: from dundie.tasks.user import try_to_send_pwd_reset_email
+
+In [2]: try_to_send_pwd_reset_email(&quot;mscott@dm.com&quot;)  # wait 3 seconds
+
+In [3]: open(&quot;email.log&quot;).readlines()
+Out[3]: 
+['--- START EMAIL mscott@dm.com ---\n',
+ 'From: Dundie &lt;no-reply@dm.com&gt;\n',
+ 'To: mscott@dm.com\n',
+ 'Subject: Password reset for Dundie\n',
+ '\n',
+ 'Please use the following link to reset your password:\n',
+ 'https://dm.com/reset_password?pwd_reset_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtaWNoYWVsLXNjb3R0IiwiZXhwIjoxNjcyNjc3OTk1LCJzY29wZSI6InB3ZF9yZXNldCJ9.nAZNxHYniofTSCzBh38gPi5Qd0FoKONw1Ge6Yp40l5s\n',
+ '\n',
+ 'This link will expire in 10 minutes.\n',
+ '\n',
+ '--- END OF EMAIL ---\n']
+</code></pre>
+<p>Cada e-mail enviado será adicionado ao arquivo email.log enquanto <code>settings.email.debug_mode</code> estiver ativado, futuramente podemos colocar os dados de um servidor smtp de verdade.</p>
+<p>Agora a parte principal é criar uma rota que permitirá ao usuário solicitar o token de alteração de senha e disparar a task em background para o envio do e-mail.</p>
+<p><strong>EDITE</strong> <code>dundie/routes/user.py</code> e no final vamos adicionar.</p>
+<pre><code class="language-python"># import
+from dundie.tasks.user import try_to_send_pwd_reset_email
+
+
+# view
+@router.post(&quot;/pwd_reset_token/&quot;)
+async def send_password_reset_token(*, email: str = Body(embed=True)):
+    &quot;&quot;&quot;Sends an email with the token to reset password.&quot;&quot;&quot;
+    try_to_send_pwd_reset_email(email)
+    return {
+        &quot;message&quot;: &quot;If we found a user with that email, we sent a password reset token to it.&quot;
+    }
+</code></pre>
+<div id="admonition-dica" class="admonition tip">
+<div class="admonition-title">
+<p>DICA</p>
+<p><a class="admonition-anchor-link" href="31_esqueci_senha.html#admonition-dica"></a></p>
+</div>
+<div>
+<p>Neste endpoint estamos recebendo <code>email</code> apenas no corpo do request, ao invés de criarmos um
+serializer apenas para armazenar esta informação podemos usar o serializer genérico <code>Body</code> que
+permite receber o valor de um campo diretamente no corpo do request.</p>
+<p>No caso de um endereço de em-mail pode ser interessante criar um serializer para efetuar a 
+verificando que o e-mail é valido, mas isso fica como melhoria para depois.</p>
+</div>
+</div>
+<p>Testando:</p>
+<pre><code class="language-bash">curl -X 'POST' -H 'Content-Type: application/json' \
+--data-raw '{&quot;email&quot;: &quot;mscott@dm.com&quot;}' -k \
+'http://localhost:8000/user/pwd_reset_token/'
+</code></pre>
+<pre><code class="language-http">POST http://localhost:8000/user/pwd_reset_token/
+#+END
+HTTP/1.1 200 OK
+date: Mon, 02 Jan 2023 16:42:56 GMT
+server: uvicorn
+content-length: 87
+content-type: application/json
+
+#+RESPONSE
+{
+  &quot;message&quot;: &quot;If we found a user with that email, we sent a password reset token to it.&quot;
+}
+#+END
+</code></pre>
+<p>Você pode agora verificar o conteúdo do arquivo <code>email.log</code> para ver se a mensagem foi realmente enviada.</p>
+<pre><code class="language-bash">$ cat email.log
+...
+</code></pre>
+<div id="admonition-tarefa" class="admonition info">
+<div class="admonition-title">
+<p>Tarefa</p>
+<p><a class="admonition-anchor-link" href="31_esqueci_senha.html#admonition-tarefa"></a></p>
+</div>
+<div>
+<p>No arquivo <code>dundie/tasks/user.py</code> estamos criando uma string <code>MESSAGE</code> para usar como template para o e-mail enviado,
+mas seria ideal salvar essa string em um arquivo separado, por exemplo <code>pwd_reset_email_template.jinja</code>
+e então usar o <code>jinja2</code> para renderizar o template, lembre-se que usamos o Jinja2 no Day1 do treinamento.</p>
+<p>Consegue fazer esta alteração?</p>
+</div>
+</div>
+<hr />
+<div id="admonition-nota" class="admonition note">
+<div class="admonition-title">
+<p>NOTA</p>
+<p><a class="admonition-anchor-link" href="31_esqueci_senha.html#admonition-nota"></a></p>
+</div>
+<div>
+<p>Por questões de privacidade nós não podemos confirmar se a operação deu certo, o usuário terá que verificar na caixa de e-mail que em nosso caso é o arquivo de log.</p>
+</div>
+</div>
+<p>Mas repare que ao chamar a URL precisamos esperar 3 segundos pela resposta, o ideal é que o request seja imediato e a função
+<code>taks.try_to_send_pwd_reset_email</code> seja executada em background. --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="enviando-emails-assíncronos"><a class="header" href="#enviando-emails-assíncronos">Enviando emails assíncronos</a></h1>
+<p>Ao chamar a URL <code>/user/pwd_reset_token/</code> a resposta demorou 3 segundos pois estamos bloqueando o request até o e-mail ser enviado, o ideal é que isso seja feito em background, vamos transformar a chamada de <code>try_to_send_pwd_reset_email</code> em uma task.</p>
+<p>O FastAPI tem uma classe chamada <code>BackgroundTasks</code> que nos permite adicionar funções que serão executadas em background, vamos importá-la e adicioná-la como um parâmetro da nossa rota.</p>
+<p>As funções que adicionarmos a background_tasks serão adicionadas ao event-loop assíncrono gerenciado pelo FastAPI, desta forma não será necessário esperar o tempo de envio do e-mail, podemos retornar a resposta para o cliente e mesmo depois do request terminado a tarefa continuará executando do lado servidor.</p>
+<p><strong>EDITE</strong> <code>dundie/routes/user.py</code></p>
+<pre><code class="language-python"># No topo
+from fastpi import BackgroundTasks
+...
+
+
+# Na função
+@router.post(&quot;/pwd_reset_token/&quot;)
+async def send_password_reset_token(
+    *,
+    email: str = Body(embed=True),
+    background_tasks: BackgroundTasks,  # NEW
+):
+    background_tasks.add_task(try_to_send_pwd_reset_email, email=email)  # NEW
+    return {
+        &quot;message&quot;: &quot;If we found a user with that email, we sent a password reset token to it.&quot;
+    }
+</code></pre>
+<p>Pode testar repetindo a mesma chamada anterior (ou usando a UI em /docs/)</p>
+<pre><code class="language-bash">curl -X 'POST' -H 'Content-Type: application/json' \
+--data-raw '{&quot;email&quot;: &quot;mscott@dm.com&quot;}' -k \
+'http://localhost:8000/user/pwd_reset_token/'
+</code></pre>
+<p>Repare que agora a resposta é instantânea e o e-mail é enviado em background.</p>
+<hr />
+<p>Assim terminamos a API de gestão de usuários e Auth por enquanto</p>
+<p><img src="images/user_final.png" alt="" /></p>
+<div id="admonition-dica" class="admonition tip">
+<div class="admonition-title">
+<p>DICA</p>
+<p><a class="admonition-anchor-link" href="33_enviando_email_async.html#admonition-dica"></a></p>
+</div>
+<div>
+<p>A tareda de envio de e-mail é bastante simples e não muito complexa em questões de resiliência a falhas,
+se o e-mail falhar o envio, o usuário simplesmente não vai receber e portanto irá tentar novamente.</p>
+<p>Existem casos onde as tarefas precisam de um pouco mais de robustes e controles como retry e auditoria,
+neste caso usaremos um gerenciador de filas como Celery ou Python-RQ, mas isso veremos adiante.</p>
+</div>
+</div>
+<p>Com estas rotas agora já podemos ter um front-end integrado para a gestão de usuários, mas o nosso próximo passo será cuidar da API de transações --&gt; </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="modelagem-de-dados"><a class="header" href="#modelagem-de-dados">Modelagem de dados</a></h1>
+<p>A modelagem dos dados será a seguinte (considerando que já concluimos a tabela de User), fica faltando implementar as outras 2 tabelas.</p>
+<p><img src="images/database.png" alt="database" /></p>
+<p><a href="https://dbdesigner.page.link/GqDU95ApwZs7a9RH9">https://dbdesigner.page.link/GqDU95ApwZs7a9RH9</a></p>
+<p>Portanto criaremos os models para <code>Transaction</code> e <code>Balance</code></p>
+<p><strong>EDITE</strong> <code>dundie/models/transaction.py</code></p>
+<pre><code class="language-python">from datetime import datetime
+from typing import TYPE_CHECKING, Optional
+
+from sqlmodel import Field, Relationship, SQLModel
+
+if TYPE_CHECKING:
+    from dundie.models.user import User
+
+
+class Transaction(SQLModel, table=True):
+    &quot;&quot;&quot;Represents the Transaction Model&quot;&quot;&quot;
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: int = Field(foreign_key=&quot;user.id&quot;, nullable=False)
+    from_id: int = Field(foreign_key=&quot;user.id&quot;, nullable=False)
+    value: int = Field(nullable=False)
+    date: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+
+    # Populates a `.incomes` on `User`
+    user: Optional[&quot;User&quot;] = Relationship(
+        back_populates=&quot;incomes&quot;,
+        sa_relationship_kwargs={&quot;primaryjoin&quot;: 'Transaction.user_id == User.id'},
+    )
+    # Populates a `.expenses` on `User`
+    from_user: Optional[&quot;User&quot;] = Relationship(
+        back_populates=&quot;expenses&quot;,
+        sa_relationship_kwargs={&quot;primaryjoin&quot;: 'Transaction.from_id == User.id'},
+    )
+
+
+class Balance(SQLModel, table=True):
+    &quot;&quot;&quot;Store the balance of a user account&quot;&quot;&quot;
+
+    user_id: int = Field(
+        foreign_key=&quot;user.id&quot;,
+        nullable=False,
+        primary_key=True,
+        unique=True,
+    )
+    value: int = Field(nullable=False)
+    updated_at: datetime = Field(
+        default_factory=datetime.utcnow,
+        nullable=False,
+        sa_column_kwargs={&quot;onupdate&quot;: datetime.utcnow}
+    )
+
+    # Populates a `._balance` on `User`
+    user: Optional[&quot;User&quot;] = Relationship(back_populates=&quot;_balance&quot;)
+</code></pre>
+<p>Como estamos includindo relacionamentos entre os models <code>Transaction</code>, <code>Balance</code> e <code>User</code> precisamos implementar as respectivas mudanças no <code>dundie/models/user.py</code></p>
+<ul>
+<li><code>incomes</code> irá retornar uma query com todos os pontos que o usuário ganhou</li>
+<li><code>expenses</code> irá retornar uma query com todos os pontos que o usuário gastou</li>
+<li>E <code>balance</code> irá retornar o saldo atual do usuário, para balance estamos usando um
+relacionamento one-to-one, por isso precisamos usar o <code>lazy=&quot;dynamic&quot;</code> e uma 
+property do Python para garantir que caso o saldo seja inexistente sempre tenhamos
+um valor de retorno padrão.</li>
+</ul>
+<pre><code class="language-python">from typing import TYPE_CHECKING, Optional
+
+
+class User(...):
+    ...
+
+    # Populates a `.user` on `Transaction`
+    incomes: Optional[list[&quot;Transaction&quot;]] = Relationship(
+        back_populates=&quot;user&quot;,
+        sa_relationship_kwargs={&quot;primaryjoin&quot;: 'User.id == Transaction.user_id'},
+    )
+    # Populates a `.from_user` on `Transaction`
+    expenses: Optional[list[&quot;Transaction&quot;]] = Relationship(
+        back_populates=&quot;from_user&quot;,
+        sa_relationship_kwargs={&quot;primaryjoin&quot;: 'User.id == Transaction.from_id'},
+    )
+    # Populates a `.user` on `Balance`
+    _balance: Optional[&quot;Balance&quot;] = Relationship(
+        back_populates=&quot;user&quot;,
+        sa_relationship_kwargs={&quot;lazy&quot;: &quot;dynamic&quot;}
+    )
+
+    @property
+    def balance(self) -&gt; int:
+        &quot;&quot;&quot;Returns the current balance of the user&quot;&quot;&quot;
+        if (user_balance := self._balance.first()) is not None:  # pyright: ignore
+            return user_balance.value
+        return 0
+</code></pre>
+<p>E por fim adicionamos o novo model ao contexto do <code>dundie/models/__init__.py</code></p>
+<pre><code class="language-python">from sqlmodel import SQLModel
+from .user import User
+from .transaction import Transaction, Balance
+
+__all__ = [&quot;User&quot;, &quot;SQLModel&quot;, &quot;Transaction&quot;, &quot;Balance&quot;]
+</code></pre>
+<h2 id="criando-as-migrations"><a class="header" href="#criando-as-migrations">Criando as migrations</a></h2>
+<p>Com os models criados pediamos ao <strong>alembic</strong> para criar o arquivo de migration com as mudanças que precisam ser aplicadas ao Postgresql.</p>
+<pre><code class="language-console">$ docker-compose exec api alembic revision --autogenerate -m &quot;transaction&quot;
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+
+INFO  [alembic.autogenerate.compare] Detected added table 'balance'
+INFO  [alembic.autogenerate.compare] Detected added table 'transaction'
+
+INFO  [alembic.ddl.postgresql] Detected sequence named 'user_id_seq' as owned by integer column 'user(id)', assuming SERIAL and omitting
+  Generating /home/app/api/migrations/versions/8af1cd3be673_transaction.py ...  done
+</code></pre>
+<p>E em sequencia aplicamos para criar as tabelas no banco de dados:</p>
+<pre><code class="language-console">$ docker-compose exec api alembic upgrade head
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade f39cbdb1efa7 -&gt; b0abf3428204, transaction
+</code></pre>
+<p>Neste momento nossas tabelas <code>transaction</code> e <code>balance</code> já devem estar criadas.</p>
+<p><strong>Antares SQL</strong>
+<img src="images/antares_transaction.png" alt="" /></p>
+<p>Agora vamos criar a lógica de negócios que cuidará da adição de novas transações --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="transaction-business-logic"><a class="header" href="#transaction-business-logic">Transaction Business Logic</a></h1>
+<p>A operação de adicionar uma transação será feita com uma requisição <code>POST</code> ao endpoint <code>/transaction/{username}/</code>
+e o corpo da transaction será:</p>
+<pre><code class="language-json">{
+  &quot;value&quot;: &quot;integer&quot;,
+}
+</code></pre>
+<p>O usuário autenticado através de token será usado para popular o campo <code>from_id</code> e o campo <code>date</code> será
+preenchido automaticamente.</p>
+<blockquote>
+<p><strong>NOTE</strong> Via <code>CLI</code> também será possivel adicionar transaction, e neste caso o <code>from_id</code> será o user <code>admin</code> (que precisamos garantir a criação via migrations)</p>
+</blockquote>
+<h3 id="fluxo-de-operação"><a class="header" href="#fluxo-de-operação">Fluxo de operação</a></h3>
+<pre class="mermaid">graph TD
+    A[Requisição POST] --&gt; B[&quot;Obter usuários user_id e from_id&quot;]
+    B --&gt; B1[[Chegagem de saldo e permissões]]
+    B1 --&gt; C[&quot;Procedimento permitido?&quot;]
+    C --&gt; D{Sim}
+    C --&gt; E{Não}
+    D --&gt; F[Adicionar Transaction]
+    F --&gt; G[Atualizar saldo]
+    G --&gt; H[Dar commit na session]
+    E --&gt; I[Retornar com erro]
+</pre>
+<h3 id="atualizando-saldo"><a class="header" href="#atualizando-saldo">Atualizando Saldo</a></h3>
+<p>Vamos criar uma função com a lógica necessária para adicionar transaction e atualizar
+o saldo baseando-se nas regras anteriores.</p>
+<p><strong>EDITE</strong> <code>dundie/tasks/transaction.py</code></p>
+<pre><code class="language-python">from typing import Optional
+from sqlmodel import Session
+from dundie.db import engine
+from dundie.models import User, Transaction, Balance
+
+
+class TransactionError(Exception):
+    &quot;&quot;&quot;Can't add transaction&quot;&quot;&quot;
+
+
+def add_transaction(
+    *,
+    user: User,
+    from_user: User,
+    value: int,
+    session: Optional[Session] = None
+):
+    &quot;&quot;&quot;Adds a new transaction to the specified user.
+
+    params:
+        user: The user to add transaction to.
+        from_user: The user where amount is coming from or superuser
+        value: The value being added
+    &quot;&quot;&quot;
+    if not from_user.superuser and from_user.balance &lt; value:
+        raise TransactionError(&quot;Insufficient balance&quot;)
+
+    session = session or Session(engine)
+
+    transaction = Transaction(user=user, from_user=from_user, value=value)  # pyright: ignore
+    session.add(transaction)
+    session.commit()
+    session.refresh(user)
+    session.refresh(from_user)
+
+    for holder in (user, from_user):
+        total_income = sum([t.value for t in holder.incomes])  # pyright: ignore
+        total_expense = sum([t.value for t in holder.expenses])  # pyright: ignore
+        balance = session.get(
+            Balance, holder.id
+        ) or Balance(user=holder, value=0)  # pyright: ignore
+        balance.value = total_income - total_expense
+        session.add(balance)
+
+    session.commit()
+</code></pre>
+<p>A função <code>add_transaction</code> recebe como parâmetros o <code>user</code> que receberá a transação, o <code>from_user</code> que é o usuário que está enviando a transação e o <code>value</code> que é o valor da transação, esta função será executado tanto via CLI quanto via REST API.</p>
+<p>Para que funcione via CLI precisamos garantir que o sistema sempre tenha um usuário <code>admin</code> padrão para o sistema, vamos garantir a existência deste usuário --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="data-migrations"><a class="header" href="#data-migrations">Data Migrations</a></h1>
+<p>Até agora usamos o <strong>alembic</strong> para criar migrations de estrutura (DDL) em operações de criação ou alteração
+de campos e tabelas.</p>
+<p>Entretanto, em alguns casos precisamos criar dados para alimentar a aplicação, como por exemplo
+criar um usuário administrador para que possamos acessar a aplicação.</p>
+<p>Sempre que precisar garantir a existência de dados alimentados em tabelas do sistema usaremos 
+o conceito de <strong>Data Migrations</strong>.</p>
+<p>Começamos criando uma <code>migration</code> vazia para efetuarmos a operação de adição do usuário.</p>
+<pre><code class="language-console">$ docker-compose exec api alembic revision -m &quot;ensure_admin_user&quot;
+  Generating /home/app/api/migrations/versions/9aa820fb7f01_ensure_admin_user.py ...  done
+</code></pre>
+<p>Repare que dessa vez não usamos <code>--autogenerate</code> pois essa migration estará vazia, e neste
+caso vamos manualmente escrever o código que desejamos que seja executado.</p>
+<p><strong>Edite</strong> o arquivo criado em <code>migrations/versions/9aa820fb7f01_ensure_admin_user.py</code></p>
+<blockquote>
+<p><strong>OBS</strong> O arquivo criado ai no seu sistema pode ter um nome diferente, mas o conteúdo é o mesmo.</p>
+</blockquote>
+<pre><code class="language-python">&quot;&quot;&quot;ensure_admin_user
+
+Revision ID: 9aa820fb7f01
+Revises: 6f4df3b5e155
+Create Date: 2023-01-06 13:13:37.907183
+
+&quot;&quot;&quot;
+from alembic import op
+import sqlalchemy as sa
+import sqlmodel
+from dundie.models.user import User  # NEW
+from sqlmodel import Session  # NEW
+
+# revision identifiers, used by Alembic.
+revision = '9aa820fb7f01'
+down_revision = '6f4df3b5e155'
+branch_labels = None
+depends_on = None
+
+
+def upgrade() -&gt; None:  # NEW
+    bind = op.get_bind()
+    session = Session(bind=bind)
+
+    admin = User(
+        name=&quot;Admin&quot;,
+        username=&quot;admin&quot;,
+        email=&quot;admin@dm.com&quot;,
+        dept=&quot;management&quot;,
+        currency=&quot;USD&quot;,
+        password=&quot;admin&quot;,  # pyright: ignore
+    )
+    # if admin user already exists it will raise IntegrityError
+    try:
+        session.add(admin)
+        session.commit()
+    except sa.exc.IntegrityError:
+        session.rollback()
+
+
+def downgrade() -&gt; None:
+    pass
+</code></pre>
+<div id="admonition-tarefa" class="admonition info">
+<div class="admonition-title">
+<p>Tarefa</p>
+<p><a class="admonition-anchor-link" href="36_admin_data_migrations.html#admonition-tarefa"></a></p>
+</div>
+<div>
+<p>A migration acima irá setar o password como <code>admin</code> e é muito importante que você defina um password mais complexo ou que faça a alteração corretamente em ambientes de produção.</p>
+<p>Uma dica é que tenha no arquivo de settings um campo para definir o password inicial de admin e então na migration ao invés
+de passarmos <code>admin</code> podemos ler de <code>settings.DEFAULT_ADMIN_PASSWORD</code>, para essa variável existir ela precisa estar no arquivo <code>default.toml</code> e então poderá ser sobrescrita usando variável de ambiente <code>DUNDIE_DEFAULT_ADMIN_PASSWORD</code>.</p>
+<p>Essa alteração eu vou deixar para você fazer, pode ser depois, no final deste tutorial todas as tarefas estarão listadas.</p>
+</div>
+</div>
+<p>Agora salve o arquivo e aplique a migration.</p>
+<pre><code class="language-console">$ docker-compose exec api alembic upgrade head                   
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade 6f4df3b5e155 -&gt; 9aa820fb7f01, ensure_admin_user 
+</code></pre>
+<p>Agora toda vez que as migrations forem aplicadas, ação que será executada sempre que houver nova atualização ou deploy, 
+garantimos que o usuário admin será criado.</p>
+<p>E agora que temos a certeza que o <code>admin</code> vai sempre existir podemos partir para a criação de um comando na CLI --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="transaction-cli"><a class="header" href="#transaction-cli">Transaction CLI</a></h1>
+<p>Agora vamos criar um comando para adicionar saldo via CLI, sempre que feito via CLI  o usuário
+de origem dos pontos <code>from_id</code> será o <code>admin</code>.</p>
+<p>O comando vai simplesmente chamar a função <code>add_transaction</code> que criamos anteriormente mas colocaremos
+lógica adicional para garantir a existencia dos usuários e para formatar os dados aprensentados em
+uma tabela no terminal.</p>
+<p><strong>EDITE</strong> <code>dundie/cli.py</code> e adicione um novo comando no final do arquivo.</p>
+<pre><code class="language-python"># No topo
+
+from dundie.tasks.transaction import add_transaction
+from dundie.models.transaction import Transaction, Balance
+
+# No comando `shell` adicione novos objetos
+def shell():
+    ...
+    _vars = {
+      ...
+      &quot;Transaction&quot;: Transaction,
+      &quot;Balance&quot;: Balance,
+      &quot;add_transaction&quot;: add_transaction,
+    }
+
+# Crie o comando que adiciona transactions 
+@main.command()
+def transaction(
+    username: str,
+    value: int,
+):
+    &quot;&quot;&quot;Adds specified value to the user&quot;&quot;&quot;
+
+    table = Table(title=&quot;Transaction&quot;)
+    fields = [&quot;user&quot;, &quot;before&quot;, &quot;after&quot;]
+    for header in fields:
+        table.add_column(header, style=&quot;magenta&quot;)
+
+    with Session(engine) as session:
+        from_user = session.exec(select(User).where(User.username == &quot;admin&quot;)).first()
+        if not from_user:
+            typer.echo(&quot;admin user not found&quot;)
+            exit(1)
+        user = session.exec(select(User).where(User.username == username)).first()
+        if not user:
+            typer.echo(f&quot;user {username} not found&quot;)
+            exit(1)
+
+        from_user_before = from_user.balance
+        user_before = user.balance
+        add_transaction(user=user, from_user=from_user, session=session, value=value)
+        table.add_row(from_user.username, str(from_user_before), str(from_user.balance))
+        table.add_row(user.username, str(user_before), str(user.balance))
+
+        Console().print(table)
+</code></pre>
+<p>E para usar podemos fazer o seguinte  no terminal:</p>
+<pre><code class="language-console">$ docker-compose exec api dundie transaction jim-halpert 900
+
+          Transaction           
+┏━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃ user        ┃ before ┃ after ┃
+┡━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ admin       │ 0      │ -900  │
+│ jim-halpert │ 0      │ 900   │
+└─────────────┴────────┴───────┘
+</code></pre>
+<p>O usuário admin será ficará com saldo negativo e não tem limite de transferencia, 
+assim como qualquer usuário que seja super-user.</p>
+<div id="admonition-tarefa" class="admonition info">
+<div class="admonition-title">
+<p>Tarefa</p>
+<p><a class="admonition-anchor-link" href="37_transaction_cli.html#admonition-tarefa"></a></p>
+</div>
+<div>
+<p>Ao chamarmos o comando <code>dundie transaction</code> assim como o <code>user-list</code> o retorno é mostrado
+em uma tabela formatada no terminal, em alguns casos seria interessante poder passar um
+argumento <code>--format=json</code> e obter o retorno em formato JSON para posterior tratamento.</p>
+<p>Consegue adicionar essa funcionalidade?</p>
+</div>
+</div>
+<p>Agora vamos partir para a API adicionando a mesma funcionalidade --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="transaction-api"><a class="header" href="#transaction-api">Transaction API</a></h1>
+<p>Agora podemos finalmente criar o endpoint na API que vai fornecer a mesma funcionalidade,
+porém com algumas diferenças entre a implementação que fizemos no CLI, 
+no caso da API o <code>from_user</code> será o usuário que estiver autenticado.</p>
+<p><strong>EDITE</strong> <code>dundie/routes/transaction.py</code> e adicione o seguinte código:</p>
+<pre><code class="language-python">from fastapi import APIRouter, Body, HTTPException
+from dundie.auth import AuthenticatedUser
+from dundie.db import ActiveSession
+from dundie.models import User
+from dundie.tasks.transaction import add_transaction, TransactionError
+from sqlmodel import select, Session
+
+router = APIRouter()
+
+
+@router.post('/{username}/', status_code=201)
+async def create_transaction(
+    *,
+    username: str,
+    value: int = Body(embed=True),
+    current_user: User = AuthenticatedUser,
+    session: Session = ActiveSession
+):
+    &quot;&quot;&quot;Adds a new transaction to the specified user.&quot;&quot;&quot;
+    user = session.exec(select(User).where(User.username == username)).first()
+    if not user:
+        raise HTTPException(status_code=404, detail=&quot;User not found&quot;)
+
+    try:
+        add_transaction(user=user, from_user=current_user, value=value, session=session)
+    except TransactionError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    # At this point there was no error, so we can return
+    return {&quot;message&quot;: &quot;Transaction added&quot;}
+</code></pre>
+<p>Agora podemos adicionar essas rotas no router principal editando <code>dundie/routes/__init__.py</code></p>
+<pre><code class="language-python">from fastapi import APIRouter
+from .auth import router as auth_router
+from .user import router as user_router
+from .transaction import router as transaction_router
+
+main_router = APIRouter()
+
+main_router.include_router(auth_router, tags=[&quot;auth&quot;])
+main_router.include_router(user_router, prefix=&quot;/user&quot;, tags=[&quot;user&quot;])
+main_router.include_router(transaction_router, prefix=&quot;/transaction&quot;, tags=[&quot;transaction&quot;])
+</code></pre>
+<p>Neste momento o endpoint já deve aparecer na API.</p>
+<p><img src="images/transaction_docs.png" alt="" /></p>
+<blockquote>
+<p><strong>OBS</strong> o parâmetro <code>fresh</code> que vemos na API se refere a possibilidade de renovar o token de autenticação.</p>
+</blockquote>
+<p>E podemos testar fazendo uma requisição HTTP.</p>
+<blockquote>
+<p><strong>Lembre-se</strong> de trocar o token pelo token gerado a partir da URL /token/, por exemplo, gerando um token para o usuário <code>admin</code> ou outro superuser permitirá a adição de pontos infinitos, usando token de um usuário comum permitirá apenas o envio de pontos comportados pelo saldo do usuário.</p>
+</blockquote>
+<p>Adicionando 300 pontos ao usuário Bruno Rocha.</p>
+<pre><code class="language-console">$ curl -X 'POST' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer TOKEN_AQUI' \
+  --data-raw '{&quot;value&quot;: 300}' \
+  -k 'http://localhost:8000/transaction/bruno-rocha/'
+</code></pre>
+<p>Adicione algumas transactions e vamos partir para a API de filtragem e exibição --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="filtrando-dados"><a class="header" href="#filtrando-dados">Filtrando dados</a></h1>
+<p>Agora que já podemos trocar pontos entre usuários vamos criar endpoints onde será possivel consultar
+as transações e saldos.</p>
+<ul>
+<li><code>POST /transaction/{username}/</code> (feito) - adiciona transação </li>
+<li><code>GET /transaction/</code> - Lista todas as transações 
+<ul>
+<li>Se <code>superuser</code> exibe todas, caso contrário apenas as próprias.</li>
+<li>permite filtros: <code>?from_user=username</code>, <code>?user=username</code></li>
+<li>permite ordenação: <code>?order_by=from_user,user,value,date</code></li>
+<li>permite paginação: <code>?page=1&amp;size=10</code> </li>
+</ul>
+</li>
+</ul>
+<p>Antes de criarmos o endpoint precisamos criar um model de saida, <code>TransactionResponse</code>
+para evitar o retorno do próprio model do banco de dados e se fizermos isso em <code>dundie/models/transaction.py</code> teremos um problema de circular imports.</p>
+<pre><code class="language-diff">- # !!!! Exemplo em dundie/models/transaction.py
+- from dundie.models.user import User   # &lt;- CIRCULAR IMPORT 
+</code></pre>
+<p>Para contornar este problema de maneira simples, vamos agora criar um novo arquivo, desta forma isolamos o import e evitamos o import circular.</p>
+<blockquote>
+<p><strong>OBS</strong> Neste momento vamos colocar apenas o serializar para Transaction neste novo módulo 
+mas futuramente podemos mover todos os serializers definidos em <code>models/user.py</code> e <code>models/transaction.py</code> 
+para este mesmo módulo também.</p>
+</blockquote>
+<p>Neste serializer vamos utilizar <code>root_validator</code> para criar campos que são calculados no 
+momento da serialização.</p>
+<p><strong>CRIE</strong> o arquivo <code>dundie/models/serializers.py</code> </p>
+<blockquote>
+<p>VocÊ pode criar usando <code>touch dundie/models/serializers.py</code> ou usando seu IDE ou navegador de arquivos.</p>
+</blockquote>
+<pre><code class="language-python">from datetime import datetime
+from typing import Optional
+
+from pydantic import BaseModel, root_validator
+from sqlmodel import Session
+
+from dundie.db import engine
+
+from .user import User
+
+
+class TransactionResponse(BaseModel, extra=&quot;allow&quot;):
+    id: int
+    value: int
+    date: datetime
+
+    # These 2 fields will be calculated at response time.
+    user: Optional[str] = None
+    from_user: Optional[str] = None
+
+    @root_validator(pre=True)
+    def get_usernames(cls, values: dict):
+        with Session(engine) as session:
+            user = session.get(User, values[&quot;user_id&quot;])
+            values[&quot;user&quot;] = user and user.username
+            from_user = session.get(User, values[&quot;from_id&quot;])
+            values[&quot;from_user&quot;] = from_user and from_user.username
+        return values
+</code></pre>
+<p>Podemos testar no shell com:</p>
+<pre><code class="language-console">$ docker-compose exec api dundie shell
+Auto imports: ['settings', 'engine', 'select', 'session', 'User', 
+               'Transaction', 'Balance', 'add_transaction']
+
+In [1]: from dundie.models.serializers import TransactionResponse
+
+In [2]: t = session.get(Transaction, 1)
+
+In [3]: TransactionResponse.parse_obj(t)
+Out[3]: TransactionResponse(
+    value=100, 
+    date=datetime.datetime(2023, 1, 6, 12, 21, 55, 30204), 
+    user='bruno-rocha', 
+    from_user='michael-scott', 
+    user_id=2, 
+    from_id=1, 
+    id=1
+)
+</code></pre>
+<p>Agora vamos <strong>EDITAR</strong> o arquivo <code>dundie/routes/transaction.py</code></p>
+<pre><code class="language-python"># No topo
+
+from fastapi_pagination import Page, Params
+from fastapi_pagination.ext.sqlmodel import paginate
+from dundie.models import Transaction
+from dundie.models.serializers import TransactionResponse
+
+# No final do arquivo
+@router.get(&quot;/&quot;, response_model=Page[TransactionResponse])
+async def list_transactions(
+    *,
+    current_user: User = AuthenticatedUser,
+    session: Session = ActiveSession,
+    params: Params = Depends(),
+    from_user: Optional[str] = None,
+    user: Optional[str] = None,
+    order_by: Optional[str] = None,
+):
+    query = select(Transaction)
+
+    # Optional `AND` filters
+    if user:
+        query = query.join(
+            User, Transaction.user_id == User.id
+        ).where(User.username == user)
+    if from_user:
+        FromUser = aliased(User)  # aliased needed to desambiguous the join
+        query = query.join(
+            FromUser, Transaction.from_id == FromUser.id
+        ).where(FromUser.username == from_user)
+
+    # Mandatory access filter
+    # regular users can only see their own transactions
+    if not current_user.superuser:
+        query = query.where(
+            Transaction.user_id == current_user.id | Transaction.from_id == current_user.id
+        )
+
+    # Ordering based on &amp;order_by=date (asc) or -date (desc)
+    if order_by:
+        order_text = text(
+          order_by.replace(&quot;-&quot;, &quot;&quot;) + &quot; &quot; + (&quot;desc&quot; if &quot;-&quot; in order_by else &quot;asc&quot;)
+        )
+        query = query.order_by(order_text)
+
+    # wrap response_model in a pagination object {&quot;items&quot;: [], total, page, size }
+    return paginate(query=query, session=session, params=params)
+</code></pre>
+<p>Agora temos um novo endpoint listando todas as transactions e com os filtros que especificamos.</p>
+<p><img src="images/transaction_list.png" alt="" /></p>
+<pre><code class="language-console">$ curl 'GET' -H 'Content-Type: application/json' \
+    -H 'Authorization: Bearer TOKEN_AQUI' \
+    -k 'http://localhost:8000/transaction/\
+    ?page=1&amp;size=2&amp;from_user=michael-scott&amp;user=bruno-rocha&amp;order_by=-date'
+</code></pre>
+<pre><code class="language-json">#+RESPONSE
+{
+  &quot;items&quot;: [
+    {
+      &quot;id&quot;: 12,
+      &quot;value&quot;: 300,
+      &quot;date&quot;: &quot;2023-01-10T17:08:29.953452&quot;,
+      &quot;user&quot;: &quot;bruno-rocha&quot;,
+      &quot;from_user&quot;: &quot;michael-scott&quot;,
+      &quot;from_id&quot;: 1,
+      &quot;user_id&quot;: 2
+    },
+    {
+      &quot;id&quot;: 11,
+      &quot;value&quot;: 112,
+      &quot;date&quot;: &quot;2023-01-10T17:07:49.296277&quot;,
+      &quot;user&quot;: &quot;bruno-rocha&quot;,
+      &quot;from_user&quot;: &quot;michael-scott&quot;,
+      &quot;from_id&quot;: 1,
+      &quot;user_id&quot;: 2
+    }
+  ],
+  &quot;total&quot;: 6,
+  &quot;page&quot;: 1,
+  &quot;size&quot;: 2
+}
+#+END
+</code></pre>
+<div id="admonition-nota" class="admonition note">
+<div class="admonition-title">
+<p>NOTA</p>
+<p><a class="admonition-anchor-link" href="39_transaction_filtrando_dados.html#admonition-nota"></a></p>
+</div>
+<div>
+<p>Repare que como usamos o plugin fastapi_pagination agora o formato da resposta está diferente contendo <code>items</code>, <code>total</code>, <code>page</code> e <code>size</code></p>
+</div>
+</div>
+<h2 id="revisão-da-api"><a class="header" href="#revisão-da-api">Revisão da API</a></h2>
+<p>Agora que já temos bastante funcionalidade na API vamos revisar e identificar o que está faltando.</p>
+<h3 id="auth"><a class="header" href="#auth">Auth</a></h3>
+<ul>
+<li>POST /token - login via formulário para gerar acccess token </li>
+<li>POST /refresh_token - Obter um novo token sem a necessidade de fazer login novamente</li>
+</ul>
+<h3 id="user"><a class="header" href="#user">User</a></h3>
+<ul>
+<li>GET /user/ -  Lista todos os usuários</li>
+<li>GET /user/{username} - Lista um usuário específico</li>
+<li>POST🔒 /user/ - Cria um novo usuário </li>
+<li>PATCH🔒 /user/{username} - Altera informações do usuário </li>
+<li>POST  /user/{username}/password - Altera a senha do usuário (?pwd_reset_token ou 🔒)</li>
+<li>POST /user/pwd_reset_token/ - Solicita um token via email para resetar a senha (?email)</li>
+</ul>
+<h3 id="transaction"><a class="header" href="#transaction">Transaction</a></h3>
+<ul>
+<li>POST🔒 /transaction/ - Cria uma nova transaction de <code>from_user para user</code></li>
+<li>GET🔒 /transaction/ - Lista transactions do usuário logado (ou todas em caso de superuser)
+<ul>
+<li>filters: <code>user</code>, <code>from_user</code></li>
+<li>sort: <code>order_by=date</code> (asc) ou <code>-date</code> (desc)</li>
+<li>pagination: <code>page</code>, <code>size</code></li>
+</ul>
+</li>
+</ul>
+<p>Mas ainda falta informação neste retorno, onde está o saldo total do usuário? vamos resolver --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="expondo-saldo-do-usuário"><a class="header" href="#expondo-saldo-do-usuário">Expondo saldo do usuário</a></h1>
+<p>Na listagem de usuário está faltando exibir o saldo total do usuário, 
+esta é uma informação sensivel e portanto estará disponível apenas em
+alguns casos.</p>
+<ul>
+<li><code>?show_balance=true</code> for passado na URL das rotas GET de /user/</li>
+<li>O usuário logado é superuser ou</li>
+<li>O usuário logado está acessando sua própria conta</li>
+</ul>
+<p><strong>EDITE</strong> o arquivo <code>dundie/auth.py</code> e vamos adicionar mais uma dependencia 
+baseada em autenticação.</p>
+<pre><code class="language-python">
+async def show_balance_field(
+    *,
+    request: Request,
+    show_balance: Optional[bool] = False,  # from /user/?show_balance=true
+) -&gt; bool:
+    &quot;&quot;&quot;Returns True if one of the conditions is met.
+    1. show_balance is True AND
+    2. authenticated_user.superuser OR
+    3. authenticated_user.username == username
+    &quot;&quot;&quot;
+    if not show_balance:
+        return False
+
+    username = request.path_params.get(&quot;username&quot;)
+
+    try:
+        authenticated_user = get_current_user(token=&quot;&quot;, request=request)
+    except HTTPException:
+        authenticated_user = None
+
+    if any(
+        [
+            authenticated_user and authenticated_user.superuser,
+            authenticated_user and authenticated_user.username == username,
+        ]
+    ):
+        return True
+
+    return False
+
+
+ShowBalanceField = Depends(show_balance_field)
+</code></pre>
+<p>Agora precisamos de um serializer contendo o campo <code>balance</code> e posteriormente no endpoint 
+usaremos este serializer como retorno apenas quando a dependência acima for satisfeita, 
+usando uma abordagem chamada <strong>conditional response model</strong></p>
+<p><strong>EDITE</strong> <code>dundie/models/user.py</code></p>
+<pre><code class="language-python"># Logo abaixo da classe UserResponse
+
+class UserResponseWithBalance(UserResponse):
+    balance: Optional[int] = None
+
+    @root_validator(pre=True)
+    def set_balance(cls, values: dict):
+        &quot;&quot;&quot;Sets the balance of the user&quot;&quot;&quot;
+        instance = values[&quot;_sa_instance_state&quot;].object
+        values[&quot;balance&quot;] = instance.balance
+        return values
+</code></pre>
+<p>Agora <strong>EDITE</strong> o <code>dundie/routes/user.py</code> e vamos usar a dependencia
+nos endpoints <code>list_users</code> e <code>get_user_by_username</code> e além de adicionar 
+a dependencia vamos alterar o <code>responde_model</code> tornando o condicional.</p>
+<pre><code class="language-python"># IMPORTS 
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+from pydantic import parse_obj_as
+from dundie.auth import ShowBalanceField
+from dundie.models.user import UserResponseWithBalance
+
+# list_users 
+
+@router.get(
+    &quot;/&quot;,
+    response_model=List[UserResponse] | List[UserResponseWithBalance],
+    response_model_exclude_unset=True,
+)
+async def list_users(
+    *, session: Session = ActiveSession, show_balance_field: bool = ShowBalanceField
+):
+    &quot;&quot;&quot;List all users.
+
+    NOTES:
+    - This endpoint can be accessed with a token authentication
+    - show_balance query parameter takes effect only for authenticated superuser.
+    &quot;&quot;&quot;
+    users = session.exec(select(User)).all()
+    if show_balance_field:
+        users_with_balance = parse_obj_as(List[UserResponseWithBalance], users)
+        return JSONResponse(jsonable_encoder(users_with_balance))
+    return users
+
+# get user by username 
+@router.get(
+    &quot;/{username}/&quot;,
+    response_model=UserResponse | UserResponseWithBalance,
+    response_model_exclude_unset=True,
+)
+async def get_user_by_username(
+    *, session: Session = ActiveSession, username: str, show_balance_field: bool = ShowBalanceField
+):
+    &quot;&quot;&quot;Get user by username&quot;&quot;&quot;
+    query = select(User).where(User.username == username)
+    user = session.exec(query).first()
+    if not user:
+        raise HTTPException(status_code=404, detail=&quot;User not found&quot;)
+    if show_balance_field:
+        user_with_balance = parse_obj_as(UserResponseWithBalance, user)
+        return JSONResponse(jsonable_encoder(user_with_balance))
+    return user
+</code></pre>
+<p>Você pode testar essa funcionalidade fazendo chamadas a URL <code>/user/</code> e <code>/user/{username}</code> e verificar que
+quando o argumento <code>?show_balance=true</code> for passado na URL, o serializer de retorno irá conter o campo 
+do saldo, mas isso só será feito se o usuário for o superuser, ou o próprio usuário autenticado.</p>
+<h2 id="a-api-está-pronta"><a class="header" href="#a-api-está-pronta">A API está pronta!</a></h2>
+<p><img src="images/api_final.png" alt="" /></p>
+<p>Não é bem assim... nada está pronto enquanto não tiver cobertura de testes --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="definindo-um-pipeline"><a class="header" href="#definindo-um-pipeline">Definindo um pipeline</a></h1>
+<p>O Pipeline de testes será</p>
+<ol start="0">
+<li>Garantir que o ambiente está em execução com o docker-compose</li>
+<li>Garantir que existe um banco de dados <code>dundie_test</code> e que este banco está
+vazio.</li>
+<li>Executar as migrations com alembic e garantir que funcionou</li>
+<li>Executar os testes com Pytest</li>
+<li>Apagar o banco de dados de testes</li>
+</ol>
+<p>Vamos adicionar um comando <code>reset_db</code> no cli</p>
+<div id="admonition-cuidado" class="admonition warning">
+<div class="admonition-title">
+<p>CUIDADO</p>
+<p><a class="admonition-anchor-link" href="42_testes_pipeline.html#admonition-cuidado"></a></p>
+</div>
+<div>
+<p>Muito cuidado com esse comando, ele apaga todo o conteúdo do banco de dados!!!</p>
+</div>
+</div>
+<p>edite <code>dundie/cli.py</code></p>
+<pre><code class="language-python"># imports
+from .db import engine, SQLModel
+
+
+# Final
+@main.command()
+def reset_db(
+    force: bool = typer.Option(
+        False, &quot;--force&quot;, &quot;-f&quot;, help=&quot;Run with no confirmation&quot;
+    )
+):
+    &quot;&quot;&quot;Resets the database tables&quot;&quot;&quot;
+    force = force or typer.confirm(&quot;Are you sure?&quot;)
+    if force:
+        SQLModel.metadata.drop_all(engine)
+</code></pre>
+<p>O comando acima poderá ser executado com a flag <code>-f</code> que irá pualr a etapa de confirmação.</p>
+<p>Em um ambiente de CI geralmente usamos <code>Github Actions</code> ou <code>Jenkins</code> para executar
+esses passos, em nosso caso vamos usar um script em bash para executar essas tarefas,
+no treinamento <strong>Python Automation</strong> que também faz parte do pacote Python Expert será
+abordado como automatizar esses processos usando os principais serviços de CI.</p>
+<p>Confira o conteúdo do arquivo <code>test.sh</code> na raiz do repositório.</p>
+<pre><code class="language-bash">#!/usr/bin/bash
+
+# Start environment with docker-compose
+DUNDIE_DB=dundie_test docker-compose up -d
+
+# wait 5 seconds
+sleep 5
+
+# Ensure database is clean
+docker-compose exec api dundie reset-db -f
+docker-compose exec api alembic stamp base
+
+# run migrations
+docker-compose exec api alembic upgrade head
+
+# run tests
+docker-compose exec api pytest -v -l --tb=short --maxfail=1 tests/
+
+# Stop environment
+docker-compose down
+</code></pre>
+<ol>
+<li>definimos um banco de dados diferente usando a variável <code>DUNDIE_DB</code> </li>
+<li>iniciamos o ambiente com o docker-compose</li>
+<li>esperamos 5 segundos para garantir que o banco de dados está pronto </li>
+<li>resetamos o banco de dados </li>
+<li>executamos as migrations para garantir que temos todas as tabelas e dados </li>
+<li>executamos os testes usando pytest</li>
+<li>finalizamos o ambiente</li>
+</ol>
+<div id="admonition-nota" class="admonition note">
+<div class="admonition-title">
+<p>NOTA</p>
+<p><a class="admonition-anchor-link" href="42_testes_pipeline.html#admonition-nota"></a></p>
+</div>
+<div>
+<p>Em caso de falha nos testes o ambiente não será parado, permitindo assim o debugging com o ambiente em execução.</p>
+</div>
+</div>
+<p>O próximo passo é configurar o nosso test-runner, o pytest --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="configurando-pytest"><a class="header" href="#configurando-pytest">Configurando Pytest</a></h1>
+<p>Para os tests vamos utilizar o Pytest para testar algumas rotas da API,
+o Pytest pode ser configurado através de hooks e fixtures que ficam no
+arquivo <code>tests/conftest.py</code>, fixtures são geralmente funções que 
+provêm funcionalidades que serão injetadas (via injeção de dependencias)
+em cada teste que escrevermos, portanto se queremos testar multiplos
+usuários, começamos criando fixtures que preparam clientes HTTP autenticados
+com os tokens de cada um desses usuários.</p>
+<p>Uma outra coisa importante que faremos é apontar o banco de dados
+para o banco de dados de teste que iniciamos no script <code>test.sh</code></p>
+<h1 id="setup"><a class="header" href="#setup">Setup</a></h1>
+<ol>
+<li>Obter um token para o usuário admin</li>
+<li>Criar usuário1</li>
+<li>Obter um token para o usuário1</li>
+<li>Criar usuario2</li>
+<li>Obter um token para o usuario2</li>
+<li>Criar usuario3</li>
+<li>Obter um token para o usuario3 </li>
+</ol>
+<p>Durante o setup teremos <strong>fixtures</strong> do Pytest já configuradas com clientes
+HTTP para acessar a API com qualquer um dos usuários ou de forma anonima.</p>
+<p>Começamos configurando o Pytest</p>
+<p><strong>EDITE</strong> <code>tests/conftest.py</code></p>
+<pre><code class="language-python">import os
+
+import pytest
+from fastapi.testclient import TestClient
+from sqlalchemy.exc import IntegrityError
+
+from dundie.app import app
+from dundie.cli import create_user
+
+os.environ[&quot;DUNDIE_DB__uri&quot;] = &quot;postgresql://postgres:postgres@db:5432/dundie_test&quot;
+
+
+@pytest.fixture(scope=&quot;function&quot;)
+def api_client():
+    &quot;&quot;&quot;Unauthenticated test client&quot;&quot;&quot;
+    return TestClient(app)
+
+
+def create_api_client_authenticated(username, dept=&quot;sales&quot;, create=True):
+    &quot;&quot;&quot;Creates a new api client authenticated for the specified user.&quot;&quot;&quot;
+    if create:
+        try:
+            create_user(name=username, email=f&quot;{username}@dm.com&quot;, password=username, dept=dept)
+        except IntegrityError:
+            pass
+
+    client = TestClient(app)
+    token = client.post(
+        &quot;/token&quot;,
+        data={&quot;username&quot;: username, &quot;password&quot;: username},
+        headers={&quot;Content-Type&quot;: &quot;application/x-www-form-urlencoded&quot;},
+    ).json()[&quot;access_token&quot;]
+    client.headers[&quot;Authorization&quot;] = f&quot;Bearer {token}&quot;
+    return client
+
+
+@pytest.fixture(scope=&quot;function&quot;)
+def api_client_admin():
+    return create_api_client_authenticated(&quot;admin&quot;, create=False)
+
+
+@pytest.fixture(scope=&quot;function&quot;)
+def api_client_user1():
+    return create_api_client_authenticated(&quot;user1&quot;, dept=&quot;management&quot;)
+
+
+@pytest.fixture(scope=&quot;function&quot;)
+def api_client_user2():
+    return create_api_client_authenticated(&quot;user2&quot;)
+
+
+@pytest.fixture(scope=&quot;function&quot;)
+def api_client_user3():
+    return create_api_client_authenticated(&quot;user3&quot;)
+</code></pre>
+<p>Basta salvar o arquivo <code>conftest.py</code> e para cada sessão de testes o pytest vai
+se certificar que cada uma das fixtures definidas esteja disponível.</p>
+<div id="admonition-info" class="admonition info">
+<div class="admonition-title">
+<p>INFO</p>
+<p><a class="admonition-anchor-link" href="43_testes_configurando_pytest.html#admonition-info"></a></p>
+</div>
+<div>
+<p>No treinamento Python Automation é abordado o tema testes e pytest com maior
+profundidade, se você quiser saber mais sobre o assunto, recomendo que assista.</p>
+</div>
+</div>
+<p>Agora podemos escrever os testes --&gt;</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="testes-de-api"><a class="header" href="#testes-de-api">Testes de API</a></h1>
+<h2 id="plano-de-testes"><a class="header" href="#plano-de-testes">Plano de testes</a></h2>
+<p>Os casos de uso que iremos testar:</p>
+<ul>
+<li>Como um usuário anonimo consigo listar os usuarios e não posso ver o saldo </li>
+<li>Como um usuário anonimo consigo listar os detalhes de um usuário sem o saldo </li>
+<li>Como usuário admin consigo atualizar o perfil de um usuário </li>
+<li>Como um usuário autenticado consigo atualziar meu próprio perfil </li>
+<li>Como um usuário autenticado não consigo atualizar o perfil de outro usuário </li>
+<li>Como usuário admin consigo transferir qualquer quantidade de pontos para todos os usuários</li>
+<li>Como um usuário autenticado consigo tranferir 20 pontos para outro usuário e ver o saldo</li>
+<li>Como um usuário admin consigo ver o saldo de todos os usuários </li>
+<li>Como um usuário admin consigo ver todas as transações</li>
+<li>Como um usuário autenticado consigo ver apenas minhas transações</li>
+</ul>
+<h2 id="pytest"><a class="header" href="#pytest">Pytest</a></h2>
+<p>Agora vamos converter os casos de uso em funções de teste com o Pytest.</p>
+<p><strong>EDITE</strong> <code>tests/test_api.py</code></p>
+<pre><code class="language-python">import pytest
+
+USER_RESPONSE_KEYS = {&quot;name&quot;, &quot;username&quot;, &quot;dept&quot;, &quot;avatar&quot;, &quot;bio&quot;, &quot;currency&quot;}
+USER_RESPONSE_WITH_BALANCE_KEYS = USER_RESPONSE_KEYS | {&quot;balance&quot;}
+
+
+@pytest.mark.order(1)
+def test_user_list(
+    api_client,
+    api_client_user1,  # pyright: ignore
+    api_client_user2,  # pyright: ignore
+    api_client_user3,  # pyright: ignore
+):
+    &quot;&quot;&quot;Ensure that all needed users are created and showing on the /user/ API
+
+    NOTE: user fixtures are called just to trigger creation of users.
+    &quot;&quot;&quot;
+    users = api_client.get(&quot;/user/&quot;).json()
+    expected_users = [&quot;admin&quot;, &quot;user1&quot;, &quot;user2&quot;, &quot;user3&quot;]
+    assert len(users) == len(expected_users)
+    for user in users:
+        assert user[&quot;username&quot;] in expected_users
+        assert user[&quot;dept&quot;] in [&quot;management&quot;, &quot;sales&quot;]
+        assert user[&quot;currency&quot;] == &quot;USD&quot;
+        assert set(user.keys()) == USER_RESPONSE_KEYS
+
+
+@pytest.mark.order(2)
+def test_user_detail(api_client):
+    &quot;&quot;&quot;Ensure that the /user/{username} API is working&quot;&quot;&quot;
+    user = api_client.get(&quot;/user/user1/&quot;).json()
+    assert user[&quot;username&quot;] == &quot;user1&quot;
+    assert set(user.keys()) == USER_RESPONSE_KEYS
+
+
+@pytest.mark.order(3)
+def test_update_user_profile_by_admin(api_client_admin):
+    &quot;&quot;&quot;Ensure that admin can patch any user data&quot;&quot;&quot;
+    data = {&quot;avatar&quot;: &quot;https://example.com/avatar.png&quot;, &quot;bio&quot;: &quot;I am a user1&quot;}
+    api_client_admin.patch(&quot;/user/user1/&quot;, json=data)
+    user = api_client_admin.get(&quot;/user/user1/&quot;).json()
+    assert user[&quot;avatar&quot;] == data[&quot;avatar&quot;]
+    assert user[&quot;bio&quot;] == data[&quot;bio&quot;]
+
+
+@pytest.mark.order(3)
+def test_update_user_profile_by_user(api_client_user2):
+    &quot;&quot;&quot;Ensure that user can patch their own data&quot;&quot;&quot;
+    data = {&quot;avatar&quot;: &quot;https://example.com/avatar.png&quot;, &quot;bio&quot;: &quot;I am a user2&quot;}
+    api_client_user2.patch(&quot;/user/user2/&quot;, json=data)
+    user = api_client_user2.get(&quot;/user/user2/&quot;).json()
+    assert user[&quot;avatar&quot;] == data[&quot;avatar&quot;]
+    assert user[&quot;bio&quot;] == data[&quot;bio&quot;]
+
+
+@pytest.mark.order(3)
+def test_fail_update_user_profile_by_other_user(api_client_user2):
+    &quot;&quot;&quot;User 2 will attempt to patch User 1 profile and it will fail&quot;&quot;&quot;
+    response = api_client_user2.patch(&quot;/user/user1/&quot;, json={})
+    assert response.status_code == 403
+
+
+@pytest.mark.order(4)
+def test_add_transaction_for_users_from_admin(api_client_admin):
+    &quot;&quot;&quot;Admin user adds a transaction for all users&quot;&quot;&quot;
+    usernames = [&quot;user1&quot;, &quot;user2&quot;, &quot;user3&quot;]
+
+    for username in usernames:
+        api_client_admin.post(f&quot;/transaction/{username}/&quot;, json={&quot;value&quot;: 500})
+
+    for username in usernames:
+        user = api_client_admin.get(f&quot;/user/{username}/?show_balance=true&quot;).json()
+        assert user[&quot;balance&quot;] == 500
+
+
+@pytest.mark.order(5)
+def test_user1_transfer_20_points_to_user2(api_client_user1):
+    &quot;&quot;&quot;Ensure that user1 can transfer points to user2&quot;&quot;&quot;
+    api_client_user1.post(&quot;/transaction/user2/&quot;, json={&quot;value&quot;: 20})
+    user1 = api_client_user1.get(&quot;/user/user1/?show_balance=true&quot;).json()
+    assert user1[&quot;balance&quot;] == 480
+
+    # user1 can see balance of user2 because user1 is a manager
+    user2 = api_client_user1.get(&quot;/user/user2/?show_balance=true&quot;).json()
+    assert user2[&quot;balance&quot;] == 520
+
+
+@pytest.mark.order(6)
+def test_user_list_with_balance(api_client_admin):
+    &quot;&quot;&quot;Ensure that admin can see user balance&quot;&quot;&quot;
+    users = api_client_admin.get(&quot;/user/?show_balance=true&quot;).json()
+    expected_users = [&quot;admin&quot;, &quot;user1&quot;, &quot;user2&quot;, &quot;user3&quot;]
+    assert len(users) == len(expected_users)
+    for user in users:
+        assert user[&quot;username&quot;] in expected_users
+        assert set(user.keys()) == USER_RESPONSE_WITH_BALANCE_KEYS
+
+
+@pytest.mark.order(6)
+def test_admin_can_list_all_transactions(api_client_admin):
+    &quot;&quot;&quot;Admin can list all transactions&quot;&quot;&quot;
+    transactions = api_client_admin.get(&quot;/transaction/&quot;).json()
+    assert transactions[&quot;total&quot;] == 4
+
+
+@pytest.mark.order(6)
+def test_regular_user_can_see_only_own_transaction(api_client_user3):
+    &quot;&quot;&quot;Regular user can see only own transactions&quot;&quot;&quot;
+    transactions = api_client_user3.get(&quot;/transaction/&quot;).json()
+    assert transactions[&quot;total&quot;] == 1
+    assert transactions[&quot;items&quot;][0][&quot;value&quot;] == 500
+    assert transactions[&quot;items&quot;][0][&quot;user&quot;] == &quot;user3&quot;
+    assert transactions[&quot;items&quot;][0][&quot;from_user&quot;] == &quot;admin&quot;
+</code></pre>
+<p>E para executar os tests podemos ir na raiz do projeto <strong>FORA DO CONTAINER</strong></p>
+<p>Garantimos que o script de testes é eecutável.</p>
+<pre><code class="language-console">$ chmod +x test.sh
+</code></pre>
+<p>Executamos o script:</p>
+<pre><code class="language-console">$ ./test.sh
+
+[+] Running 3/3
+ ⠿ Network dundie-api_default  Created                                                     0.1s
+ ⠿ Container dundie-api-db-1   Started                                                     0.7s
+ ⠿ Container dundie-api-api-1  Started                                                     1.7s
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running stamp_revision 9aa820fb7f01 -&gt; 
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -&gt; f39cbdb1efa7, initial
+INFO  [alembic.runtime.migration] Running upgrade f39cbdb1efa7 -&gt; b0abf3428204, transaction
+INFO  [alembic.runtime.migration] Running upgrade b0abf3428204 -&gt; 9aa820fb7f01, ensure_admin_user
+===================================== test session starts ======================================
+platform linux -- Python 3.10.8, pytest-7.2.0, pluggy-1.0.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /home/app/api, configfile: pyproject.toml
+plugins: order-1.0.1, anyio-3.6.2
+collected 10 items                                                                             
+
+tests/test_api.py::test_user_list PASSED                                                 [ 10%]
+tests/test_api.py::test_user_detail PASSED                                               [ 20%]
+tests/test_api.py::test_update_user_profile_by_admin PASSED                              [ 30%]
+tests/test_api.py::test_update_user_profile_by_user PASSED                               [ 40%]
+tests/test_api.py::test_fail_update_user_profile_by_other_user PASSED                    [ 50%]
+tests/test_api.py::test_add_transaction_for_users_from_admin PASSED                      [ 60%]
+tests/test_api.py::test_user1_transfer_20_points_to_user2 PASSED                         [ 70%]
+tests/test_api.py::test_user_list_with_balance PASSED                                    [ 80%]
+tests/test_api.py::test_admin_can_list_all_transactions PASSED                           [ 90%]
+tests/test_api.py::test_regular_user_can_see_only_own_transaction PASSED                 [100%]
+
+====================================== 10 passed in 4.62s ======================================
+[+] Running 3/3
+ ⠿ Container dundie-api-api-1  Removed                                                     1.2s
+ ⠿ Container dundie-api-db-1   Removed                                                     0.7s
+ ⠿ Network dundie-api_default  Removed                                                     0.3s
+</code></pre>
+<p>Se tudo deu certo então todos os testes devem ter passado, caso contrário tente encontrar onde
+está o erro e corrija antes de prosseguir.</p>
+<hr />
+<p>Finalizamos assim a fase 1 do nosso projeto com a maior parte das funcionalidades testadas,
+vamos partir agora para a fase 2 -&gt; </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="finalização"><a class="header" href="#finalização">Finalização</a></h1>
+<p>Muito obrigado por ter participado do treinamento Python Web API.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="./theme/pagetoc.js"></script>
+        <script type="text/javascript" src="./theme/mermaid.min.js"></script>
+        <script type="text/javascript" src="./theme/mermaid-init.js"></script>
+
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </body>
+</html>

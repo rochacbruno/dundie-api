@@ -1,0 +1,390 @@
+<!DOCTYPE HTML>
+<html lang="pt" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Gerando tokens - Dundie API - Curso Python LINUXtips</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/catppuccin-highlight.css">
+        <link rel="stylesheet" href="./theme/pagetoc.css">
+        <link rel="stylesheet" href="./theme/mdbook-admonish.css">
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "mocha" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intro.html">Intro</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Ambiente</li><li class="chapter-item expanded "><a href="01_requisitos.html"><strong aria-hidden="true">1.</strong> Requisitos</a></li><li class="chapter-item expanded "><a href="02_repositorio.html"><strong aria-hidden="true">2.</strong> Repositório</a></li><li class="chapter-item expanded "><a href="03_ambiente.html"><strong aria-hidden="true">3.</strong> Ambiente dev</a></li><li class="chapter-item expanded affix "><li class="part-title">Conhecendo o Projeto</li><li class="chapter-item expanded "><a href="04_projeto.html"><strong aria-hidden="true">4.</strong> O Projeto</a></li><li class="chapter-item expanded "><a href="05_funcionalidades.html"><strong aria-hidden="true">5.</strong> Funcionalidades</a></li><li class="chapter-item expanded "><a href="06_estrutura.html"><strong aria-hidden="true">6.</strong> Estrutura de arquivos</a></li><li class="chapter-item expanded affix "><li class="part-title">Containers</li><li class="chapter-item expanded "><a href="07_api_base.html"><strong aria-hidden="true">7.</strong> Criando uma API base</a></li><li class="chapter-item expanded "><a href="08_container.html"><strong aria-hidden="true">8.</strong> Criando um container</a></li><li class="chapter-item expanded "><a href="09_compose.html"><strong aria-hidden="true">9.</strong> Orquestrando serviços</a></li><li class="chapter-item expanded affix "><li class="part-title">Banco de dados</li><li class="chapter-item expanded "><a href="10_modelagem.html"><strong aria-hidden="true">10.</strong> Modelagem com SQLModel</a></li><li class="chapter-item expanded "><a href="12_config.html"><strong aria-hidden="true">11.</strong> Configurações</a></li><li class="chapter-item expanded "><a href="13_conexao_db.html"><strong aria-hidden="true">12.</strong> Conexão com o DB</a></li><li class="chapter-item expanded "><a href="14_migrations.html"><strong aria-hidden="true">13.</strong> Migrations</a></li><li class="chapter-item expanded affix "><li class="part-title">CLI</li><li class="chapter-item expanded "><a href="15_cli.html"><strong aria-hidden="true">14.</strong> Criando a CLI</a></li><li class="chapter-item expanded affix "><li class="part-title">Password Hash</li><li class="chapter-item expanded "><a href="18_secret_key.html"><strong aria-hidden="true">15.</strong> Configurando SECRET_KEY</a></li><li class="chapter-item expanded "><a href="19_hash.html"><strong aria-hidden="true">16.</strong> Criando um hash</a></li><li class="chapter-item expanded "><a href="20_comando_usuario.html"><strong aria-hidden="true">17.</strong> Comando para criar usuários</a></li><li class="chapter-item expanded affix "><li class="part-title">User API endpoints</li><li class="chapter-item expanded "><a href="21_serializers.html"><strong aria-hidden="true">18.</strong> Definindo Serializers</a></li><li class="chapter-item expanded "><a href="22_injecao_dependencia.html"><strong aria-hidden="true">19.</strong> Injeção de dependência</a></li><li class="chapter-item expanded "><a href="23_view.html"><strong aria-hidden="true">20.</strong> Criando as Views</a></li><li class="chapter-item expanded "><a href="24_roteamento.html"><strong aria-hidden="true">21.</strong> Roteamento de URL</a></li><li class="chapter-item expanded affix "><li class="part-title">Autenticação</li><li class="chapter-item expanded "><a href="25_tokens.html" class="active"><strong aria-hidden="true">22.</strong> Gerando tokens</a></li><li class="chapter-item expanded "><a href="26_auth.html"><strong aria-hidden="true">23.</strong> Criando Endpoints de Auth</a></li><li class="chapter-item expanded "><a href="27_protegendo_rotas.html"><strong aria-hidden="true">24.</strong> Protegendo rotas</a></li><li class="chapter-item expanded affix "><li class="part-title">Tratando erros</li><li class="chapter-item expanded "><a href="28_erros_http.html"><strong aria-hidden="true">25.</strong> Erros HTTP</a></li><li class="chapter-item expanded affix "><li class="part-title">Alterando Dados</li><li class="chapter-item expanded "><a href="29_update_user.html"><strong aria-hidden="true">26.</strong> Update User</a></li><li class="chapter-item expanded "><a href="30_change_password.html"><strong aria-hidden="true">27.</strong> Change Password</a></li><li class="chapter-item expanded "><a href="31_esqueci_senha.html"><strong aria-hidden="true">28.</strong> Esqueci minha senha</a></li><li class="chapter-item expanded affix "><li class="part-title">Background Tasks</li><li class="chapter-item expanded "><a href="33_enviando_email_async.html"><strong aria-hidden="true">29.</strong> Enviando emails assíncronos</a></li><li class="chapter-item expanded affix "><li class="part-title">Transaction API Endpoints</li><li class="chapter-item expanded "><a href="34_transaction_modelagem_dados.html"><strong aria-hidden="true">30.</strong> Modelagem de dados</a></li><li class="chapter-item expanded "><a href="35_transaction_business_logic.html"><strong aria-hidden="true">31.</strong> Business Logic</a></li><li class="chapter-item expanded "><a href="36_admin_data_migrations.html"><strong aria-hidden="true">32.</strong> Data Migrations</a></li><li class="chapter-item expanded "><a href="37_transaction_cli.html"><strong aria-hidden="true">33.</strong> Transaction CLI</a></li><li class="chapter-item expanded "><a href="38_transaction_api.html"><strong aria-hidden="true">34.</strong> Transaction API</a></li><li class="chapter-item expanded "><a href="39_transaction_filtrando_dados.html"><strong aria-hidden="true">35.</strong> Filtrando dados</a></li><li class="chapter-item expanded "><a href="40_transaction_expondo_saldo.html"><strong aria-hidden="true">36.</strong> Expondo saldo do usuário</a></li><li class="chapter-item expanded affix "><li class="part-title">Testes</li><li class="chapter-item expanded "><a href="42_testes_pipeline.html"><strong aria-hidden="true">37.</strong> Definindo um pipeline</a></li><li class="chapter-item expanded "><a href="43_testes_configurando_pytest.html"><strong aria-hidden="true">38.</strong> Configurando Pytest</a></li><li class="chapter-item expanded "><a href="44_testes_api.html"><strong aria-hidden="true">39.</strong> Testes de API</a></li><li class="chapter-item expanded affix "><li class="part-title">Tarefas Agendadas</li><li class="chapter-item expanded affix "><li class="part-title">Front-end</li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="final.html">Final</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Dundie API - Curso Python LINUXtips</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rochacbruno/dundie-api" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rochacbruno/dundie-api/edit/main/docs/src/25_tokens.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <div class="sidetoc"><nav class="pagetoc"></nav></div>
+                        <h1 id="gerando-tokens"><a class="header" href="#gerando-tokens">Gerando tokens</a></h1>
+<p>Agora que já podemos criar usuários é importante conseguirmos autenticar
+os usuários pois desta forma podemos limitar o acesso a alguns endpoints.</p>
+<blockquote>
+<p>Esse será arquivo com a maior quantidade de código <strong>boilerplate</strong>.</p>
+</blockquote>
+<p><strong>EDITE</strong> o arquivo <code>dundie/auth.py</code> vamos criar as classes e funções necessárias
+para a implementação de JWT que é a autenticação baseada em token e vamos
+usar o algoritmo selecionado no arquivo de configuração.</p>
+<p>Neste arquivo vamos criar os seguintes objetos:</p>
+<ul>
+<li>Um esquema de autenticação baseado em oauth, este objeto é usado pelo FastAPI para exibir um formulário de login e outros controles de autenticação na página /docs.</li>
+<li>Classes para serializar os 3 tipos de token que criaremos (token, refresh_token, reset_password_token)</li>
+<li>Fução que cria um token usando o algoritmo especificado</li>
+<li>Função que recebe o token e valida sua autenticidade</li>
+<li>Funções para retornar o objeto <code>User</code> sempre que precisarmos saber qual usuário está autenticado</li>
+<li>Dependência para injetarmos em todas as funções que necessitem de autenticação</li>
+</ul>
+<p><code>dundie/auth.py</code></p>
+<pre><code class="language-python">&quot;&quot;&quot;Token based auth&quot;&quot;&quot;
+from datetime import datetime, timedelta
+from typing import Callable, Optional, Union
+from functools import partial
+
+from fastapi import Depends, HTTPException, Request, status
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError, jwt
+from pydantic import BaseModel
+from sqlmodel import Session, select
+
+from dundie.config import settings
+from dundie.db import engine
+from dundie.models.user import User
+from dundie.security import verify_password
+
+SECRET_KEY = settings.security.secret_key  # pyright: ignore
+ALGORITHM = settings.security.algorithm  # pyright: ignore
+
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=&quot;token&quot;)
+
+
+# Models
+
+
+class Token(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str
+
+
+class RefreshToken(BaseModel):
+    refresh_token: str
+
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+
+
+# Functions
+
+
+def create_access_token(
+    data: dict,
+    expires_delta: Optional[timedelta] = None,
+    scope: str = &quot;access_token&quot;,
+) -&gt; str:
+    &quot;&quot;&quot;Creates a JWT Token from user data
+
+    scope: access_token or refresh_token
+    &quot;&quot;&quot;
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+    to_encode.update({&quot;exp&quot;: expire, &quot;scope&quot;: scope})
+    encoded_jwt = jwt.encode(
+        to_encode,
+        SECRET_KEY,  # pyright: ignore
+        algorithm=ALGORITHM,  # pyright: ignore
+    )
+    return encoded_jwt
+
+
+create_refresh_token = partial(create_access_token, scope=&quot;refresh_token&quot;)
+
+
+def authenticate_user(
+    get_user: Callable, username: str, password: str
+) -&gt; Union[User, bool]:
+    &quot;&quot;&quot;Authenticate the user&quot;&quot;&quot;
+    user = get_user(username)
+    if not user:
+        return False
+    if not verify_password(password, user.password):
+        return False
+    return user
+
+
+def get_user(username) -&gt; Optional[User]:
+    &quot;&quot;&quot;Get user from database&quot;&quot;&quot;
+    query = select(User).where(User.username == username)
+    with Session(engine) as session:
+        return session.exec(query).first()
+
+
+def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    request: Request = None,  # pyright: ignore
+    fresh=False
+) -&gt; User:
+    &quot;&quot;&quot;Get current user authenticated&quot;&quot;&quot;
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail=&quot;Could not validate credentials&quot;,
+        headers={&quot;WWW-Authenticate&quot;: &quot;Bearer&quot;},
+    )
+
+    if request:
+        if authorization := request.headers.get(&quot;authorization&quot;):
+            try:
+                token = authorization.split(&quot; &quot;)[1]
+            except IndexError:
+                raise credentials_exception
+
+    try:
+        payload = jwt.decode(
+            token,
+            SECRET_KEY,  # pyright: ignore
+            algorithms=[ALGORITHM]  # pyright: ignore
+        )
+        username: str = payload.get(&quot;sub&quot;)  # pyright: ignore
+
+        if username is None:
+            raise credentials_exception
+        token_data = TokenData(username=username)
+    except JWTError:
+        raise credentials_exception
+    user = get_user(username=token_data.username)
+    if user is None:
+        raise credentials_exception
+    if fresh and (not payload[&quot;fresh&quot;] and not user.superuser):
+        raise credentials_exception
+
+    return user
+
+
+# FastAPI dependencies
+
+async def get_current_active_user(
+    current_user: User = Depends(get_current_user),
+) -&gt; User:
+    &quot;&quot;&quot;Wraps the sync get_active_user for sync calls&quot;&quot;&quot;
+    return current_user
+
+
+AuthenticatedUser = Depends(get_current_active_user)
+
+
+async def validate_token(token: str = Depends(oauth2_scheme)) -&gt; User:
+    &quot;&quot;&quot;Validates user token&quot;&quot;&quot;
+    user = get_current_user(token=token)
+    return user
+</code></pre>
+<div id="admonition-nota" class="admonition note">
+<div class="admonition-title">
+<p>NOTA</p>
+<p><a class="admonition-anchor-link" href="#admonition-nota"></a></p>
+</div>
+<div>
+<p>O objeto <code>AuthenticatedUser</code> é uma dependência do FastAPI e é
+através dele que iremos garantir que nossas rotas estejas protegidas
+com token.</p>
+</div>
+</div>
+<p>Agora só falta registrarmos as URLs responsáveis por gerar a validar o token --&gt;</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="24_roteamento.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="26_auth.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="24_roteamento.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="26_auth.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="./theme/pagetoc.js"></script>
+        <script type="text/javascript" src="./theme/mermaid.min.js"></script>
+        <script type="text/javascript" src="./theme/mermaid-init.js"></script>
+
+
+    </body>
+</html>
