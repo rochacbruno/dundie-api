@@ -20,6 +20,8 @@ done
 # cargo install mdbook-pagetoc
 # cargo install mdbook-mermaid
 # cargo install mdbook-admonish
-# mdbook-admonish install --css-dir theme tutorial/
-cargo install mdbook-yml-header
-cargo install mdbook-epub
+# mdbook-admonish install --css-dir theme docs/
+
+# THE 2 below doesn't have binaries built
+# cargo install mdbook-yml-header
+# cargo install mdbook-epub
