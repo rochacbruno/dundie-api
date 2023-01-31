@@ -18,6 +18,11 @@ jobs:
       - name: Install dependencies 🔧
         run: make install
 
+      - name: Add paths
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+        run: echo "::add-path::$GITHUB_WORKSPACE/docs"
+
       - name: Build 🏗️
         run: make build
 
