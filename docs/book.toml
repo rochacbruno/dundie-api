@@ -12,9 +12,9 @@ title = "Dundie API - Curso Python LINUXtips"
 [preprocessor.catppuccin]
 assets_version = "0.1.1" # DO NOT EDIT: Managed by `mdbook-catppuccin install`
 
-[preprocessor.toc]
-command = "mdbook-toc"
-renderer = ["html"]
+# [preprocessor.toc]
+# command = "mdbook-toc"
+# renderer = ["html"]
 
 [preprocessor.mermaid]
 command = "mdbook-mermaid"
@@ -36,7 +36,8 @@ edit-url-template = "https://github.com/rochacbruno/dundie-api/edit/main/docs/{p
 default-theme = "light"
 preferred-dark-theme = "mocha"
 # no-section-label = false
-# [output.epub]
+
+[output.epub]
 # additional-css = ["./path/to/main.css"]
 # use-default-css = false
 # cover-image = "ebook-cover.png"
