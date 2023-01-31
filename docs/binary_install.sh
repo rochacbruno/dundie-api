@@ -13,6 +13,7 @@ for url in "${URLS[@]}"; do
   curl -L "$url" | tar xvz
 done
 
+
 # curl -L https://github.com/rust-lang/mdBook/releases/download/v0.4.25/mdbook-v0.4.25-x86_64-unknown-linux-gnu.tar.gz | tar xvz
 # cargo install mdbook-catppuccin
 # cargo install mdbook-toc
