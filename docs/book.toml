@@ -24,7 +24,7 @@ command = "mdbook-admonish"
 assets_version = "2.0.0" # do not edit: managed by `mdbook-admonish install`
 on_failure = "bail"
 
-# [preprocessor.yml-header]
+[preprocessor.yml-header]
 
 [output]
 

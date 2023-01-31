@@ -26,15 +26,22 @@ jobs:
       - name: Build 🏗️
         run: make build
 
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: v1.0 # Optional fallback tag to use when no tag can be found
+
       # ePub upload as a Github release asset
       - name: Create Release
+        continue-on-error: true
         id: create-release
         uses: actions/create-release@v1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ steps.previoustag.outputs.tag }}
+          release_name: Release ${{ steps.previoustag.outputs.tag }}
           draft: false
           prerelease: false
 
