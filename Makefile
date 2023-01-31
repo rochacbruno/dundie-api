@@ -4,7 +4,7 @@ all: install build
 
 .PHONY: install
 install:
-	cd docs && ./install.sh
+	cd docs && ./binary_install.sh
 
 .PHONY: build
 build:
