@@ -64,7 +64,6 @@
 
 # Background Tasks
 
-- [Enviando emails](./32_enviando_email.md)
 - [Enviando emails assíncronos](./33_enviando_email_async.md)
 
 # Transaction API Endpoints
@@ -79,21 +78,20 @@
 
 # Testes
 
-- [Plano de tests](./41_testes_plano.md)
 - [Definindo um pipeline](./42_testes_pipeline.md)
 - [Configurando Pytest](./43_testes_configurando_pytest.md)
 - [Testes de API](./44_testes_api.md)
 
 # Tarefas Agendadas
 
-- [Task Queue](./45_task_queue.md)
-- [Emails agendados](./46_relatorios.md)
-- [Transações agendadas](./47_transacoes_agendadas.md)
+<!-- - [Task Queue](./45_task_queue.md) -->
+<!-- - [Emails agendados](./46_relatorios.md) -->
+<!-- - [Transações agendadas](./47_transacoes_agendadas.md) -->
 
 # Front-end
 
-- [Integrando Front-end](./48_front_end.md)
-- [Websockets](./49_websockets.md)
+<!-- - [Integrando Front-end](./48_front_end.md) -->
+<!-- - [Websockets](./49_websockets.md) -->
 
 ---
 

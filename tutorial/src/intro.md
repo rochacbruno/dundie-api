@@ -1,13 +1,10 @@
 # Projeto Dundie API
 
-
 ## LINUXTips - Python Web API
 
 Olá, este é o material de apoio do projeto desenvolvido durante o
-treinamento Python Web API.
-
-Este material é um guia passo a passo para a criação de uma API REST
-usando Python, FastAPI, PostgreSQL e Containers.
+treinamento [Python Web API](https://www.linuxtips.io/course/python-para-web-e-api)
+para ter acesso aos videos e grupo de alunos + emissão do certificado clique no link e matricule-se.
 
 Durante o treinamento, você vai aprender:
 
@@ -31,7 +28,11 @@ Se tiver qualquer dúvida não hesite em postar em nosso grupo do
 Discord, lá você vai obter ajuda do intrutor e também dos demais alunos.
 (O link para o grupo está no primeiro item lá na plataforma)
 
-Ahh e se você não usa o Discord, não tem problema, pode acessar https://LINUXtips/social e postar lá aba referente ao treinamento.
+Ahh e se você não usa o Discord, não tem problema, pode acessar [https://LINUXtips/social](https://linuxtips.io/social) e postar lá aba referente ao treinamento.
+
+Faça parte do Discord da LINUXtips cliando em [Convite Discord Geral](https://discord.gg/MpTwbWYhaF) (observação: no discord existem salas públicas e uma sala exclusiva para alunos.)
+
+Siga o autor deste treinamento no twitter [Bruno Rocha](https://twitter.com/rochacbruno)
 
 Tudo pronto para começar?
 
