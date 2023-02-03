@@ -53,4 +53,27 @@ Você pode gerar uma secret key mais segura se quiser usando:
     b9483cc8a0bad1c2fe31e6d9d6a36c4a96ac23859a264b69a0badb4b32c538f8
 ```
 
+## Garantindo que os settings sempre tenham uma SECRET_KEY
+
+Como a secret key será de extrema importância para o funcionamento da API precisamos garantir que esta chave de configuração
+esteja sempre presente antes do sistema inicializar.
+
+**EDITE** `dundie/config.py`
+
+```python
+# No topo faça o import de `Validator`
+from dynaconf import Dynaconf, Validator  
+
+# No final adicione a validação
+
+settings.validators.register(  # pyright: ignore
+    Validator("security.SECRET_KEY", must_exist=True, is_type_of=str),
+)
+
+settings.validators.validate()  # pyright: ignore
+```
+
+A partir de agora caso a **SECRET_KEY** não esteja disponível a aplicação não irá inicializar.
+
+
 Agora sim podemos adicionar o código para geração de hash do password -->
