@@ -164,7 +164,7 @@ ou seja, sempre que o servidor receber um request na URL <code>/user/</code> ir�
 a função mapeada passando todo o contexto HTTP e o FastAPI se encarrega de fazer
 a injeção das dependências.</p>
 <p>Vamos começar criando um <strong>router</strong> principal que irá agrerar todas as rotas:</p>
-<p><strong>EDITE</strong> <code>dundie/router/__init__.py</code></p>
+<p><strong>EDITE</strong> <code>dundie/routes/__init__.py</code></p>
 <pre><code class="language-python">from fastapi import APIRouter
 
 from .user import router as user_router
