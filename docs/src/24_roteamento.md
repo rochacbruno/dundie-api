@@ -8,7 +8,7 @@ a injeção das dependências.
 
 Vamos começar criando um **router** principal que irá agrerar todas as rotas:
 
-**EDITE** `dundie/router/__init__.py`
+**EDITE** `dundie/routes/__init__.py`
 
 ```python
 from fastapi import APIRouter
@@ -75,7 +75,6 @@ content-type: application/json
 
 Ou diretamente via cURL
 
-
 ```bash
 curl -X 'GET' -k 'http://localhost:8000/user/'
 ```
@@ -93,6 +92,7 @@ Pegar um usuário pelo username
 ```bash
 curl -X 'GET' -k 'http://localhost:8000/user/michael-scott/'
 ```
+
 ```json
 {
   "name": "Michael Scott",
@@ -111,6 +111,7 @@ curl -X 'GET' \
   'http://0.0.0.0:8000/user/' \
   -H 'accept: application/json'
 ```
+
 ```json
 [
   {
@@ -158,4 +159,3 @@ curl -X 'GET' \
 
 Só tem um pequeno problema: Qualquer um consegue criar usuários em nossa API sem estar autenticado e isso não é desejável,
 vamos resolver este problema implementando autenticação -->
-
