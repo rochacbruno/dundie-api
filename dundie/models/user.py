@@ -1,6 +1,7 @@
 """User related data models"""
 from typing import Optional
 
+from pydantic import BaseModel, root_validator
 from sqlmodel import Field, SQLModel
 
 from dundie.security import HashedPassword
@@ -31,3 +32,34 @@ def generate_username(name: str) -> str:
     """
 
     return name.lower().replace(" ", "-")
+
+
+class UserResponse(BaseModel):
+    """Serializer for User Response"""
+
+    name: str
+    username: str
+    dept: str
+    avatar: Optional[str] = None
+    bio: Optional[str] = None
+    currency: str
+
+
+class UserRequest(BaseModel):
+    """Serializer for User request payload"""
+
+    name: str
+    email: str
+    dept: str
+    password: str
+    currency: str = "USD"
+    username: Optional[str] = None
+    avatar: Optional[str] = None
+    bio: Optional[str] = None
+
+    @root_validator(pre=True)
+    def generate_username_if_not_set(cls, values: dict[str, str]) -> dict[str, str]:
+        """Generates username if not set"""
+        if values.get("username") is None:
+            values["username"] = generate_username(values["name"])
+        return values
