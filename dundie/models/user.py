@@ -52,10 +52,10 @@ class UserRequest(BaseModel):
     email: str
     dept: str
     password: str
-    currency: str = "USD"
     username: Optional[str] = None
     avatar: Optional[str] = None
     bio: Optional[str] = None
+    currency: str = "USD"
 
     @root_validator(pre=True)
     def generate_username_if_not_set(cls, values: dict[str, str]) -> dict[str, str]:
