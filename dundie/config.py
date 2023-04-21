@@ -14,7 +14,7 @@ settings = Dynaconf(
     load_dotenv=False,
 )
 
-settings.validators.register(
+settings.validators.register(  # pyright: ignore
     Validator("security.SECRET_KEY", must_exist=True, is_type_of=str),
 )  # type: ignore
 
