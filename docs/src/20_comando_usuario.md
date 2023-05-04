@@ -40,7 +40,7 @@ def create_user(
 A função `create_user` será exposta na CLI como o subcomando  `create-user`, ou seja, `_` será substituido por `-` então no terminal execute para ver a mensagem de ajuda `dundie create-user --help`:
 
 ```console
-$ docker-compose exec api dundie create-user --help
+$ docker compose exec api dundie create-user --help
                                                     
  Usage: dundie create-user [OPTIONS] NAME EMAIL PASSWORD DEPT            
                                                     
@@ -78,7 +78,7 @@ usar aspas para o terminal entender que é um único argumento.
 Crie o usuário:
 
 ```console
-$ docker-compose exec api dundie create-user \
+$ docker compose exec api dundie create-user \
 "Michael Scott" mscott@dm.com boss123 management 
 
 created michael-scott user
@@ -87,7 +87,7 @@ created michael-scott user
 E para listar o usuário criado:
 
 ```console
-$ docker-compose exec api dundie user-list
+$ docker compose exec api dundie user-list
 
                               dundie users                               
 ┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━┓

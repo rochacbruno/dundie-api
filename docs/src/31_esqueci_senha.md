@@ -143,7 +143,7 @@ smtp_password = "<replace in .secrets.toml>"
 Agora podemos abrir um terminal e testar essas funções
 
 ```python
-$ docker-compose exec api dundie shell
+$ docker compose exec api dundie shell
 
 Auto imports: ['settings', 'engine', 'select', 'session', 'User']
 

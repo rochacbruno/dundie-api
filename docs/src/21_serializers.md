@@ -61,7 +61,7 @@ class UserRequest(BaseModel):
 Podemos testar os serializers em nosso shell só para ter certeza do funcionamento correto.
 
 ```python
-$ docker-compose exec api dundie shell    
+$ docker compose exec api dundie shell    
 Auto imports: ['settings', 'engine', 'select', 'session', 'User']
 
 In [1]: from dundie.models.user import UserRequest

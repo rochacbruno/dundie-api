@@ -4,7 +4,7 @@
 
 - Acesso a um computador com Python
 - Terminal Linux/Mac (ou WSL)
-- Docker e docker-compose
+- Docker e docker compose
 - Editor de código de sua preferência (VSCode, vim, micro, emacs)
 
 ```admonish info

@@ -62,7 +62,7 @@ def transaction(
 E para usar podemos fazer o seguinte  no terminal:
 
 ```console
-$ docker-compose exec api dundie transaction jim-halpert 900
+$ docker compose exec api dundie transaction jim-halpert 900
 
           Transaction           
 ┏━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓

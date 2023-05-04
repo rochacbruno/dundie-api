@@ -12,7 +12,7 @@ o conceito de **Data Migrations**.
 Começamos criando uma `migration` vazia para efetuarmos a operação de adição do usuário.
 
 ```console
-$ docker-compose exec api alembic revision -m "ensure_admin_user"
+$ docker compose exec api alembic revision -m "ensure_admin_user"
   Generating /home/app/api/migrations/versions/9aa820fb7f01_ensure_admin_user.py ...  done
 ```
 
@@ -80,7 +80,7 @@ Essa alteração eu vou deixar para você fazer, pode ser depois, no final deste
 Agora salve o arquivo e aplique a migration.
 
 ```console
-$ docker-compose exec api alembic upgrade head                   
+$ docker compose exec api alembic upgrade head                   
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
 INFO  [alembic.runtime.migration] Running upgrade 6f4df3b5e155 -> 9aa820fb7f01, ensure_admin_user 

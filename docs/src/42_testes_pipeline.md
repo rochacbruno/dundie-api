@@ -2,7 +2,7 @@
 
 O Pipeline de testes será
 
-0. Garantir que o ambiente está em execução com o docker-compose
+0. Garantir que o ambiente está em execução com o docker compose
 1. Garantir que existe um banco de dados `dundie_test` e que este banco está
    vazio.
 2. Executar as migrations com alembic e garantir que funcionou
@@ -47,28 +47,28 @@ Confira o conteúdo do arquivo `test.sh` na raiz do repositório.
 ```bash
 #!/usr/bin/bash
 
-# Start environment with docker-compose
-DUNDIE_DB=dundie_test docker-compose up -d
+# Start environment with docker compose
+DUNDIE_DB=dundie_test docker compose up -d
 
 # wait 5 seconds
 sleep 5
 
 # Ensure database is clean
-docker-compose exec api dundie reset-db -f
-docker-compose exec api alembic stamp base
+docker compose exec api dundie reset-db -f
+docker compose exec api alembic stamp base
 
 # run migrations
-docker-compose exec api alembic upgrade head
+docker compose exec api alembic upgrade head
 
 # run tests
-docker-compose exec api pytest -v -l --tb=short --maxfail=1 tests/
+docker compose exec api pytest -v -l --tb=short --maxfail=1 tests/
 
 # Stop environment
-docker-compose down
+docker compose down
 ```
 
 1. definimos um banco de dados diferente usando a variável `DUNDIE_DB` 
-2. iniciamos o ambiente com o docker-compose
+2. iniciamos o ambiente com o docker compose
 3. esperamos 5 segundos para garantir que o banco de dados está pronto 
 4. resetamos o banco de dados 
 5. executamos as migrations para garantir que temos todas as tabelas e dados 

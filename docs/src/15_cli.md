@@ -70,7 +70,7 @@ Não se esqueça de salvar os arquivo modificado :)
 E agora podemos executar.
 
 ```console
-$ docker-compose exec api dundie --help
+$ docker compose exec api dundie --help
 
  Usage: dundie [OPTIONS] COMMAND [ARGS]...
 
@@ -88,7 +88,7 @@ E cada um dos comandos:
 O comando `user-list` para listar todos os usuários (que por enquanto irá retornar uma tabela vazia)
 
 ```console
-$ docker-compose exec api dundie user-list
+$ docker compose exec api dundie user-list
                 dundie users
 ┏━━━━━━┳━━━━━━━━━━┳━━━━━━┳━━━━━━━┳━━━━━━━━━━┓
 ┃ name ┃ username ┃ dept ┃ email ┃ currency ┃
@@ -99,7 +99,7 @@ $ docker-compose exec api dundie user-list
 e o comando `shell` que irá abrir um shell interativo com os objetos da aplicação.
 
 ```console
-$ docker-compose exec api dundie shell
+$ docker compose exec api dundie shell
 Auto imports: ['settings', 'engine', 'select', 'session', 'User']
 
 In [1]: session.exec(select(User))
