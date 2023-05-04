@@ -202,7 +202,7 @@ Discord, lá você vai obter ajuda do intrutor e também dos demais alunos.
   This is a dummy file, the git version & date will be appended here
   via `netlify.toml` or `github actions` configuration when the book is deployed.
 -->
-commit ff9fec6 on 2023-05-04 17:29:11
+commit 9c425f4 on 2023-05-04 17:48:08
     </code>
   </center>
 </div>
@@ -2884,6 +2884,8 @@ from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlmodel import paginate
 from dundie.models import Transaction
 from dundie.models.serializers import TransactionResponse
+from sqlmodel import text
+from sqlalchemy.orm import aliased
 
 # No final do arquivo
 @router.get(&quot;/&quot;, response_model=Page[TransactionResponse])
