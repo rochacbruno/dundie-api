@@ -226,7 +226,7 @@ def user_list():
 </div>
 </div>
 <p>E agora podemos executar.</p>
-<pre><code class="language-console">$ docker-compose exec api dundie --help
+<pre><code class="language-console">$ docker compose exec api dundie --help
 
  Usage: dundie [OPTIONS] COMMAND [ARGS]...
 
@@ -240,7 +240,7 @@ def user_list():
 </code></pre>
 <p>E cada um dos comandos:</p>
 <p>O comando <code>user-list</code> para listar todos os usuários (que por enquanto irá retornar uma tabela vazia)</p>
-<pre><code class="language-console">$ docker-compose exec api dundie user-list
+<pre><code class="language-console">$ docker compose exec api dundie user-list
                 dundie users
 ┏━━━━━━┳━━━━━━━━━━┳━━━━━━┳━━━━━━━┳━━━━━━━━━━┓
 ┃ name ┃ username ┃ dept ┃ email ┃ currency ┃
@@ -248,7 +248,7 @@ def user_list():
 └──────┴──────────┴──────┴───────┴──────────┘
 </code></pre>
 <p>e o comando <code>shell</code> que irá abrir um shell interativo com os objetos da aplicação.</p>
-<pre><code class="language-console">$ docker-compose exec api dundie shell
+<pre><code class="language-console">$ docker compose exec api dundie shell
 Auto imports: ['settings', 'engine', 'select', 'session', 'User']
 
 In [1]: session.exec(select(User))

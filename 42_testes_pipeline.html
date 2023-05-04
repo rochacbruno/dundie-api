@@ -160,7 +160,7 @@
                         <h1 id="definindo-um-pipeline"><a class="header" href="#definindo-um-pipeline">Definindo um pipeline</a></h1>
 <p>O Pipeline de testes será</p>
 <ol start="0">
-<li>Garantir que o ambiente está em execução com o docker-compose</li>
+<li>Garantir que o ambiente está em execução com o docker compose</li>
 <li>Garantir que existe um banco de dados <code>dundie_test</code> e que este banco está
 vazio.</li>
 <li>Executar as migrations com alembic e garantir que funcionou</li>
@@ -202,28 +202,28 @@ abordado como automatizar esses processos usando os principais serviços de CI.<
 <p>Confira o conteúdo do arquivo <code>test.sh</code> na raiz do repositório.</p>
 <pre><code class="language-bash">#!/usr/bin/bash
 
-# Start environment with docker-compose
-DUNDIE_DB=dundie_test docker-compose up -d
+# Start environment with docker compose
+DUNDIE_DB=dundie_test docker compose up -d
 
 # wait 5 seconds
 sleep 5
 
 # Ensure database is clean
-docker-compose exec api dundie reset-db -f
-docker-compose exec api alembic stamp base
+docker compose exec api dundie reset-db -f
+docker compose exec api alembic stamp base
 
 # run migrations
-docker-compose exec api alembic upgrade head
+docker compose exec api alembic upgrade head
 
 # run tests
-docker-compose exec api pytest -v -l --tb=short --maxfail=1 tests/
+docker compose exec api pytest -v -l --tb=short --maxfail=1 tests/
 
 # Stop environment
-docker-compose down
+docker compose down
 </code></pre>
 <ol>
 <li>definimos um banco de dados diferente usando a variável <code>DUNDIE_DB</code> </li>
-<li>iniciamos o ambiente com o docker-compose</li>
+<li>iniciamos o ambiente com o docker compose</li>
 <li>esperamos 5 segundos para garantir que o banco de dados está pronto </li>
 <li>resetamos o banco de dados </li>
 <li>executamos as migrations para garantir que temos todas as tabelas e dados </li>

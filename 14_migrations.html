@@ -208,19 +208,19 @@ migrations, precisamos executar este comando dentro do shell do container.</p>
 <p><a class="admonition-anchor-link" href="#admonition-importante"></a></p>
 </div>
 <div>
-<p>Todos os comandos a partir de agora serão executados no shell dentro do container e para fazer isso usaremos sempre <code>docker-compose exec</code> antes que qualquer comando.</p>
+<p>Todos os comandos a partir de agora serão executados no shell dentro do container e para fazer isso usaremos sempre <code>docker compose exec</code> antes que qualquer comando.</p>
 </div>
 </div>
-<p>Experimente: <code>docker-compose exec api /bin/bash</code></p>
-<pre><code class="language-console">$ docker-compose exec api /bin/bash
+<p>Experimente: <code>docker compose exec api /bin/bash</code></p>
+<pre><code class="language-console">$ docker compose exec api /bin/bash
 app@c5dd026e8f92:~/api$ # este é o shell dentro do container api
 
 # digite exit para sair
 </code></pre>
-<p>Podemos redirecionar comandos diretamente para dentro do container com <code>docker-compose exec api [comando a ser executado]</code> </p>
+<p>Podemos redirecionar comandos diretamente para dentro do container com <code>docker compose exec api [comando a ser executado]</code> </p>
 <h2 id="gerando-e-aplicando-migrations"><a class="header" href="#gerando-e-aplicando-migrations">Gerando e aplicando migrations</a></h2>
 <p>Agora para gerar um registro inicial de migration usaremos o comando <code>alembic revision --autogenerate</code> e isso será executado dentro do container conforme exemplo abaixo:</p>
-<pre><code class="language-console">$ docker-compose exec api alembic revision --autogenerate -m &quot;initial&quot;
+<pre><code class="language-console">$ docker compose exec api alembic revision --autogenerate -m &quot;initial&quot;
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
 INFO  [alembic.autogenerate.compare] Detected added table 'user'
@@ -229,7 +229,7 @@ INFO  [alembic.autogenerate.compare] Detected added table 'user'
 <p>Repare que o alembic identificou o nosso model <code>User</code> e gerou uma migration
 inicial que fará a criação desta tabela no banco de dados.</p>
 <p>Podemos aplicar a migration rodando dentro do container com <code>alembic upgrade head</code>:</p>
-<pre><code class="language-console">$ docker-compose exec api alembic upgrade head
+<pre><code class="language-console">$ docker compose exec api alembic upgrade head
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
 INFO  [alembic.runtime.migration] Running upgrade  -&gt; ee59b23815d3, initial
@@ -245,7 +245,7 @@ INFO  [alembic.runtime.migration] Running upgrade  -&gt; ee59b23815d3, initial
 </div>
 </div>
 <h2 id="acessando-o-banco-de-dados-através-do-shell"><a class="header" href="#acessando-o-banco-de-dados-através-do-shell">Acessando o banco de dados através do shell</a></h2>
-<pre><code class="language-console">$ docker-compose exec api ipython
+<pre><code class="language-console">$ docker compose exec api ipython
 # Agora está no ipython dentro do shell do container
 In [1]: 
 </code></pre>

@@ -167,7 +167,7 @@
 <h2 id="docker-compose"><a class="header" href="#docker-compose">Docker compose</a></h2>
 <p>Para iniciar a nossa <strong>API</strong> + o <strong>Banco de dados</strong> vamos precisar de um
 orquestrador de containers, em produção isso será feito com Kubernetes
-mas no ambiente de desenvolvimento podemos usar o <strong>docker-compose</strong>.</p>
+mas no ambiente de desenvolvimento podemos usar o <strong>docker compose</strong>.</p>
 <p>No arquivo <code>docker-compose.yaml</code></p>
 <ul>
 <li>Definimos 2 serviços <code>api</code> e <code>db</code></li>
@@ -209,7 +209,7 @@ services:
       - POSTGRES_PASSWORD=postgres
 </code></pre>
 <p>O próximo passo é estando na raiz do repositório executar:</p>
-<pre><code class="language-bash">docker-compose up -d
+<pre><code class="language-bash">docker compose up -d
 </code></pre>
 <div id="admonition-info" class="admonition info">
 <div class="admonition-title">
@@ -220,8 +220,17 @@ services:
 <p>Na primeira execução poderá demorar mais termpo pois as imagens serão construidas.</p>
 </div>
 </div>
+<div id="admonition-warning" class="admonition warning">
+<div class="admonition-title">
+<p>Warning</p>
+<p><a class="admonition-anchor-link" href="#admonition-warning"></a></p>
+</div>
+<div>
+<p>Se o comando <code>docker compose</code> não funcionar tente usar <code>docker-compose</code> (com um traço - )</p>
+</div>
+</div>
 <p>Para verificar os serviços que estão rodando:</p>
-<pre><code class="language-console">$ docker-compose ps
+<pre><code class="language-console">$ docker compose ps
        Name                     Command               State           Ports
     api_1             /bin/sh -c uvicorn dundie...     Up             8000
     db_1             docker-entrypoint.sh postgres     Up             5432
@@ -232,7 +241,7 @@ services:
 <p><a class="admonition-anchor-link" href="#admonition-tip"></a></p>
 </div>
 <div>
-<p>Os serviços ficarão em execução em segundo plano, se quiser manter o terminal aberto para acompanhar os logs pode omitir o <code>-d</code> ou então abrir um segundo terminal e executar <code>docker-compose logs --follow</code></p>
+<p>Os serviços ficarão em execução em segundo plano, se quiser manter o terminal aberto para acompanhar os logs pode omitir o <code>-d</code> ou então abrir um segundo terminal e executar <code>docker compose logs --follow</code></p>
 </div>
 </div>
 

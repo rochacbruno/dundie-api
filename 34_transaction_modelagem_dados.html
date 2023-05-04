@@ -259,7 +259,7 @@ __all__ = [&quot;User&quot;, &quot;SQLModel&quot;, &quot;Transaction&quot;, &quo
 </code></pre>
 <h2 id="criando-as-migrations"><a class="header" href="#criando-as-migrations">Criando as migrations</a></h2>
 <p>Com os models criados pediamos ao <strong>alembic</strong> para criar o arquivo de migration com as mudanças que precisam ser aplicadas ao Postgresql.</p>
-<pre><code class="language-console">$ docker-compose exec api alembic revision --autogenerate -m &quot;transaction&quot;
+<pre><code class="language-console">$ docker compose exec api alembic revision --autogenerate -m &quot;transaction&quot;
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
 
@@ -270,7 +270,7 @@ INFO  [alembic.ddl.postgresql] Detected sequence named 'user_id_seq' as owned by
   Generating /home/app/api/migrations/versions/8af1cd3be673_transaction.py ...  done
 </code></pre>
 <p>E em sequencia aplicamos para criar as tabelas no banco de dados:</p>
-<pre><code class="language-console">$ docker-compose exec api alembic upgrade head
+<pre><code class="language-console">$ docker compose exec api alembic upgrade head
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
 INFO  [alembic.runtime.migration] Running upgrade f39cbdb1efa7 -&gt; b0abf3428204, transaction

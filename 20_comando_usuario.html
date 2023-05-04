@@ -188,7 +188,7 @@ def create_user(
         return user
 </code></pre>
 <p>A função <code>create_user</code> será exposta na CLI como o subcomando  <code>create-user</code>, ou seja, <code>_</code> será substituido por <code>-</code> então no terminal execute para ver a mensagem de ajuda <code>dundie create-user --help</code>:</p>
-<pre><code class="language-console">$ docker-compose exec api dundie create-user --help
+<pre><code class="language-console">$ docker compose exec api dundie create-user --help
                                                     
  Usage: dundie create-user [OPTIONS] NAME EMAIL PASSWORD DEPT            
                                                     
@@ -226,13 +226,13 @@ usar aspas para o terminal entender que é um único argumento.</p>
 </div>
 </div>
 <p>Crie o usuário:</p>
-<pre><code class="language-console">$ docker-compose exec api dundie create-user \
+<pre><code class="language-console">$ docker compose exec api dundie create-user \
 &quot;Michael Scott&quot; mscott@dm.com boss123 management 
 
 created michael-scott user
 </code></pre>
 <p>E para listar o usuário criado:</p>
-<pre><code class="language-console">$ docker-compose exec api dundie user-list
+<pre><code class="language-console">$ docker compose exec api dundie user-list
 
                               dundie users                               
 ┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┳━━━━━━━━━━┓

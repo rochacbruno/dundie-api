@@ -165,7 +165,7 @@ criar um usuário administrador para que possamos acessar a aplicação.</p>
 <p>Sempre que precisar garantir a existência de dados alimentados em tabelas do sistema usaremos 
 o conceito de <strong>Data Migrations</strong>.</p>
 <p>Começamos criando uma <code>migration</code> vazia para efetuarmos a operação de adição do usuário.</p>
-<pre><code class="language-console">$ docker-compose exec api alembic revision -m &quot;ensure_admin_user&quot;
+<pre><code class="language-console">$ docker compose exec api alembic revision -m &quot;ensure_admin_user&quot;
   Generating /home/app/api/migrations/versions/9aa820fb7f01_ensure_admin_user.py ...  done
 </code></pre>
 <p>Repare que dessa vez não usamos <code>--autogenerate</code> pois essa migration estará vazia, e neste
@@ -230,7 +230,7 @@ de passarmos <code>admin</code> podemos ler de <code>settings.DEFAULT_ADMIN_PASS
 </div>
 </div>
 <p>Agora salve o arquivo e aplique a migration.</p>
-<pre><code class="language-console">$ docker-compose exec api alembic upgrade head                   
+<pre><code class="language-console">$ docker compose exec api alembic upgrade head                   
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
 INFO  [alembic.runtime.migration] Running upgrade 6f4df3b5e155 -&gt; 9aa820fb7f01, ensure_admin_user 
