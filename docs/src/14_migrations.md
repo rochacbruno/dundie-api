@@ -59,19 +59,19 @@ migrations, precisamos executar este comando dentro do shell do container.
 ## Executando comandos dentro do container 
 
 ```admonish important "IMPORTANTE"
-Todos os comandos a partir de agora serão executados no shell dentro do container e para fazer isso usaremos sempre `docker-compose exec` antes que qualquer comando.
+Todos os comandos a partir de agora serão executados no shell dentro do container e para fazer isso usaremos sempre `docker compose exec` antes que qualquer comando.
 ```
 
-Experimente: `docker-compose exec api /bin/bash`
+Experimente: `docker compose exec api /bin/bash`
 
 ```console
-$ docker-compose exec api /bin/bash
+$ docker compose exec api /bin/bash
 app@c5dd026e8f92:~/api$ # este é o shell dentro do container api
 
 # digite exit para sair
 ```
 
-Podemos redirecionar comandos diretamente para dentro do container com `docker-compose exec api [comando a ser executado]` 
+Podemos redirecionar comandos diretamente para dentro do container com `docker compose exec api [comando a ser executado]` 
 
 
 ## Gerando e aplicando migrations 
@@ -79,7 +79,7 @@ Podemos redirecionar comandos diretamente para dentro do container com `docker-c
 Agora para gerar um registro inicial de migration usaremos o comando `alembic revision --autogenerate` e isso será executado dentro do container conforme exemplo abaixo:
 
 ```console
-$ docker-compose exec api alembic revision --autogenerate -m "initial"
+$ docker compose exec api alembic revision --autogenerate -m "initial"
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
 INFO  [alembic.autogenerate.compare] Detected added table 'user'
@@ -92,7 +92,7 @@ inicial que fará a criação desta tabela no banco de dados.
 Podemos aplicar a migration rodando dentro do container com `alembic upgrade head`:
 
 ```console
-$ docker-compose exec api alembic upgrade head
+$ docker compose exec api alembic upgrade head
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
 INFO  [alembic.runtime.migration] Running upgrade  -> ee59b23815d3, initial
@@ -107,7 +107,7 @@ Pode usar um client como [https://antares-sql.app](https://antares-sql.app) para
 ## Acessando o banco de dados através do shell
 
 ```console
-$ docker-compose exec api ipython
+$ docker compose exec api ipython
 # Agora está no ipython dentro do shell do container
 In [1]: 
 ```

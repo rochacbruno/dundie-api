@@ -66,7 +66,7 @@ class TransactionResponse(BaseModel, extra="allow"):
 Podemos testar no shell com:
 
 ```console
-$ docker-compose exec api dundie shell
+$ docker compose exec api dundie shell
 Auto imports: ['settings', 'engine', 'select', 'session', 'User', 
                'Transaction', 'Balance', 'add_transaction']
 
