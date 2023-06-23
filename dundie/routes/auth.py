@@ -16,7 +16,8 @@ from dundie.auth import (
 from dundie.config import settings
 
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.security.access_token_expire_minutes  # pyright: ignore
-REFRESH_TOKEN_EXPIRE_MINUTES = settings.security.REFRESH_TOKEN_EXPIRES_MINUTES  # pyright: ignore
+REFRESH_TOKEN_EXPIRE_MINUTES = settings.security.refresh_token_expire_minutes  # pyright: ignore
+
 
 router = APIRouter()
 
