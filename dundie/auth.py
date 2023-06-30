@@ -65,7 +65,7 @@ def authenticate_user(
 
 def get_user(username: str) -> Optional[User]:
     # TODO: move to utils module
-    query = select(User).where(username == username)
+    query = select(User).where(User.username == username)
     with Session(engine) as session:
         return session.exec(query).first()
 
@@ -112,6 +112,16 @@ async def get_current_active_user(
 
 
 AuthenticatedUser = Depends(get_current_active_user)
+
+
+async def get_current_super_user(
+    current_user: User = Depends(get_current_user),
+) -> User:
+    """Wraps the sync get_active_user for sync calls for superuser"""
+    return current_user
+
+
+SuperUser = Depends(get_current_active_user)
 
 
 async def validate_token(token: str = Depends(oauth2_scheme)) -> User:
