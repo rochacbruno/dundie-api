@@ -159,16 +159,17 @@
                         <div class="sidetoc"><nav class="pagetoc"></nav></div>
                         <h1 id="task-queue"><a class="header" href="#task-queue">Task Queue</a></h1>
 <p>Enfileiramento de tarefas é uma abordagem que permite
-distrinuir o procesamento de tarefas en diferentes
+distribuir o procesamento de tarefas en diferentes
 unidades de processamento para obter um melhor desempenho
-e uma gestão mais fácil da escalabilidade ro projeto.</p>
+e uma gestão mais fácil da escalabilidade do projeto.</p>
 <p>Imagine que temos a tarefa de enviar um email como
 fizemos anteriormente usando BackGround Tasks do FastAPI,
 agora assuma que temos que enviar centenas ou até milhares
 de e-mails de uma só vez.</p>
 <p>Para evitar que a aplicação fique sobrecarrega ao executar
 em um único processo, nós partimos para uma arquiretura
-de computação distribuida.</p>
+de computação distribuida, onde poderemos ter várias
+instâncias de um worker sendo executados em paralelo.</p>
 <p>Alguns conceitos importantes:</p>
 <p><strong>BROKER</strong>:</p>
 <p>É o serviço que gerencia a fila de tarefas,
@@ -179,6 +180,22 @@ simples é pensar neste componente como um caixa de uma
 lanchonete que anota os pedidos e os coloca em uma fila
 distribuindo o trabalho entre os cozinheiros.</p>
 <p>Para este projeto vamos usar o REDIS como BROKER.</p>
+<div id="admonition-warning" class="admonition warning">
+<div class="admonition-title">
+<p>Warning</p>
+<p><a class="admonition-anchor-link" href="#admonition-warning"></a></p>
+</div>
+<div>
+<p>O Redis é um banco de dados em memória, ele por si só
+não é considerado um message BROKER, ou seja, ele precisa
+de um outro processo para gerenciar as mensagens enfileiras
+nós usaremos REDIS como Broker pois o RQ faz o trabalho
+de gerenciar as mensagens no REDIS.</p>
+<p>Em ambientes produtivos de alta escalabilidade é mais
+recomendado usar RabbitMQ, Kafka ou serviços especificos
+de cloud providers como o AWS SQS como Broker.</p>
+</div>
+</div>
 <p><strong>TASK</strong>:</p>
 <p>É a tarefa que ficará disponível para ser executada,
 geralmente usamos decorators em Python ou uma chamada de
@@ -188,8 +205,8 @@ enfileiramento. Imagine que a task é um item do cardapio
 de um restaurante.</p>
 <p>Existem vários sistemas de gestão de filas para Python
 cada um com um jeito específico de registrar uma task,
-alguns conhecidoss são: Celery, Dramatiq, RQ, Huey.
-Em nosso projeto vamos usar o RQ pois é o mais simples
+alguns conhecidoss são: Celery, Dramatiq, RQ, Huey.</p>
+<p>Em nosso projeto vamos usar o RQ pois é o mais simples
 de configurar e usar.</p>
 <p><strong>PRODUCER</strong>:</p>
 <p>É o mecanismo que envia a tarefa para o BROKER,
@@ -209,11 +226,11 @@ mensagens diretamente no REDIS.</p>
 <p>Com as tasks enfileiradas e devidamente configuradas
 precisamos de um componente que de fato irá executar
 a tarefa e tomar conta de coisas como contexto,
-re=execução, falhas, logs etc. Imagine que o consumer
-(ou trabalhador) é o cozinheiro que recebe o pedido e
-que precisa executar a tarefa de preparo levando
-em consideração o contexto do pedido, a receita,
-a prioridade etc.</p>
+re-execução, falhas, logs etc.</p>
+<p>Imagine que o consumer (ou trabalhador) é o cozinheiro
+que recebe o pedido e que precisa executar a tarefa
+de preparo levando em consideração o contexto do pedido,
+a receita, a prioridade etc.</p>
 <p>O RQ já fornece um mecanismo de worker que podemos
 usar diretamente no terminal ou integrar a um
 sistema de gestão de processos como o supervisord ou
@@ -232,8 +249,8 @@ de fila de mensagens e o serviço consumidor de tarefas.</p>
 <pre class="mermaid">graph TD;
     A[&quot;API (FastAPI) fa:fa-globe&quot;]
     B[(&quot;Banco de Dados (PG) fa:fa-cubes&quot;)]
-    C&gt;&quot;Fila de mensagens (Redis) fa:fa-bars&quot;]
-    D[[&quot;Consumidor de tarefas (RQ) fa:fa-gears&quot;]]
+    C&gt;&quot;Fila/Broker de mensagens (Redis) fa:fa-bars&quot;]
+    D[[&quot;Consumidor/Worker de tarefas (RQ) fa:fa-gears&quot;]]
     A --&gt; B
     A --&gt; C
     D --&gt; C
@@ -256,8 +273,9 @@ docker compose up -d
 </code></pre>
 <p>O client GUI oficial é o RedisInsight, você pode baixar
 no site oficial: https://redislabs.com/redis-enterprise/redis-insight/</p>
+<p>Se preferir acesssar via terminal pode usar o redis-cli: https://redis.io/docs/ui/cli/</p>
 <p><img src="./images/redis_insight_1.png" alt="Redis Insight1" /></p>
-<p>Dentro do REdisInsight vamos criar uma conexão com o REDIS e geralmente
+<p>Dentro do RedisInsight vamos criar uma conexão com o REDIS e geralmente
 ele já irá detectar o REDIS que está sendo executado no localhost.</p>
 <p>Podemos então criar chaves:</p>
 <p><img src="./images/redis_insight_2.png" alt="Redis Insight2" /></p>
@@ -278,6 +296,7 @@ as dependencias do RQ:</p>
 </code></pre>
 <p>O pacote rq já irá instalar o Redis,
 precisamos agora atualizar o arquivo <code>requirements.txt</code>:</p>
+<p>Em seu computador (fora do container) execute:</p>
 <pre><code>pip install pip-tools
 pip-compile requirements.in
 cat requirements.txt | grep rq
@@ -292,7 +311,7 @@ rq==1.15.1
 docker compose build api
 docker compose up -d
 </code></pre>
-<p>Agora podemos entrar no shell e interagir com o Redi só para confirmar
+<p>Agora podemos entrar no shell e interagir com o Redis só para confirmar
 que está tudo funcionando:</p>
 <pre><code>docker compose exec api dundie shell
 </code></pre>
@@ -322,6 +341,11 @@ consumindo as tarefas.</p>
 <pre><code class="language-toml">[default.redis]
 host = &quot;redis&quot;
 port = 6379
+</code></pre>
+<p>Desta forma caso seja necessário alterar a configuração do REDIS podemos fazer
+via variáveis de ambiente pois o Dynaconf faz a gestão das configurações.</p>
+<pre><code># exemplo
+DUNDIE_REDIS_HOST=&quot;meuhost&quot;
 </code></pre>
 <p>Agora criaremos um arquivo novo <code>dundie/queue.py</code></p>
 <pre><code class="language-python">from redis import Redis
@@ -357,10 +381,8 @@ no Redis para usar o processamento distribuido.</p>
 <p>e nele vamos alterar a função
 <code>send_password_reset_token</code> para enfileirar a task
 portanto troque a linha:</p>
-<pre><code class="language-python">background_tasks.add_task(try_to_send_pwd_reset_email, email=email)
-</code></pre>
-<p>POR:</p>
-<pre><code class="language-python">queue.enqueue(try_to_send_pwd_reset_email, email=email)
+<pre><code class="language-diff">- background_tasks.add_task(try_to_send_pwd_reset_email, email=email)
++ queue.enqueue(try_to_send_pwd_reset_email, email=email)
 </code></pre>
 <p>Reinicie os serviços e agora vamos testar via API:</p>
 <pre><code class="language-bash">docker compose down
@@ -457,7 +479,8 @@ dundie-api-worker-1  | 14:33:39 Scheduler for default started with PID 7
 dundie-api-worker-1  | 14:36:02 default: Job OK (14e53a7a-7fb9-4bc1-896a-5d0341e6b281)
 dundie-api-worker-1  | 14:36:02 Result is kept for 500 seconds
 </code></pre>
-<p>Aconselho ler a documentação do RQ em https://python-rq.org/docs/</p>
+<p>Aconselho ler a documentação do RQ em <a href="https://python-rq.org/docs/">Python RQ Docs</a></p>
+<p>Em nossa próxima aula iremos agendar tarefas com o scheduler do RQ.</p>
 
                     </main>
 
