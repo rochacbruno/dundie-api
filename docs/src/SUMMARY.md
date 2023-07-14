@@ -84,7 +84,7 @@
 
 # Tarefas Agendadas
 
-<!-- - [Task Queue](./45_task_queue.md) -->
+- [Task Queue](./45_task_queue.md)
 <!-- - [Emails agendados](./46_relatorios.md) -->
 <!-- - [Transações agendadas](./47_transacoes_agendadas.md) -->
 
