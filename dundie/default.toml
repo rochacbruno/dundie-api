@@ -11,3 +11,13 @@ echo = false
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 REFRESH_TOKEN_EXPIRE_MINUTES = 600
+RESET_TOKEN_EXPIRE_MINUTES = 10
+PWD_RESET_URL = "https://dm.com/reset_password"
+
+[default.email]
+debug_mode = true
+smtp_sender = "no-reply@dm.com"
+smtp_server = "localhost"
+smtp_port = 1025
+smtp_user = "<replace in .secrets.toml>"
+smtp_password = "<replace in .secrets.toml>"
