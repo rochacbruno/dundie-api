@@ -8,12 +8,15 @@ alembic==1.10.3
     # via -r requirements.in
 anyio==3.6.2
     # via starlette
+async-timeout==4.0.3
+    # via redis
 bcrypt==4.0.1
     # via passlib
 cffi==1.15.1
     # via cryptography
 click==8.1.3
     # via
+    #   rq
     #   typer
     #   uvicorn
 cryptography==40.0.2
@@ -67,7 +70,11 @@ python-jose[cryptography]==3.3.0
     # via -r requirements.in
 python-multipart==0.0.6
     # via -r requirements.in
+redis==5.0.0
+    # via rq
 rich==13.3.4
+    # via -r requirements.in
+rq==1.15.1
     # via -r requirements.in
 rsa==4.9
     # via python-jose

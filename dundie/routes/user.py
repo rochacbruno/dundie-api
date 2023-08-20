@@ -6,7 +6,6 @@ from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
 
 from dundie.auth import AuthenticatedUser, CanChangeUserPassword, SuperUser
-from dundie.tasks.user import try_to_send_pwd_reset_email
 from dundie.db import ActiveSession
 from dundie.models.user import (
     User,
@@ -15,6 +14,8 @@ from dundie.models.user import (
     UserRequest,
     UserResponse,
 )
+from dundie.queue import queue
+from dundie.tasks.user import try_to_send_pwd_reset_email
 
 router = APIRouter()
 
@@ -52,11 +53,11 @@ async def create_user(*, session: Session = ActiveSession, user: UserRequest) ->
 
 @router.patch("/{username}/", response_model=UserResponse)
 async def update_user(
-    *,
-    session: Session = ActiveSession,
-    patch_data: UserProfilePatchRequest,
-    current_user: User = AuthenticatedUser,
-    username: str,
+        *,
+        session: Session = ActiveSession,
+        patch_data: UserProfilePatchRequest,
+        current_user: User = AuthenticatedUser,
+        username: str,
 ) -> User:
     user = session.exec(select(User).where(User.username == username)).first()
     if not user:
@@ -78,10 +79,10 @@ async def update_user(
 
 @router.post("/{username}/password", response_model=UserResponse)
 async def change_password(
-    *,
-    session: Session = ActiveSession,
-    patch_data: UserPasswordPatchRequest,
-    user: User = CanChangeUserPassword,
+        *,
+        session: Session = ActiveSession,
+        patch_data: UserPasswordPatchRequest,
+        user: User = CanChangeUserPassword,
 ) -> User:
     user.password = patch_data.hashed_password  # pyright: ignore
     session.add(user)
@@ -92,11 +93,12 @@ async def change_password(
 
 @router.post("/pwd_reset_token/")
 async def send_password_reset_token(
-    *, email: str = Body(embed=True),
-    background_tasks: BackgroundTasks,
+        *, email: str = Body(embed=True),
+        background_tasks: BackgroundTasks,
 ):
     """Sends an email with the token to reset password."""
-    background_tasks.add_task(try_to_send_pwd_reset_email, email=email)  # NEW
+    # background_tasks.add_task(try_to_send_pwd_reset_email, email=email)  # NEW
+    queue.enqueue(try_to_send_pwd_reset_email, email=email)
     return {
         "message": "If we found a user with that email, we sent a password reset token to it."
     }
