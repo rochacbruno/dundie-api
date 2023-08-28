@@ -9,7 +9,7 @@ from dundie.db import engine
 from .user import User
 
 
-class TransactionResponse(BaseModel, extra="allow"):
+class TransactionResponse(BaseModel):  # , extra="allow" retorna camopos extras
     id: int
     value: int
     date: datetime
