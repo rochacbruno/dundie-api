@@ -1,14 +1,14 @@
 """User related data models"""
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from fastapi import HTTPException, status
 from pydantic import BaseModel, root_validator
-from sqlmodel import Field, SQLModel, Relationship
+from sqlmodel import Field, Relationship, SQLModel
 
 from dundie.security import HashedPassword, get_password_hash
 
 if TYPE_CHECKING:
-    from dundie.models.transaction import Transaction, Balance
+    from dundie.models.transaction import Balance, Transaction
 
 
 class User(SQLModel, table=True):
@@ -69,6 +69,17 @@ class UserResponse(BaseModel):
     avatar: Optional[str] = None
     bio: Optional[str] = None
     currency: str
+
+
+class UserResponseWithBalance(UserResponse):
+    balance: Optional[int] = None
+
+    @root_validator(pre=True)
+    def set_balance(cls, values: dict):
+        """Sets the balance of the user"""
+        instance = values["_sa_instance_state"].object
+        values["balance"] = instance.balance
+        return values
 
 
 class UserRequest(BaseModel):
