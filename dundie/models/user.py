@@ -111,7 +111,7 @@ class UserProfilePatchRequest(BaseModel):
     @root_validator(pre=True)
     def ensure_values(cls, values):
         if not values:
-            raise HTTPException(status_code=404, detail="Bad request, no data informed")
+            raise HTTPException(status_code=400, detail="Bad request, no data informed")
         return values
 
 
