@@ -59,7 +59,7 @@ pydantic==1.10.2
     #   fastapi
     #   fastapi-pagination
     #   sqlmodel
-pygments==2.13.0
+pygments==2.15.0
     # via rich
 python-jose[cryptography]==3.3.0
     # via -r requirements.in
