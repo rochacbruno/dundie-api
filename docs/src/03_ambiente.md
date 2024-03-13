@@ -47,7 +47,7 @@ sdb             # debugger remoto
 pip-tools       # lock de dependencias
 pytest          # execução de testes
 pytest-order    # ordenação de testes
-httpx           # requests async para testes
+httpx==0.26.0   # requests async para testes
 black           # auto formatação
 flake8          # linter
 ```

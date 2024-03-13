@@ -128,7 +128,11 @@ usando o REDIS, para isso vamos editar o arquivo
     ports:
       - "6379:6379"
     volumes:
-      - $HOME/.redis/dundie_redis/data:/data
+      - dundie_redis_data:/data
+
+volumes:
+  dundie_pg_data:
+  dundie_redis_data:
 ```
 
 Após editar o arquivo vamos subir o serviço:
@@ -392,6 +396,7 @@ Vamos editar o arquivo `docker-compose.yml` e adicionar um novo serviço
     environment:
       DUNDIE_DB__uri: "postgresql://postgres:postgres@db:5432/${DUNDIE_DB:-dundie}"
       DUNDIE_DB__connect_args: "{}"
+      SQLALCHEMY_SILENCE_UBER_WARNING: 1
     volumes:
       - .:/home/app/api
     depends_on:

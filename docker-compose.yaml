@@ -11,6 +11,7 @@ services:
     environment:
       DUNDIE_DB__uri: "postgresql://postgres:postgres@db:5432/${DUNDIE_DB:-dundie}"
       DUNDIE_DB__connect_args: "{}"
+      SQLALCHEMY_SILENCE_UBER_WARNING: 1
     volumes:
       - .:/home/app/api
     depends_on:
@@ -21,7 +22,7 @@ services:
     build: postgres
     image: dundie_postgres-13-alpine-multi-user
     volumes:
-      - $HOME/.postgres/dundie_db/data/postgresql:/var/lib/postgresql/data
+      - dundie_pg_data:/var/lib/postgresql/data
     ports:
       # ATENÇÃO: Mude para 5432: se precisar acessar via host
       - "5435:5432"
@@ -29,3 +30,6 @@ services:
       - POSTGRES_DBS=dundie, dundie_test
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+
+volumes:
+  dundie_pg_data:

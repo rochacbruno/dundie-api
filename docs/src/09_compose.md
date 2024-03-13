@@ -37,6 +37,7 @@ services:
     environment:
       DUNDIE_DB__uri: "postgresql://postgres:postgres@db:5432/${DUNDIE_DB:-dundie}"
       DUNDIE_DB__connect_args: "{}"
+      SQLALCHEMY_SILENCE_UBER_WARNING: 1
     volumes:
       - .:/home/app/api
     depends_on:
@@ -47,13 +48,16 @@ services:
     build: postgres
     image: dundie_postgres-13-alpine-multi-user
     volumes:
-      - $HOME/.postgres/dundie_db/data/postgresql:/var/lib/postgresql/data
+      - dundie_pg_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_DBS=dundie, dundie_test
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+
+volumes:
+  dundie_pg_data:
 ```
 
 O próximo passo é estando na raiz do repositório executar:

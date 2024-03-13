@@ -1,3 +1,5 @@
+pydantic<2.0               # Model and validation
+sqlalchemy<2.0             # ORM BASE
 fastapi                    # Web Framework
 uvicorn                    # ASGI Server
 sqlmodel                   # Database ORM
