@@ -7,9 +7,7 @@
 alembic==1.8.1
     # via -r requirements.in
 anyio==3.7.1
-    # via
-    #   fastapi
-    #   starlette
+    # via starlette
 bcrypt==4.0.1
     # via passlib
 cffi==1.15.1
@@ -24,7 +22,9 @@ dynaconf==3.1.11
     # via -r requirements.in
 ecdsa==0.18.0
     # via python-jose
-fastapi==0.103.1
+exceptiongroup==1.2.0
+    # via anyio
+fastapi==0.109.1
     # via
     #   -r requirements.in
     #   fastapi-pagination
@@ -85,7 +85,7 @@ sqlalchemy2-stubs==0.0.2a29
     # via sqlmodel
 sqlmodel==0.0.8
     # via -r requirements.in
-starlette==0.27.0
+starlette==0.35.1
     # via fastapi
 typer==0.9.0
     # via -r requirements.in
