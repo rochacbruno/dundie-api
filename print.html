@@ -202,7 +202,7 @@ Discord, lá você vai obter ajuda do intrutor e também dos demais alunos.
   This is a dummy file, the git version & date will be appended here
   via `netlify.toml` or `github actions` configuration when the book is deployed.
 -->
-commit 0d16c3d on 2024-03-13 18:28:44
+commit 33fb274 on 2024-03-13 20:41:30
     </code>
   </center>
 </div>
@@ -345,7 +345,7 @@ sdb             # debugger remoto
 pip-tools       # lock de dependencias
 pytest          # execução de testes
 pytest-order    # ordenação de testes
-httpx           # requests async para testes
+httpx==0.26.0   # requests async para testes
 black           # auto formatação
 flake8          # linter
 </code></pre>
@@ -629,6 +629,7 @@ services:
     environment:
       DUNDIE_DB__uri: &quot;postgresql://postgres:postgres@db:5432/${DUNDIE_DB:-dundie}&quot;
       DUNDIE_DB__connect_args: &quot;{}&quot;
+      SQLALCHEMY_SILENCE_UBER_WARNING: 1
     volumes:
       - .:/home/app/api
     depends_on:
@@ -639,13 +640,16 @@ services:
     build: postgres
     image: dundie_postgres-13-alpine-multi-user
     volumes:
-      - $HOME/.postgres/dundie_db/data/postgresql:/var/lib/postgresql/data
+      - dundie_pg_data:/var/lib/postgresql/data
     ports:
       - &quot;5432:5432&quot;
     environment:
       - POSTGRES_DBS=dundie, dundie_test
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+
+volumes:
+  dundie_pg_data:
 </code></pre>
 <p>O próximo passo é estando na raiz do repositório executar:</p>
 <pre><code class="language-bash">docker compose up -d
@@ -3581,7 +3585,11 @@ usando o REDIS, para isso vamos editar o arquivo
     ports:
       - &quot;6379:6379&quot;
     volumes:
-      - $HOME/.redis/dundie_redis/data:/data
+      - dundie_redis_data:/data
+
+volumes:
+  dundie_pg_data:
+  dundie_redis_data:
 </code></pre>
 <p>Após editar o arquivo vamos subir o serviço:</p>
 <pre><code class="language-bash">docker compose down
@@ -3754,6 +3762,7 @@ segundo plano dentro de um container.</p>
     environment:
       DUNDIE_DB__uri: &quot;postgresql://postgres:postgres@db:5432/${DUNDIE_DB:-dundie}&quot;
       DUNDIE_DB__connect_args: &quot;{}&quot;
+      SQLALCHEMY_SILENCE_UBER_WARNING: 1
     volumes:
       - .:/home/app/api
     depends_on:
