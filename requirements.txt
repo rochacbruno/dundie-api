@@ -24,6 +24,8 @@ dynaconf==3.1.11
     # via -r requirements.in
 ecdsa==0.18.0
     # via python-jose
+exceptiongroup==1.2.0
+    # via anyio
 fastapi==0.103.1
     # via
     #   -r requirements.in
@@ -67,7 +69,7 @@ pygments==2.15.0
     # via rich
 python-jose[cryptography]==3.3.0
     # via -r requirements.in
-python-multipart==0.0.6
+python-multipart==0.0.7
     # via -r requirements.in
 rich==13.5.3
     # via -r requirements.in
