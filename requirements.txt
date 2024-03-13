@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements.in
 #
-alembic==1.8.1
+alembic==1.13.0
     # via -r requirements.in
 anyio==3.7.1
     # via
@@ -24,6 +24,8 @@ dynaconf==3.1.11
     # via -r requirements.in
 ecdsa==0.18.0
     # via python-jose
+exceptiongroup==1.2.0
+    # via anyio
 fastapi==0.103.1
     # via
     #   -r requirements.in
@@ -91,6 +93,7 @@ typer==0.9.0
     # via -r requirements.in
 typing-extensions==4.8.0
     # via
+    #   alembic
     #   fastapi
     #   pydantic
     #   sqlalchemy2-stubs
