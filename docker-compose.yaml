@@ -29,3 +29,27 @@ services:
       - POSTGRES_DBS=dundie, dundie_test
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+
+  redis:
+    image: redis:6.2.5-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - $HOME/.redis/dundie_redis/data:/data
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    environment:
+      DUNDIE_DB__uri: "postgresql://postgres:postgres@db:5432/${DUNDIE_DB:-dundie}"
+      DUNDIE_DB__connect_args: "{}"
+    volumes:
+      - .:/home/app/api
+    depends_on:
+      - db
+      - redis
+    stdin_open: true
+    tty: true
+    command: rq worker --with-scheduler --url redis://redis:6379

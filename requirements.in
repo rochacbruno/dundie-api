@@ -11,3 +11,4 @@ psycopg2-binary            # Database Driver
 alembic                    # Database Migrations
 rich                       # Terminal formatting
 fastapi-pagination         # Pagination
+rq                         # Task Queue

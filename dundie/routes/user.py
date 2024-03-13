@@ -9,6 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
 
 from dundie.auth import AuthenticatedUser, CanChangeUserPassword, ShowBalanceField, SuperUser
+from dundie.queue import queue
 from dundie.db import ActiveSession
 from dundie.models.user import (
     User,
@@ -122,7 +123,8 @@ async def change_password(
 async def send_password_reset_token(
     *,
     email: str = Body(embed=True),
-    background_tasks: BackgroundTasks,
+    # background_tasks: BackgroundTasks,
 ):
-    background_tasks.add_task(try_to_send_pwd_reset_email, email=email)
+    # background_tasks.add_task(try_to_send_pwd_reset_email, email=email)
+    queue.enqueue(try_to_send_pwd_reset_email, email=email)
     return {"message": "If we found a user with that email, we sent a password reset token to it."}

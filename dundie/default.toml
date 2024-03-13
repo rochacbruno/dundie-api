@@ -21,3 +21,7 @@ smtp_server = "localhost"
 smtp_port = 1025
 smtp_user = "<replace in .secrets.toml>"
 smtp_password = "<replace in .secrets.toml>"
+
+[default.redis]
+host = "redis"
+port = 6379
