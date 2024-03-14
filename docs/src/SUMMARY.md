@@ -91,7 +91,7 @@
 # Front-end
 
 <!-- - [Integrando Front-end](./48_front_end.md) -->
-<!-- - [Websockets](./49_websockets.md) -->
+- [Websockets](./49_websockets.md)
 
 ---
 
