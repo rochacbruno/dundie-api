@@ -23,7 +23,7 @@ Se você criou o seu repositório fork antes de 14/03/2024 pode ser que você te
 para que seu projeto continue funcionando, devido a mudanças no Pydantic e SQLALchemy.
 ````
 
-Pode ver as alterações e efetuar as mudanças manualmente com o seguinte link: https://github.com/rochacbruno/dundie-api/commit/33fb2747ac2b57a50a202eb67825aaff02036fa5
+Pode ver as alterações e efetuar as mudanças manualmente com o seguinte link: [https://github.com/rochacbruno/dundie-api/commit/33fb2747ac2b57a50a202eb67825aaff02036fa5](https://github.com/rochacbruno/dundie-api/commit/33fb2747ac2b57a50a202eb67825aaff02036fa5)
 
 Se preferir pode aplicar as mudanças localmente com o seguinte script:
 
@@ -79,7 +79,7 @@ e o FastAPI já tem suporte nativo a este tipo de protocolo.
 Editaremos o arquivo `dundie/routes/transaction.py` e vamos criar um websocket para fazer stream de transações,
 dessa forma o usuário vai conseguir acompanhar as transações em tempo real sem precisar dar refresh no client (navegador)
 
-Vamos com algo simples para entender o funcionamento de um websocket.
+Vamos começar com algo simples para entender o funcionamento de um websocket.
 
 ```python
 from fastapi import APIRouter, Body, Depends, HTTPException, WebSocket  # New
@@ -107,7 +107,7 @@ e para facilitar recomendo abrir um terminal e um browser lado a lado.
 O passo a passo:
 
 1. Observamos os logs da API com `docker compose logs api --follow`
-2. No navegador tentamos abrir a URL http://localhost:8000/transaction/ws e obteremos o erro 405, não tem problema!
+2. No navegador tentamos abrir a URL [http://localhost:8000/transaction/ws](http://localhost:8000/transaction/ws) e obteremos o erro 405, não tem problema!
 3. Abriremos o painel de **inspect** do navegador e clicaremos em console onde iremos escrever algumas instruções em JavaScript.
 4. Criamos um client `ws` no JS com `var ws = new WebSocket("ws://localhost:8000/transaction/ws");`
 5. Definimos um event listener para quando recebermos uma mensagem via ws com `ws.onmessage = function(event) {console.log(event.data)};` e por enquanto nosso listener apenas vai imprimir a mensagem no console.
@@ -287,7 +287,8 @@ E agora com a tela do browser aberta lado a lado vamos adicionar transactions.
 ![socketing](./images/transactions_real_time.gif)
 
 
-```adminish danger
+```admonish danger
+
 **PERFORMANCE** e **DISPONIBILIDADE**
 
 Nossa implementação do endpoint `list_transactions_ws` não está boa, existem certos problemas que podem influenciar
@@ -309,7 +310,7 @@ que tenha alta disponibilidade.
 
 Nós não vamos resolver os problemas acima agora, em nosso ambiente controlado o máximo que vai acontecer é conexões simultaneas
 darem timeout, tente por exemplo abrir mais de uma vez a página no browser, em abas separadas, abrindo assim diferentes sockets,
-tambem tente fazer uma requisição normal a API em http://localhost:8000/docs e você vai perceber que o servidor não será capaz de
+tambem tente fazer uma requisição normal a API em [http://localhost:8000/docs](http://localhost:8000/docs) e você vai perceber que o servidor não será capaz de
 servir todas essas conexões.
 
 O que podemos fazer neste momento?
@@ -368,16 +369,16 @@ api-1     | INFO:     Application startup complete.
 Temos 8 workers, isso quer dizer que podemos abrir pelo menos 7 sockets ao mesmo tempo e ainda ter um livre para
 receber as requisições HTTP.
 
-- Experimente abrir várias abas no endereço http://localhost:8001  (dica: O browser permite clicar com o direito e duplicar a aba)
+- Experimente abrir várias abas no endereço [http://localhost:8001](http://localhost:8001)  (dica: O browser permite clicar com o direito e duplicar a aba)
 - Adicione uma transaction no CLI e veja se aparece em todas as abas `docker compose exec api dundie transaction admin 123`
-- tente abrir http://localhost:8000/docs e executar o endpoint `List Users`
+- tente abrir [http://localhost:8000/docs](http://localhost:8000/docs) e executar o endpoint `List Users`
 
 Você vai perceber que dentro dessas limitações irá funcionar, mas ainda assim não é o ideal.
 
 ## Melhorias
 
 Uma das melhorias é criando em nossa aplicação um ConnectionManager para gerenciar a lista de conexões `ws`, na documentação
-do FastAPI o procedimente é explicado em detalhes https://fastapi.tiangolo.com/advanced/websockets/#handling-disconnections-and-multiple-clients
+do FastAPI o procedimente é explicado em detalhes [https://fastapi.tiangolo.com/advanced/websockets/#handling-disconnections-and-multiple-clients](https://fastapi.tiangolo.com/advanced/websockets/#handling-disconnections-and-multiple-clients)
 
 ## Testando
 
