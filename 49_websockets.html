@@ -188,7 +188,7 @@ para que seu projeto continue funcionando, devido a mudanças no Pydantic e SQLA
 `</p>
 </div>
 </div>
-<p>Pode ver as alterações e efetuar as mudanças manualmente com o seguinte link: https://github.com/rochacbruno/dundie-api/commit/33fb2747ac2b57a50a202eb67825aaff02036fa5</p>
+<p>Pode ver as alterações e efetuar as mudanças manualmente com o seguinte link: <a href="https://github.com/rochacbruno/dundie-api/commit/33fb2747ac2b57a50a202eb67825aaff02036fa5">https://github.com/rochacbruno/dundie-api/commit/33fb2747ac2b57a50a202eb67825aaff02036fa5</a></p>
 <p>Se preferir pode aplicar as mudanças localmente com o seguinte script:</p>
 <pre><code class="language-bash">curl https://github.com/rochacbruno/dundie-api/commit/33fb2747ac2b57a50a202eb67825aaff02036fa5.patch | git apply -v
 </code></pre>
@@ -223,7 +223,7 @@ Out[2]: '12.0'
 e o FastAPI já tem suporte nativo a este tipo de protocolo.</p>
 <p>Editaremos o arquivo <code>dundie/routes/transaction.py</code> e vamos criar um websocket para fazer stream de transações,
 dessa forma o usuário vai conseguir acompanhar as transações em tempo real sem precisar dar refresh no client (navegador)</p>
-<p>Vamos com algo simples para entender o funcionamento de um websocket.</p>
+<p>Vamos começar com algo simples para entender o funcionamento de um websocket.</p>
 <pre><code class="language-python">from fastapi import APIRouter, Body, Depends, HTTPException, WebSocket  # New
 
 ...
@@ -244,7 +244,7 @@ e para facilitar recomendo abrir um terminal e um browser lado a lado.</p>
 <p>O passo a passo:</p>
 <ol>
 <li>Observamos os logs da API com <code>docker compose logs api --follow</code></li>
-<li>No navegador tentamos abrir a URL http://localhost:8000/transaction/ws e obteremos o erro 405, não tem problema!</li>
+<li>No navegador tentamos abrir a URL <a href="http://localhost:8000/transaction/ws">http://localhost:8000/transaction/ws</a> e obteremos o erro 405, não tem problema!</li>
 <li>Abriremos o painel de <strong>inspect</strong> do navegador e clicaremos em console onde iremos escrever algumas instruções em JavaScript.</li>
 <li>Criamos um client <code>ws</code> no JS com <code>var ws = new WebSocket(&quot;ws://localhost:8000/transaction/ws&quot;);</code></li>
 <li>Definimos um event listener para quando recebermos uma mensagem via ws com <code>ws.onmessage = function(event) {console.log(event.data)};</code> e por enquanto nosso listener apenas vai imprimir a mensagem no console.</li>
@@ -388,27 +388,31 @@ nos logs do container de API.</p>
 </code></pre>
 <p>E agora com a tela do browser aberta lado a lado vamos adicionar transactions.</p>
 <p><img src="./images/transactions_real_time.gif" alt="socketing" /></p>
-<pre><code class="language-adminish danger">**PERFORMANCE** e **DISPONIBILIDADE**
-
-Nossa implementação do endpoint `list_transactions_ws` não está boa, existem certos problemas que podem influenciar
+<div id="admonition-danger" class="admonition danger">
+<div class="admonition-title">
+<p>Danger</p>
+<p><a class="admonition-anchor-link" href="#admonition-danger"></a></p>
+</div>
+<div>
+<p><strong>PERFORMANCE</strong> e <strong>DISPONIBILIDADE</strong></p>
+<p>Nossa implementação do endpoint <code>list_transactions_ws</code> não está boa, existem certos problemas que podem influenciar
 a performance e a escalabilidade, isso se deve ao fato de que para cada cliente que estiver conectado (aba aberta no browser)
-do lado servidor será preciso manter uma conexão ws, uma session com o banco de dados e todo o restante do estado.
-
-Considere um site que recebe milhares de requests simultaneos, isso pode ser um grande problema!
-
-Para resolver estes problemas será preciso mudar a implementação para:
-
-- Evitar a execução de queries SQL, lendo a partir de um cache ou tópico em uma fila de stream (redis/kafka)
-- Se usar SQL devemos usar um driver async, o driver atual não é async, teriamos que usar um do SQLAlchemy 2.0
-- Usar um pool de conexões websocket
-- Tratar o fechamento das conexões
-
-E além dessas mudanças na aplicação tambem será necessário colocar nosso servidor para executar em um load-balancer para
-que tenha alta disponibilidade.
-</code></pre>
+do lado servidor será preciso manter uma conexão ws, uma session com o banco de dados e todo o restante do estado.</p>
+<p>Considere um site que recebe milhares de requests simultaneos, isso pode ser um grande problema!</p>
+<p>Para resolver estes problemas será preciso mudar a implementação para:</p>
+<ul>
+<li>Evitar a execução de queries SQL, lendo a partir de um cache ou tópico em uma fila de stream (redis/kafka)</li>
+<li>Se usar SQL devemos usar um driver async, o driver atual não é async, teriamos que usar um do SQLAlchemy 2.0</li>
+<li>Usar um pool de conexões websocket</li>
+<li>Tratar o fechamento das conexões</li>
+</ul>
+<p>E além dessas mudanças na aplicação tambem será necessário colocar nosso servidor para executar em um load-balancer para
+que tenha alta disponibilidade.</p>
+</div>
+</div>
 <p>Nós não vamos resolver os problemas acima agora, em nosso ambiente controlado o máximo que vai acontecer é conexões simultaneas
 darem timeout, tente por exemplo abrir mais de uma vez a página no browser, em abas separadas, abrindo assim diferentes sockets,
-tambem tente fazer uma requisição normal a API em http://localhost:8000/docs e você vai perceber que o servidor não será capaz de
+tambem tente fazer uma requisição normal a API em <a href="http://localhost:8000/docs">http://localhost:8000/docs</a> e você vai perceber que o servidor não será capaz de
 servir todas essas conexões.</p>
 <p>O que podemos fazer neste momento?</p>
 <p>Escalar Horizontalmente!</p>
@@ -454,14 +458,14 @@ api-1     | INFO:     Application startup complete.
 <p>Temos 8 workers, isso quer dizer que podemos abrir pelo menos 7 sockets ao mesmo tempo e ainda ter um livre para
 receber as requisições HTTP.</p>
 <ul>
-<li>Experimente abrir várias abas no endereço http://localhost:8001  (dica: O browser permite clicar com o direito e duplicar a aba)</li>
+<li>Experimente abrir várias abas no endereço <a href="http://localhost:8001">http://localhost:8001</a>  (dica: O browser permite clicar com o direito e duplicar a aba)</li>
 <li>Adicione uma transaction no CLI e veja se aparece em todas as abas <code>docker compose exec api dundie transaction admin 123</code></li>
-<li>tente abrir http://localhost:8000/docs e executar o endpoint <code>List Users</code></li>
+<li>tente abrir <a href="http://localhost:8000/docs">http://localhost:8000/docs</a> e executar o endpoint <code>List Users</code></li>
 </ul>
 <p>Você vai perceber que dentro dessas limitações irá funcionar, mas ainda assim não é o ideal.</p>
 <h2 id="melhorias"><a class="header" href="#melhorias">Melhorias</a></h2>
 <p>Uma das melhorias é criando em nossa aplicação um ConnectionManager para gerenciar a lista de conexões <code>ws</code>, na documentação
-do FastAPI o procedimente é explicado em detalhes https://fastapi.tiangolo.com/advanced/websockets/#handling-disconnections-and-multiple-clients</p>
+do FastAPI o procedimente é explicado em detalhes <a href="https://fastapi.tiangolo.com/advanced/websockets/#handling-disconnections-and-multiple-clients">https://fastapi.tiangolo.com/advanced/websockets/#handling-disconnections-and-multiple-clients</a></p>
 <h2 id="testando"><a class="header" href="#testando">Testando</a></h2>
 <p>Para testar o endpoint WS podemos usar o mesmo client que usamos para testar os endpoints HTTP, vamos adicionar o seguinte
 teste ao arquivo <code>tests/test_api.py</code></p>
