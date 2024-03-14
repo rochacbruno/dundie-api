@@ -1,0 +1,584 @@
+<!DOCTYPE HTML>
+<html lang="pt" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Websockets - Dundie API - Curso Python LINUXtips</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/catppuccin-highlight.css">
+        <link rel="stylesheet" href="./theme/pagetoc.css">
+        <link rel="stylesheet" href="./theme/mdbook-admonish.css">
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "mocha" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intro.html">Intro</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Ambiente</li><li class="chapter-item expanded "><a href="01_requisitos.html"><strong aria-hidden="true">1.</strong> Requisitos</a></li><li class="chapter-item expanded "><a href="02_repositorio.html"><strong aria-hidden="true">2.</strong> Repositório</a></li><li class="chapter-item expanded "><a href="03_ambiente.html"><strong aria-hidden="true">3.</strong> Ambiente dev</a></li><li class="chapter-item expanded affix "><li class="part-title">Conhecendo o Projeto</li><li class="chapter-item expanded "><a href="04_projeto.html"><strong aria-hidden="true">4.</strong> O Projeto</a></li><li class="chapter-item expanded "><a href="05_funcionalidades.html"><strong aria-hidden="true">5.</strong> Funcionalidades</a></li><li class="chapter-item expanded "><a href="06_estrutura.html"><strong aria-hidden="true">6.</strong> Estrutura de arquivos</a></li><li class="chapter-item expanded affix "><li class="part-title">Containers</li><li class="chapter-item expanded "><a href="07_api_base.html"><strong aria-hidden="true">7.</strong> Criando uma API base</a></li><li class="chapter-item expanded "><a href="08_container.html"><strong aria-hidden="true">8.</strong> Criando um container</a></li><li class="chapter-item expanded "><a href="09_compose.html"><strong aria-hidden="true">9.</strong> Orquestrando serviços</a></li><li class="chapter-item expanded affix "><li class="part-title">Banco de dados</li><li class="chapter-item expanded "><a href="10_modelagem.html"><strong aria-hidden="true">10.</strong> Modelagem com SQLModel</a></li><li class="chapter-item expanded "><a href="12_config.html"><strong aria-hidden="true">11.</strong> Configurações</a></li><li class="chapter-item expanded "><a href="13_conexao_db.html"><strong aria-hidden="true">12.</strong> Conexão com o DB</a></li><li class="chapter-item expanded "><a href="14_migrations.html"><strong aria-hidden="true">13.</strong> Migrations</a></li><li class="chapter-item expanded affix "><li class="part-title">CLI</li><li class="chapter-item expanded "><a href="15_cli.html"><strong aria-hidden="true">14.</strong> Criando a CLI</a></li><li class="chapter-item expanded affix "><li class="part-title">Password Hash</li><li class="chapter-item expanded "><a href="18_secret_key.html"><strong aria-hidden="true">15.</strong> Configurando SECRET_KEY</a></li><li class="chapter-item expanded "><a href="19_hash.html"><strong aria-hidden="true">16.</strong> Criando um hash</a></li><li class="chapter-item expanded "><a href="20_comando_usuario.html"><strong aria-hidden="true">17.</strong> Comando para criar usuários</a></li><li class="chapter-item expanded affix "><li class="part-title">User API endpoints</li><li class="chapter-item expanded "><a href="21_serializers.html"><strong aria-hidden="true">18.</strong> Definindo Serializers</a></li><li class="chapter-item expanded "><a href="22_injecao_dependencia.html"><strong aria-hidden="true">19.</strong> Injeção de dependência</a></li><li class="chapter-item expanded "><a href="23_view.html"><strong aria-hidden="true">20.</strong> Criando as Views</a></li><li class="chapter-item expanded "><a href="24_roteamento.html"><strong aria-hidden="true">21.</strong> Roteamento de URL</a></li><li class="chapter-item expanded affix "><li class="part-title">Autenticação</li><li class="chapter-item expanded "><a href="25_tokens.html"><strong aria-hidden="true">22.</strong> Gerando tokens</a></li><li class="chapter-item expanded "><a href="26_auth.html"><strong aria-hidden="true">23.</strong> Criando Endpoints de Auth</a></li><li class="chapter-item expanded "><a href="27_protegendo_rotas.html"><strong aria-hidden="true">24.</strong> Protegendo rotas</a></li><li class="chapter-item expanded affix "><li class="part-title">Tratando erros</li><li class="chapter-item expanded "><a href="28_erros_http.html"><strong aria-hidden="true">25.</strong> Erros HTTP</a></li><li class="chapter-item expanded affix "><li class="part-title">Alterando Dados</li><li class="chapter-item expanded "><a href="29_update_user.html"><strong aria-hidden="true">26.</strong> Update User</a></li><li class="chapter-item expanded "><a href="30_change_password.html"><strong aria-hidden="true">27.</strong> Change Password</a></li><li class="chapter-item expanded "><a href="31_esqueci_senha.html"><strong aria-hidden="true">28.</strong> Esqueci minha senha</a></li><li class="chapter-item expanded affix "><li class="part-title">Background Tasks</li><li class="chapter-item expanded "><a href="33_enviando_email_async.html"><strong aria-hidden="true">29.</strong> Enviando emails assíncronos</a></li><li class="chapter-item expanded affix "><li class="part-title">Transaction API Endpoints</li><li class="chapter-item expanded "><a href="34_transaction_modelagem_dados.html"><strong aria-hidden="true">30.</strong> Modelagem de dados</a></li><li class="chapter-item expanded "><a href="35_transaction_business_logic.html"><strong aria-hidden="true">31.</strong> Business Logic</a></li><li class="chapter-item expanded "><a href="36_admin_data_migrations.html"><strong aria-hidden="true">32.</strong> Data Migrations</a></li><li class="chapter-item expanded "><a href="37_transaction_cli.html"><strong aria-hidden="true">33.</strong> Transaction CLI</a></li><li class="chapter-item expanded "><a href="38_transaction_api.html"><strong aria-hidden="true">34.</strong> Transaction API</a></li><li class="chapter-item expanded "><a href="39_transaction_filtrando_dados.html"><strong aria-hidden="true">35.</strong> Filtrando dados</a></li><li class="chapter-item expanded "><a href="40_transaction_expondo_saldo.html"><strong aria-hidden="true">36.</strong> Expondo saldo do usuário</a></li><li class="chapter-item expanded affix "><li class="part-title">Testes</li><li class="chapter-item expanded "><a href="42_testes_pipeline.html"><strong aria-hidden="true">37.</strong> Definindo um pipeline</a></li><li class="chapter-item expanded "><a href="43_testes_configurando_pytest.html"><strong aria-hidden="true">38.</strong> Configurando Pytest</a></li><li class="chapter-item expanded "><a href="44_testes_api.html"><strong aria-hidden="true">39.</strong> Testes de API</a></li><li class="chapter-item expanded affix "><li class="part-title">Tarefas Agendadas</li><li class="chapter-item expanded "><a href="45_task_queue.html"><strong aria-hidden="true">40.</strong> Task Queue</a></li><li class="chapter-item expanded affix "><li class="part-title">Front-end</li><li class="chapter-item expanded "><a href="49_websockets.html" class="active"><strong aria-hidden="true">41.</strong> Websockets</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="final.html">Final</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Dundie API - Curso Python LINUXtips</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rochacbruno/dundie-api" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/rochacbruno/dundie-api/edit/main/docs/src/49_websockets.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <div class="sidetoc"><nav class="pagetoc"></nav></div>
+                        <h1 id="websockets"><a class="header" href="#websockets">WebSockets</a></h1>
+<h2 id="o-que-é"><a class="header" href="#o-que-é">O que é</a></h2>
+<p>O protocolo ws:// é uma abreviação de WebSocket e é usado para estabelecer uma conexão bidirecional entre um cliente (como um navegador da web) e um servidor web. Aqui estão alguns pontos-chave sobre o protocolo ws://:</p>
+<ul>
+<li>
+<p><strong>Bidirecionalidade</strong>: Com o protocolo ws://, tanto o cliente quanto o servidor podem enviar mensagens um para o outro em tempo real, sem a necessidade de esperar por uma solicitação do cliente. Isso é diferente do HTTP tradicional, onde o cliente precisa solicitar informações do servidor a cada interação.</p>
+</li>
+<li>
+<p><strong>Comunicação em tempo real</strong>: O protocolo ws:// é ideal para aplicativos da web que exigem atualizações em tempo real, como jogos multiplayer, salas de bate-papo ao vivo, feeds de notícias em tempo real e colaboração em tempo real.</p>
+</li>
+<li>
+<p><strong>Eficiência</strong>: Em comparação com soluções baseadas em polling (em que o cliente solicita repetidamente informações do servidor), os WebSockets são mais eficientes, pois estabelecem uma conexão persistente entre o cliente e o servidor. Isso reduz a sobrecarga de rede e os atrasos associados às solicitações HTTP repetidas. <strong>NOTA</strong>: Isto vem com um custo de performance na gestão de conexões.</p>
+</li>
+<li>
+<p><strong>Suporte</strong>: A maioria dos navegadores modernos e servidores web suporta o protocolo ws://, tornando-o uma escolha popular para desenvolvedores que desejam criar aplicativos da web interativos e em tempo real.</p>
+</li>
+</ul>
+<p>Em resumo, o protocolo ws:// é uma tecnologia de comunicação em tempo real que permite uma conexão persistente e bidirecional entre clientes e servidores web, facilitando a criação de aplicativos da web interativos e em tempo real.</p>
+<p><img src="./images/ws_diagram.png" alt="diag" /></p>
+<h2 id="importante"><a class="header" href="#importante">Importante</a></h2>
+<div id="admonition-info" class="admonition info">
+<div class="admonition-title">
+<p>Info</p>
+<p><a class="admonition-anchor-link" href="#admonition-info"></a></p>
+</div>
+<div>
+<p>Se você criou o seu repositório fork antes de 14/03/2024 pode ser que você tenha que atualizar algumas extensões locais
+para que seu projeto continue funcionando, devido a mudanças no Pydantic e SQLALchemy.
+`</p>
+</div>
+</div>
+<p>Pode ver as alterações e efetuar as mudanças manualmente com o seguinte link: https://github.com/rochacbruno/dundie-api/commit/33fb2747ac2b57a50a202eb67825aaff02036fa5</p>
+<p>Se preferir pode aplicar as mudanças localmente com o seguinte script:</p>
+<pre><code class="language-bash">curl https://github.com/rochacbruno/dundie-api/commit/33fb2747ac2b57a50a202eb67825aaff02036fa5.patch | git apply -v
+</code></pre>
+<h2 id="instalação-do-websockets"><a class="header" href="#instalação-do-websockets">Instalação do websockets</a></h2>
+<p>A biblioteca websockets precisa estar instalada no ambiente onde vamos servir o websocket.</p>
+<p>Edite o arquivo <code>requirements.in</code> e adicione a biblioteca <code>websockets</code> ao final do arquivo.</p>
+<pre><code class="language-txt">websockets                 # Web Sockets
+</code></pre>
+<p>Em seu computador (fora do container) execute:</p>
+<pre><code class="language-console">pip install pip-tools
+pip-compile requirements.in
+cat requirements.txt | grep websockets
+</code></pre>
+<pre><code>websockets==12.0  (pode ser que a versão seja diferente no momento que vc executar)
+</code></pre>
+<p>Agora devemos fazer o rebuild dos containers:</p>
+<pre><code class="language-bash">docker compose down
+docker compose build api
+docker compose up -d
+</code></pre>
+<p>E agora podemos entrar no shell para se certificar de que tudo está funcionando:</p>
+<pre><code class="language-console">❯ docker compose exec api dundie shell
+Auto imports: ['settings', 'engine', 'select', 'session', 'User', 'Transaction', 'Balance', 'add_transaction']
+
+In [1]: from websockets.version import version
+
+In [2]: version
+Out[2]: '12.0'
+</code></pre>
+<h2 id="websocket-server"><a class="header" href="#websocket-server">Websocket Server</a></h2>
+<p>O primeiro passo é criar do lado servidor um endpoint (URL) que iniciará uma conexão usando o protocolo <code>ws</code>
+e o FastAPI já tem suporte nativo a este tipo de protocolo.</p>
+<p>Editaremos o arquivo <code>dundie/routes/transaction.py</code> e vamos criar um websocket para fazer stream de transações,
+dessa forma o usuário vai conseguir acompanhar as transações em tempo real sem precisar dar refresh no client (navegador)</p>
+<p>Vamos com algo simples para entender o funcionamento de um websocket.</p>
+<pre><code class="language-python">from fastapi import APIRouter, Body, Depends, HTTPException, WebSocket  # New
+
+...
+
+@router.websocket(&quot;/ws&quot;)
+async def list_transactions_ws(websocket: WebSocket):
+    await websocket.accept()
+    while True:
+        data = await websocket.receive_text()
+        await websocket.send_text(f&quot;Message text was: {data}&quot;)
+</code></pre>
+<p>O FastAPI ainda não suporta exibir o endpoint websocket no /docs portanto esta
+URL não será exibida, a boa prática é adicionar documentação sobre este endpoint
+manualmente em seu endpoint correspondente ou em forma de texsto puro.</p>
+<h2 id="websocket-client"><a class="header" href="#websocket-client">Websocket client</a></h2>
+<p>Para testar precisaremos escrever um pouco de JavaScript diretamente no navegador
+e para facilitar recomendo abrir um terminal e um browser lado a lado.</p>
+<p>O passo a passo:</p>
+<ol>
+<li>Observamos os logs da API com <code>docker compose logs api --follow</code></li>
+<li>No navegador tentamos abrir a URL http://localhost:8000/transaction/ws e obteremos o erro 405, não tem problema!</li>
+<li>Abriremos o painel de <strong>inspect</strong> do navegador e clicaremos em console onde iremos escrever algumas instruções em JavaScript.</li>
+<li>Criamos um client <code>ws</code> no JS com <code>var ws = new WebSocket(&quot;ws://localhost:8000/transaction/ws&quot;);</code></li>
+<li>Definimos um event listener para quando recebermos uma mensagem via ws com <code>ws.onmessage = function(event) {console.log(event.data)};</code> e por enquanto nosso listener apenas vai imprimir a mensagem no console.</li>
+<li>Enviamos uma mensagem ao servidor com <code>ws.send(&quot;Hello&quot;)</code></li>
+<li>A mensagem é enviada ao servidor e processada, retornando ao client (repare a adição de &quot;Message text was: ...&quot;)</li>
+</ol>
+<p>Toda esta comunicação acontece utilizando um único socket de comunicação, mantendo o estado da conexão, diferente das conexões HTTP que vimos até agora.</p>
+<p><img src="./images/web_socket_video.gif" alt="inspect" /></p>
+<p>O console em detalhe:</p>
+<p><img src="./images/inspect_ws.png" alt="Inspect zoom" /></p>
+<h2 id="criando-o-front-end"><a class="header" href="#criando-o-front-end">Criando o front-end</a></h2>
+<p>O objetivo até aqui é falar sobre o lado back-end apenas, nosso foco está na API e endpoints, porém
+para obter a experiência completa vamos precisar de um <strong>front-end</strong> então faremos uma interface muito simples
+para ser usada de client para nossa API.</p>
+<p>O que faremos:</p>
+<ol>
+<li>Criar um novo serviço no docker-compose que vai servir apenas o front-end</li>
+<li>Usar o servidor NGINX para servir o front-end</li>
+<li>Criar o front-end usando uma página estática HTML</li>
+</ol>
+<p>Vamos começar simples assim, no futuro iremos deixar este front-end mais robusto,
+mas no momento o que importa é apenas fazer a conexão com o websocket.</p>
+<p>No <code>docker-compose.yaml</code> vamos adicionar mais um serviço, logo após <code>worker</code>.</p>
+<pre><code class="language-yaml">services:
+  worker:
+    ...
+
+  ui:
+    image: nginx
+    ports:
+      - &quot;8001:80&quot;
+    volumes:
+      - ./ui:/usr/share/nginx/html
+
+volumes:
+    ...
+</code></pre>
+<p>Repare que estamos mapeando uma pasta local chamada <code>./ui</code> que é onde estará o
+nosso site estático com páginas html.</p>
+<pre><code class="language-console">mkdir ui
+echo &quot;Hello front end&quot; &gt; ui/index.html
+</code></pre>
+<p>Agora vamos dar o restart nos containers.</p>
+<pre><code class="language-bash">docker compose down
+docker compose up -d
+</code></pre>
+<p>Na primeira execução pode demorar um pouco mais pois a imagem do nginx será baixada, mas assim que os containers
+estiverem em execução abra a URL http://localhost:8001 onde está sendo servido nosso front-end.</p>
+<p><img src="./images/ui_nginx.png" alt="nginx" /></p>
+<p>Experimente editar o arquivo <code>ui/index.html</code> e depois façá refresh na URL para ver se as mudanças serão refletidas.</p>
+<h2 id="html"><a class="header" href="#html">HTML</a></h2>
+<p>Não espere muito do nosso HTML, aqui temos um programdor backend tentando criar uma interface :) será simples para
+apenas funcionar!</p>
+<p>Edite o <code>ui/index.html</code> e adicione o seguinte código.</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+&lt;title&gt;WebSocket Transactions&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Transaction List&lt;/h1&gt;
+&lt;ul id=&quot;transaction-list&quot;&gt;&lt;/ul&gt;
+
+&lt;script&gt;
+// Function to create and append a new &lt;li&gt; element to the list
+function appendTransactionToList(transaction) {
+    var transactionList = document.getElementById(&quot;transaction-list&quot;);
+    var listItem = document.createElement(&quot;li&quot;);
+    listItem.textContent = transaction.to + &quot; - &quot; + transaction.from + &quot; - &quot; + transaction.value;
+    transactionList.appendChild(listItem);
+}
+
+// Connect to WebSocket endpoint
+var ws = new WebSocket(&quot;ws://localhost:8000/transaction/ws&quot;);
+
+// Event listener for WebSocket connection opened
+ws.onopen = function(event) {
+    console.log(&quot;WebSocket connection opened&quot;);
+};
+
+// Event listener for incoming messages
+ws.onmessage = function(event) {
+    console.log(&quot;New message received:&quot;, event.data);
+    // Parse JSON data
+    var transaction = JSON.parse(event.data);
+    // Append transaction to list
+    appendTransactionToList(transaction);
+};
+
+// Event listener for WebSocket connection closed
+ws.onclose = function(event) {
+    console.log(&quot;WebSocket connection closed&quot;);
+};
+
+// Event listener for WebSocket connection error
+ws.onerror = function(event) {
+    console.error(&quot;WebSocket error:&quot;, event);
+};
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>O próximo passo é implementar no endpoint o retorno das ultimas transactions.</p>
+<pre><code class="language-python">@router.websocket(&quot;/ws&quot;)
+async def list_transactions_ws(websocket: WebSocket, session: Session = ActiveSession):
+    await websocket.accept()
+    last = 0
+    while True:
+        # Read all transactions that have not been seen yet
+        new_transactions = session.exec(select(Transaction).where(Transaction.id &gt; last).order_by(&quot;id&quot;))
+        for transaction in new_transactions:
+            data = {
+                &quot;to&quot;: transaction.user.name,
+                &quot;from&quot;: transaction.from_user.name,
+                &quot;value&quot;: transaction.value,
+            }
+            await websocket.send_json(data)
+
+            # set the last sent ID to avoid duplication
+            last = transaction.id
+
+            # Sleep 1 second (just to see better on UI)
+            await sleep(1)
+</code></pre>
+<p>Agora podemos salvar e abrir o endereço http://localhost:8001 que inicialmente irá exibir uma tela vazia, porem
+pode abrir o <code>inspect</code> do navegador para ver a mensagem de conexão ao websocket e tambem verificar a mesma informação
+nos logs do container de API.</p>
+<p>Através do terminal vamos verificar quais users existem no sistema</p>
+<pre><code class="language-console">❯ docker compose exec api dundie user-list
+                       dundie users
+┏━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃ name  ┃ username ┃ dept       ┃ email        ┃ currency ┃
+┡━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━┩
+│ Admin │ admin    │ management │ admin@dm.com │ USD      │
+│ user3 │ user3    │ sales      │ user3@dm.com │ USD      │
+│ user1 │ user1    │ management │ user1@dm.com │ USD      │
+│ user2 │ user2    │ sales      │ user2@dm.com │ USD      │
+└───────┴──────────┴────────────┴──────────────┴──────────┘
+</code></pre>
+<p>E agora com a tela do browser aberta lado a lado vamos adicionar transactions.</p>
+<p><img src="./images/transactions_real_time.gif" alt="socketing" /></p>
+<pre><code class="language-adminish danger">**PERFORMANCE** e **DISPONIBILIDADE**
+
+Nossa implementação do endpoint `list_transactions_ws` não está boa, existem certos problemas que podem influenciar
+a performance e a escalabilidade, isso se deve ao fato de que para cada cliente que estiver conectado (aba aberta no browser)
+do lado servidor será preciso manter uma conexão ws, uma session com o banco de dados e todo o restante do estado.
+
+Considere um site que recebe milhares de requests simultaneos, isso pode ser um grande problema!
+
+Para resolver estes problemas será preciso mudar a implementação para:
+
+- Evitar a execução de queries SQL, lendo a partir de um cache ou tópico em uma fila de stream (redis/kafka)
+- Se usar SQL devemos usar um driver async, o driver atual não é async, teriamos que usar um do SQLAlchemy 2.0
+- Usar um pool de conexões websocket
+- Tratar o fechamento das conexões
+
+E além dessas mudanças na aplicação tambem será necessário colocar nosso servidor para executar em um load-balancer para
+que tenha alta disponibilidade.
+</code></pre>
+<p>Nós não vamos resolver os problemas acima agora, em nosso ambiente controlado o máximo que vai acontecer é conexões simultaneas
+darem timeout, tente por exemplo abrir mais de uma vez a página no browser, em abas separadas, abrindo assim diferentes sockets,
+tambem tente fazer uma requisição normal a API em http://localhost:8000/docs e você vai perceber que o servidor não será capaz de
+servir todas essas conexões.</p>
+<p>O que podemos fazer neste momento?</p>
+<p>Escalar Horizontalmente!</p>
+<p>Vamos editar o arquivo <code>Dockerfile.dev</code> e aumentar a quantidade de workers uvicorn, e também será necessário
+remover a funcionalidade de reload automático, pois o uso de <code>--reload</code> faz com que o uvicorn execute de modo bloqueante.</p>
+<pre><code class="language-diff">-CMD [&quot;uvicorn&quot;,&quot;dundie.app:app&quot;,&quot;--host=0.0.0.0&quot;,&quot;--port=8000&quot;, &quot;--reload&quot;]
++CMD [&quot;uvicorn&quot;,&quot;dundie.app:app&quot;,&quot;--host=0.0.0.0&quot;,&quot;--port=8000&quot;, &quot;--workers=8&quot;]
+</code></pre>
+<p>Após alterar o Dockerfile precisaremos fazer o rebuild da imagem e executar novamente</p>
+<pre><code class="language-bash">docker compose down
+docker compose build api
+docker compose up -d
+</code></pre>
+<p>Agora sim a nossa API estará executando com 8 workers, capazes de servir mais requisições e segurar mais sockets abertos.</p>
+<pre><code class="language-yaml">api-1     | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+api-1     | INFO:     Started parent process [1]
+api-1     | INFO:     Started server process [13]
+api-1     | INFO:     Waiting for application startup.
+api-1     | INFO:     Application startup complete.
+api-1     | INFO:     Started server process [10]
+api-1     | INFO:     Waiting for application startup.
+api-1     | INFO:     Application startup complete.
+api-1     | INFO:     Started server process [9]
+api-1     | INFO:     Waiting for application startup.
+api-1     | INFO:     Application startup complete.
+api-1     | INFO:     Started server process [14]
+api-1     | INFO:     Waiting for application startup.
+api-1     | INFO:     Application startup complete.
+api-1     | INFO:     Started server process [12]
+api-1     | INFO:     Waiting for application startup.
+api-1     | INFO:     Application startup complete.
+api-1     | INFO:     Started server process [11]
+api-1     | INFO:     Waiting for application startup.
+api-1     | INFO:     Started server process [15]
+api-1     | INFO:     Application startup complete.
+api-1     | INFO:     Waiting for application startup.
+api-1     | INFO:     Application startup complete.
+api-1     | INFO:     Started server process [8]
+api-1     | INFO:     Waiting for application startup.
+api-1     | INFO:     Application startup complete.
+</code></pre>
+<h2 id="experimentando"><a class="header" href="#experimentando">Experimentando</a></h2>
+<p>Temos 8 workers, isso quer dizer que podemos abrir pelo menos 7 sockets ao mesmo tempo e ainda ter um livre para
+receber as requisições HTTP.</p>
+<ul>
+<li>Experimente abrir várias abas no endereço http://localhost:8001  (dica: O browser permite clicar com o direito e duplicar a aba)</li>
+<li>Adicione uma transaction no CLI e veja se aparece em todas as abas <code>docker compose exec api dundie transaction admin 123</code></li>
+<li>tente abrir http://localhost:8000/docs e executar o endpoint <code>List Users</code></li>
+</ul>
+<p>Você vai perceber que dentro dessas limitações irá funcionar, mas ainda assim não é o ideal.</p>
+<h2 id="melhorias"><a class="header" href="#melhorias">Melhorias</a></h2>
+<p>Uma das melhorias é criando em nossa aplicação um ConnectionManager para gerenciar a lista de conexões <code>ws</code>, na documentação
+do FastAPI o procedimente é explicado em detalhes https://fastapi.tiangolo.com/advanced/websockets/#handling-disconnections-and-multiple-clients</p>
+<h2 id="testando"><a class="header" href="#testando">Testando</a></h2>
+<p>Para testar o endpoint WS podemos usar o mesmo client que usamos para testar os endpoints HTTP, vamos adicionar o seguinte
+teste ao arquivo <code>tests/test_api.py</code></p>
+<pre><code class="language-python">@pytest.mark.order(6)
+def test_admin_can_list_all_transactions_ws(api_client_admin):
+    &quot;&quot;&quot;Admin can list all 4 transactions on ws endpoint&quot;&quot;&quot;
+    with api_client_admin.websocket_connect(&quot;/transaction/ws&quot;) as ws:
+        for i in range(4):
+            data = ws.receive_json()
+            assert data.keys() == {&quot;to&quot;, &quot;from&quot;, &quot;value&quot;}
+</code></pre>
+<p>Executando o teste</p>
+<pre><code class="language-console">❯ ./test.sh
+[+] Running 5/6
+ ⠸ Network dundie-api_default     Created               1.3s
+ ✔ Container dundie-api-ui-1      Started               0.7s
+ ✔ Container dundie-api-db-1      Started               0.5s
+ ✔ Container dundie-api-redis-1   Started               0.8s
+ ✔ Container dundie-api-api-1     Started               0.8s
+ ✔ Container dundie-api-worker-1  Started               1.2s
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running stamp_revision 9aa820fb7f01 -&gt;
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -&gt; f39cbdb1efa7, initial
+INFO  [alembic.runtime.migration] Running upgrade f39cbdb1efa7 -&gt; b0abf3428204, transaction
+INFO  [alembic.runtime.migration] Running upgrade b0abf3428204 -&gt; 8af1cd3be673, transaction1
+INFO  [alembic.runtime.migration] Running upgrade 8af1cd3be673 -&gt; 6f4df3b5e155, transaction2
+INFO  [alembic.runtime.migration] Running upgrade 6f4df3b5e155 -&gt; 9aa820fb7f01, ensure_admin_user
+================================ test session starts =================================
+platform linux -- Python 3.10.13, pytest-8.1.1, pluggy-1.4.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /home/app/api
+configfile: pyproject.toml
+plugins: order-1.2.0, anyio-4.3.0
+collected 11 items
+
+tests/test_api.py::test_user_list PASSED                                       [  9%]
+tests/test_api.py::test_user_detail PASSED                                     [ 18%]
+tests/test_api.py::test_update_user_profile_by_admin PASSED                    [ 27%]
+tests/test_api.py::test_update_user_profile_by_user PASSED                     [ 36%]
+tests/test_api.py::test_fail_update_user_profile_by_other_user PASSED          [ 45%]
+tests/test_api.py::test_add_transaction_for_users_from_admin PASSED            [ 54%]
+tests/test_api.py::test_user1_transfer_20_points_to_user2 PASSED               [ 63%]
+tests/test_api.py::test_user_list_with_balance PASSED                          [ 72%]
+tests/test_api.py::test_admin_can_list_all_transactions PASSED                 [ 81%]
+tests/test_api.py::test_regular_user_can_see_only_own_transaction PASSED       [ 90%]
+tests/test_api.py::test_admin_can_list_all_transactions_ws PASSED              [100%]
+
+================================= 11 passed in 8.08s =================================
+[+] Running 6/6
+ ✔ Container dundie-api-worker-1  Removed                                        1.0s
+ ✔ Container dundie-api-ui-1      Removed                                        0.3s
+ ✔ Container dundie-api-api-1     Removed                                        2.4s
+ ✔ Container dundie-api-redis-1   Removed                                        0.3s
+ ✔ Container dundie-api-db-1      Removed                                        0.3s
+ ✔ Network dundie-api_default     Removed                                        0.1s
+
+</code></pre>
+<h2 id="conclusão"><a class="header" href="#conclusão">Conclusão</a></h2>
+<p>O FastAPI junto com o Starlette permite implementar websockets de maneira bastante simples, mas como é um micro-framework
+limita-se a entregar a parte de comunicação entre client e server respeitando o protocolo <code>ws://</code>.</p>
+<p>Qualquer melhoria adicional precisará ser ajustada tanto na plataforma que serve a aplicação, como <code>uvicorn</code>, caches, load-balancers, proxies,
+como também através da utilização de drivers assincronos para acesso ao banco de dados assim como o uso de streams de dados ao invés de
+conexões a bancos de dados relacionais.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="45_task_queue.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="final.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="45_task_queue.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="final.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="./theme/pagetoc.js"></script>
+        <script type="text/javascript" src="./theme/mermaid.min.js"></script>
+        <script type="text/javascript" src="./theme/mermaid-init.js"></script>
+
+
+    </body>
+</html>
