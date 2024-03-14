@@ -14,3 +14,4 @@ alembic                    # Database Migrations
 rich                       # Terminal formatting
 fastapi-pagination         # Pagination
 rq                         # Task Queue
+websockets                 # Web Sockets

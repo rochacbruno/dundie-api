@@ -58,6 +58,13 @@ services:
     tty: true
     command: rq worker --with-scheduler --url redis://redis:6379
 
+  ui:
+    image: nginx
+    ports:
+      - "8001:80"
+    volumes:
+      - ./ui:/usr/share/nginx/html
+
 volumes:
   dundie_pg_data:
   dundie_redis_data:
