@@ -1,6 +1,7 @@
 from typing import Optional
+from asyncio import sleep
 
-from fastapi import APIRouter, Body, Depends, HTTPException
+from fastapi import APIRouter, Body, Depends, HTTPException, WebSocket
 from fastapi_pagination import Page, Params
 from fastapi_pagination.ext.sqlmodel import paginate
 from sqlalchemy.orm import aliased
@@ -72,3 +73,24 @@ async def list_transactions(
 
     # wrap response_model in a pagination object {"items": [], total, page, size }
     return paginate(query=query, session=session, params=params)
+
+
+@router.websocket("/ws")
+async def list_transactions_ws(websocket: WebSocket, session: Session = ActiveSession):
+    await websocket.accept()
+    last = 0
+    while True:
+        # Read all transactions that have not been seen yet
+        new_transactions = session.exec(select(Transaction).where(Transaction.id > last).order_by("id"))
+        for transaction in new_transactions:
+            data = {
+                "to": transaction.user.name,
+                "from": transaction.from_user.name,
+                "value": transaction.value,
+            }
+            await websocket.send_json(data)
+
+            # set the last sent ID to avoid duplication
+            last = transaction.id
+
+            await sleep(1)
