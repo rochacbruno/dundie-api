@@ -92,6 +92,7 @@
 
 <!-- - [Integrando Front-end](./48_front_end.md) -->
 - [Websockets](./49_websockets.md)
+- [Cors Middleware](./50_cors_middleware.md)
 
 ---
 
