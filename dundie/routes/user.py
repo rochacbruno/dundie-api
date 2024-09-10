@@ -1,9 +1,9 @@
 from typing import List
 
-from fastapi import APIRouter, BackgroundTasks, Body
+from fastapi import APIRouter, Body, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from pydantic import parse_obj_as
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, select
@@ -22,6 +22,10 @@ from dundie.models.user import (
 from dundie.tasks.user import try_to_send_pwd_reset_email
 
 router = APIRouter()
+
+@router.get("/test")
+async def test_view():
+    return {}
 
 
 @router.get(

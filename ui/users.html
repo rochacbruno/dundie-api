@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Users</title>
+</head>
+<body>
+<h1>Users List</h1>
+<ul id="users-list"></ul>
+
+<script>
+// Function to create and append a new <li> element to the list
+function appendUserToList(user) {
+    var transactionList = document.getElementById("users-list");
+    var listItem = document.createElement("li");
+    listItem.textContent = user.name + " " + user.dept;
+    transactionList.appendChild(listItem);
+}
+
+// Fetch API user list
+fetch("http://localhost:8000/user/")
+// parse to JSON
+.then(response => response.json())
+// loop the list and pass each user to the append function
+.then(users => {
+    users.forEach(user => {
+        appendUserToList(user);
+    });
+});
+</script>
+</body>
+</html>

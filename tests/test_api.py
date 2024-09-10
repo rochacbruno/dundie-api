@@ -5,6 +5,12 @@ USER_RESPONSE_WITH_BALANCE_KEYS = USER_RESPONSE_KEYS | {"balance"}
 
 
 @pytest.mark.order(1)
+def test_http_header(api_client):
+    response = api_client.get("/user/")
+    assert response.headers["x-mensagem"] == "Hello"
+
+
+@pytest.mark.order(1)
 def test_user_list(
     api_client,
     api_client_user1,  # pyright: ignore
@@ -15,7 +21,10 @@ def test_user_list(
 
     NOTE: user fixtures are called just to trigger creation of users.
     """
-    users = api_client.get("/user/").json()
+    response = api_client.get("/user/")
+    assert response.headers["x-mensagem"] == "Hello"
+
+    users = response.json()
     expected_users = ["admin", "user1", "user2", "user3"]
     assert len(users) == len(expected_users)
     for user in users:
