@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from functools import partial
 from typing import Callable, Optional, Union
 
-from fastapi import Depends, HTTPException, Path, Request, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from pydantic import BaseModel
@@ -13,12 +13,13 @@ from dundie.config import settings
 from dundie.db import engine
 from dundie.models.user import User
 from dundie.security import verify_password
+from dundie.session import get_session
 
 SECRET_KEY = settings.security.secret_key  # pyright: ignore
 ALGORITHM = settings.security.algorithm  # pyright: ignore
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token", auto_error=False)
 
 
 # Models
@@ -85,7 +86,7 @@ def get_user(username) -> Optional[User]:
 
 
 def get_current_user(
-    token: str = Depends(oauth2_scheme), request: Request = None, fresh=False  # pyright: ignore
+    request: Request, token: str = Depends(oauth2_scheme), fresh=False  # pyright: ignore
 ) -> User:
     """Get current user authenticated"""
     credentials_exception = HTTPException(
@@ -95,11 +96,24 @@ def get_current_user(
     )
 
     if request:
+        if session_id := request.cookies.get("session_id"):
+            username = get_session(session_id)
+            if not username:
+                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Session ID")
+            user = get_user(username=username)
+            if user is None:
+                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session user not found")
+            return user
+
+
         if authorization := request.headers.get("authorization"):
             try:
                 token = authorization.split(" ")[1]
             except IndexError:
                 raise credentials_exception
+
+    if not token:
+        raise credentials_exception
 
     try:
         payload = jwt.decode(

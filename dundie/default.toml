@@ -25,3 +25,9 @@ smtp_password = "<replace in .secrets.toml>"
 [default.redis]
 host = "redis"
 port = 6379
+
+[default.session_store]
+host = "@get redis.host"
+port = "@get redis.port"
+db = 1
+expiration = "@int @jinja {{60 * 60 * 24 * 7}}"

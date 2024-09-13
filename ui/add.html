@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Form</title>
+    <style>
+        #message {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid transparent;
+            display: none;
+        }
+        #message.success {
+            border-color: green;
+            color: green;
+        }
+        #message.error {
+            border-color: red;
+            color: red;
+        }
+        nav#controls {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <nav id="controls">
+        <button id="login" onclick="login()">Login</button>
+        <span>
+        <button id="logout" onclick="logout()">Logout</button>
+    </nav>
+
+    <h2>Transaction Form</h2>
+
+    <div id="message"></div> <!-- Message div -->
+
+    <form id="transactionForm">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required><br><br>
+
+        <label for="value">Value (positive integer):</label><br>
+        <input type="number" id="value" name="value" min="1" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        function getCookie(name) {
+            let cookies = document.cookie.split(';');
+            for(let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    return cookie.substring(name.length + 1);
+                }
+            }
+            return null;
+        }
+
+        function checkSessionLogin() {
+            let sessionCookie = getCookie("session_id");
+            if (!sessionCookie) {
+                window.location.href = "/login.html";
+            }
+        }
+
+        checkSessionLogin();
+
+        const messageDiv = document.getElementById('message');
+        function reset_message_div() {
+            // Reset the message div
+            messageDiv.style.display = 'none';
+            messageDiv.classList.remove('success', 'error');
+        }
+
+        function logout() {
+            fetch('http://localhost:8000/logout', {
+                method: 'POST',
+                credentials: 'include'
+            })
+            .then(response => {
+                location.href = "/login.html"
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                messageDiv.textContent = error;
+                messageDiv.classList.add('error');
+                messageDiv.style.display = 'block';
+            });
+        }
+        function login() {
+            location.href = "/login.html"
+        }
+
+        document.getElementById('transactionForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the default form submission
+
+            const username = document.getElementById('username').value;
+            const value = document.getElementById('value').value;
+
+            reset_message_div();
+
+            if (value <= 0) {
+                messageDiv.textContent = 'Please enter a positive integer for the value.';
+                messageDiv.classList.add('error');
+                messageDiv.style.display = 'block';
+                return;
+            }
+
+            const url = `http://localhost:8000/transaction/${username}/`;
+            const data = { value: parseInt(value) };
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+                credentials: 'include'
+            })
+            .then(response => {
+                if (response.status >= 400 && response.status <= 500) {
+                    throw new Error(`Authentication Error ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                messageDiv.textContent = 'Transaction successful: ' + JSON.stringify(data);
+                messageDiv.classList.add('success');
+                messageDiv.style.display = 'block';
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                messageDiv.textContent = error;
+                messageDiv.classList.add('error');
+                messageDiv.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>
