@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <style>
+        #message {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid transparent;
+            display: none;
+        }
+        #message.success {
+            border-color: green;
+            color: green;
+        }
+        #message.error {
+            border-color: red;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h2>Login Form</h2>
+
+    <div id="message"></div> <!-- Message div -->
+
+    <form id="loginForm">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required><br><br>
+
+        <label for="password">password:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+
+        const messageDiv = document.getElementById('message');
+        function reset_message_div() {
+            // Reset the message div
+            messageDiv.style.display = 'none';
+            messageDiv.classList.remove('success', 'error');
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the default form submission
+
+            const formData = new FormData();
+            formData.append("username", document.getElementById("username").value);
+            formData.append("password", document.getElementById("password").value);
+
+            reset_message_div();
+
+            const url = `http://localhost:8000/login`;
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            })
+            .then(response => {
+                if (response.status >= 400 && response.status <= 500) {
+                    throw new Error(`Authentication Error ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                location.href = "/add.html"
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                messageDiv.textContent = error;
+                messageDiv.classList.add('error');
+                messageDiv.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>
